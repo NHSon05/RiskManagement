@@ -5,7 +5,6 @@ import net.javaguides.risk_management_web.entity.Objective;
 import net.javaguides.risk_management_web.entity.Project;
 import net.javaguides.risk_management_web.entity.Risk;
 import net.javaguides.risk_management_web.repository.ObjectiveRepository;
-import net.javaguides.risk_management_web.repository.ProjectRepository;
 import net.javaguides.risk_management_web.repository.RiskRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,38 +15,26 @@ public class RiskService {
 
     private final RiskRepository riskRepo;
     private final ObjectiveRepository objectiveRepo;
-    private final ProjectRepository projectRepo;
 
     public RiskService(RiskRepository riskRepo,
-                       ObjectiveRepository objectiveRepo,
-                       ProjectRepository projectRepo) {
+                       ObjectiveRepository objectiveRepo) {
         this.riskRepo = riskRepo;
         this.objectiveRepo = objectiveRepo;
-        this.projectRepo = projectRepo;
     }
 
     public Risk create(Long objectiveId, RiskRequest req) {
-        Objective obj = objectiveRepo.findById(objectiveId).orElseThrow();
+        Objective obj = objectiveRepo.findById(objectiveId)
+                .orElseThrow(() -> new RuntimeException("Objective not found"));
         Project project = obj.getProject();
 
         Risk r = new Risk();
-        r.setName(req.name);
-        r.setCategory(req.category);
+        r.setName(req.getName());
+        r.setCategory(req.getCategory());
+        r.setDescription(req.getDescription()); // Lưu mô tả
         r.setObjective(obj);
         r.setProject(project);
 
         return riskRepo.save(r);
-    }
-
-    public List<Risk> getByObjective(Long objectiveId) {
-        return riskRepo.findByObjectiveId(objectiveId);
-    }
-
-    public List<Risk> getByProject(Long projectId) {
-        return riskRepo.findByProjectIdOrderByAssessment_RiskLevelDesc(projectId);
-    }
-    public void delete(Long id) {
-        riskRepo.deleteById(id);
     }
 
     public Risk update(Long id, RiskRequest req) {
@@ -56,9 +43,23 @@ public class RiskService {
 
         r.setName(req.getName());
         r.setCategory(req.getCategory());
-
-        // chỉ cho sửa Tên và Loại thôi.
+        r.setDescription(req.getDescription()); // Cập nhật mô tả
 
         return riskRepo.save(r);
+    }
+
+    public void delete(Long id) {
+        if (!riskRepo.existsById(id)) {
+            throw new RuntimeException("Risk not found");
+        }
+        riskRepo.deleteById(id);
+    }
+
+    public List<Risk> getByObjective(Long objectiveId) {
+        return riskRepo.findByObjectiveId(objectiveId);
+    }
+
+    public List<Risk> getByProject(Long projectId) {
+        return riskRepo.findByProjectIdOrderByAssessment_RiskLevelDesc(projectId);
     }
 }

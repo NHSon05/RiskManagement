@@ -1,7 +1,7 @@
 package net.javaguides.risk_management_web.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,17 +14,20 @@ public class Risk {
     private String name;
     private String category;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @ManyToOne
-    @JsonIgnore
+    @JsonIgnoreProperties({"project", "description", "risks"})
     private Objective objective;
 
     @ManyToOne
+    @JsonIgnore
     private Project project;
 
-    @OneToOne(mappedBy = "risk")
+    @OneToOne(mappedBy = "risk", cascade = CascadeType.ALL)
     private RiskAssessment assessment;
 
-    // getters & setters
 
     public Long getId() {
         return id;
@@ -48,6 +51,14 @@ public class Risk {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Objective getObjective() {
