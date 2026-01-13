@@ -1,7 +1,12 @@
 import './App.css'
+import { RouterProvider } from 'react-router-dom'
+import { router } from './routes/routes'
 
 function App() {
-  return <div className='bg-red-600'>Hi</div>
+  return (
+    <>
+      <RouterProvider router={router} />
+    </>
+  )
 }
-
 export default App
