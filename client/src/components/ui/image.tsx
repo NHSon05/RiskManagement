@@ -22,7 +22,7 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(({
     //     setFallBack(customeFallback);
     // }
     return(
-        <img
+      <img
         src={src}
         alt={alt}
         className={className}
@@ -38,5 +38,5 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(({
         />
     )
 });
-
-export default Image;
+Image.displayName = 'Image';
+export { Image };

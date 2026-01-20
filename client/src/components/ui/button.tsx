@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     // children: ReactNode;
-    title: string;
     variant?: 'primary' | 'outline' | 'red' ;
     size?: 'small' | 'medium' | 'large';
     disabled?: boolean;
@@ -15,11 +14,11 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
     icon?: React.ReactNode;
     iconPosition?: 'left' | 'right';
+    children?: React.ReactNode;
 }
 // Build Component
 
 function Button({ 
-    title ,
     variant = 'primary',
     size = 'medium',
     disabled = false,
@@ -29,6 +28,7 @@ function Button({
     icon,
     iconPosition = 'left',
     onClick,
+    children,
     ...passProps
 } : ButtonProps) {
 
@@ -73,7 +73,8 @@ function Button({
             {icon && iconPosition === 'left' && (
                 <span className="mr-1">{icon}</span>
             )}
-            <span className="whitespace-nowrap">{title}</span>
+            {/* <span className="whitespace-nowrap">{title}</span> */}
+            {children}
             {icon && iconPosition === 'right' && (
                 <span className="ml-2">{icon}</span>
             )}

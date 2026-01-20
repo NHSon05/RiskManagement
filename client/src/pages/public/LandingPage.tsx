@@ -4,8 +4,7 @@ import construction from '../../assets/imgs/construction.jpg';
 import iso from '../../assets/imgs/ISO.png'
 import building from '../../assets/imgs/DaNang.png';
 
-import { Button, FadedDiv, Title } from '@/components/ui';
-import Image from '@/components/ui/Image';
+import { Button, FadedDiv, Title, Image } from '@/components/ui';
 import Card from '../../components/ui/PublicComponents/Cards';
 
 
@@ -42,15 +41,16 @@ function LandingPage() {
                         <span className='text-(--main-color)'> dự án</span> của bạn
                     </h1>
                     <p className='p-4 text-[20px] mx-2 sm:mx-16 md:mx-32 lg:mx-64'>Risk Management - Công cụ toàn diện giúp bạn xác định, đánh giá và quản lý rủi ro hiệu quả cho mọi dự án, đảm bảo thành công và giảm thiểu bất ngờ.</p>
-                    <Button title='Xem thêm' variant='outline' size='large'/>
+                    <Button variant='outline' size='large'>Xem thêm</Button>
                 </div>
             </div>
 
             {/* Advantages of Projects */}
-            <div className='py-24 space-y-8'>
+            <div className='py-12 space-y-8'>
                 <div                >
-                    <Title title='Risk Management ' variant='dark' size='large'>
-                        <span className='text-(--main-color)'>cung cấp</span>
+                    <Title variant='dark' size='large'>
+                        Risk Management 
+                        <span className='text-(--main-color)'> cung cấp</span>
                     </Title>
                 </div>
                 <FadedDiv className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8'>
@@ -71,8 +71,8 @@ function LandingPage() {
                                 viewport={{ once: true }} 
                                 transition={{ duration: 0.2, delay: 0.2}}
                     >
-                        <Title size='large' variant='dark' 
-                            title='ISO 31000 : 2009'>
+                        <Title size='large' variant='dark'>
+                            ISO 31000 : 2009
                             <span><br/>Tiêu chuẩn quốc tế về quản lý rủi ro</span>
                         </Title>
                         <div className='w-1/3 bg-(--main-color) rounded-full h-1.5 my-4'/>
@@ -91,11 +91,11 @@ function LandingPage() {
                 <div className="absolute inset-0 bg-black opacity-30" />
 
                 <div className="relative py-16">
-                    <Title  className='mb-4' size='large' variant='light' 
-                            title='Bạn cần hỗ trợ quản lý rủi ro dự án?'>
+                    <Title  className='mb-4' size='large' variant='light'>
+                        Bạn cần hỗ trợ quản lý rủi ro dự án?
                         <span><br/>Hãy để chúng tôi giúp bạn với các giải pháp chuyên sâu</span>
                     </Title>
-                    <Button title='Liên hệ với chúng tôi' variant='outline' size='large'/>
+                    <Button variant='outline' size='large'>Liên hệ với chúng tôi</Button>
                 </div>
             </div>
         </div>

@@ -1,8 +1,8 @@
 import React from "react"
 import classNames from "classnames";
+import { cn } from "@/lib/utils"
 
 interface TitleProps{
-    title: string;
     size: 'small' | 'medium' | 'large' | 'extra-large';
     variant: 'light' | 'dark' | 'navy';
     className?: string;
@@ -10,7 +10,6 @@ interface TitleProps{
 }
 
 const Title: React.FC<TitleProps> = ({
-    title,
     size = 'small',
     variant,
     className,
@@ -35,10 +34,21 @@ const Title: React.FC<TitleProps> = ({
     )
     return (
         <h1 className={classes} {...props}>
-            {title}
             {children}
         </h1>
     )
 }
 
-export default Title;
+const Description = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("text-(--description) text-[16px]", className)}
+    {...props}
+  />
+))
+Description.displayName = "Description"
+
+export {Title, Description}

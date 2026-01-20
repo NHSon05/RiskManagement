@@ -9,6 +9,7 @@ import { Button } from "@/components/ui";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket, faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useLogout } from "@/hooks/useAuth";
 // import ScrollToTop from "../../../hooks/ScrollToTop";
 // import './NavBar.css'
 
@@ -25,6 +26,7 @@ function NavBar({isLogin = true}: NavBarProps){
     
     const [isLoggedIn, setIsLoggedIn] = useState(isLogin);
     const navigate = useNavigate();
+    const { logout } = useLogout()
 
     const links:Links[] = [
         { label: "Trang chủ", to: "/home" },
@@ -50,32 +52,37 @@ function NavBar({isLogin = true}: NavBarProps){
                         {isLoggedIn ? (
                             <div className="flex gap-2">
                                 <Button variant="primary" 
-                                    title="Thêm dự án" 
                                     icon={<FontAwesomeIcon icon={faPlus}/>}
                                     onClick={() => {navigate('projects/info')}}
-                                />
-                                <Button variant="red" title="Đăng xuất"
+                                >
+                                  Thêm dự án
+                                </Button>
+                                <Button variant="red"
                                     className="hidden sm:inline-flex"
-                                    onClick={() => {
-                                        setIsLoggedIn(false);
-                                        navigate('/');
-                                    
-                                    }}
+                                    onClick={logout}
                                     icon={<FontAwesomeIcon icon={faArrowRightFromBracket}/>}
                                     iconPosition="right"
-                                />
+                                >
+                                  Đăng xuất
+                                </Button>
                             </div>
                         ) : (
                             <div className="flex gap-2">
-                                <Button variant="primary" title="Đăng nhập" 
+                                <Button variant="primary"
                                     onClick={() => {
                                         setIsLoggedIn(true);
-                                        navigate('home')
-                                }}/>
+                                        navigate('login')
+                                }}>
+                                  Đăng nhập
+                                </Button>
                                 <Button 
                                     variant="outline" 
-                                    title="Đăng ký"
-                                />
+                                    onClick={() => {
+                                        setIsLoggedIn(true);
+                                        navigate('register')
+                                }}>
+                                  Đăng ký
+                                </Button>
                             </div>
                         )}
                     </div>
