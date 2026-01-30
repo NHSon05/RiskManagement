@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useRegisterMutation } from "@/apis/authService";
 
-import { Button, Title } from "@/components/ui";
+import { Button, Title, Input } from "@/components/ui";
 import {
   Form,
   FormControl,
@@ -15,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 
 interface TitleProps{
     size: 'small' | 'medium' | 'large' | 'extra-large';
-    variant: 'light' | 'dark' | 'navy';
+    variant?: 'light' | 'dark' | 'navy';
     className?: string;
     children?: React.ReactNode;
 }

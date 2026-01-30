@@ -19,7 +19,7 @@ a.active{
 }
 
 :root{
-    --main-color : #1F75FE;
+    --main-color : #2c3cf0;
 
     --background: #FDFAF6;
     --white: #ffffff;
@@ -36,7 +36,7 @@ a.active{
     --solution: #22C55F;
     --report: #A856F7;
     /* //------------------------ */
-    --primary-btn : #3B82F6;
+    --primary-btn : #2c3cf0;
     --primary-btn-hover : #5B9AFF;
     --secondary-btn: #F1F8FE;
     --secondary-btn-hover:   #FAFAFB; 

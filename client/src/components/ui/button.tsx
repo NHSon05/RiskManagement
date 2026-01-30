@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     // children: ReactNode;
-    variant?: 'primary' | 'outline' | 'red' ;
-    size?: 'small' | 'medium' | 'large';
+    variant?: 'primary' | 'outline' | 'red' | 'none' ;
+    size?: 'small' | 'medium' | 'large' | 'none';
     disabled?: boolean;
     to?: string;
     href?: string;
@@ -54,6 +54,7 @@ function Button({
         },
         // Size
         {
+            'text-sm': size === 'none',
             'px-2 py-2 text-sm': size === 'small',
             'px-4 py-2 text-base': size === 'medium',
             'px-6 py-2 text-lg': size === 'large',
@@ -63,6 +64,7 @@ function Button({
             'bg-[var(--primary-btn)] text-[var(--white)] hover:bg-[var(--primary-btn-hover)] focus:ring-primary-btn': variant === 'primary' && !disabled,
             'bg-[var(--error)] text-[var(--white)] hover:bg-[var(--error)] hover:opacity-90 focus:ring-primary-btn': variant === 'red' && !disabled,
             'bg-[var(--secondary-btn)] text-[var(--primary-btn)] border border-[var(--primary-btn)] hover:bg-[var(--border)]': variant === 'outline' && !disabled,
+            'text-[var(--primary-btn)]': variant === 'none' && !disabled,
             'bg-[var(--description)] text-[var(--white)] cursor-not-allowed': disabled,
         },
         className

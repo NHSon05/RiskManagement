@@ -34,7 +34,6 @@ function Footer() {
             ]
         },
     ]
-
     return (  
         <footer className="border-t border-(--border)"
                 style={{ backgroundImage: `url(${bg_blue})` }}>
@@ -67,7 +66,9 @@ function Footer() {
                                     placeholder="Nhập email của bạn" 
                                     className="border-2 rounded-lg p-2 mb-2 bg-amber-50 border-t border-(--border)"/>
                         </form>
-                        <Button variant="outline" size="large" title="Đăng ký bây giờ"/>
+                        <Button variant="outline" size="large">
+                          Đăng ký bây giờ
+                        </Button>
                     </div>
                 </div>
                 <div className="mt-12 border-t border-gray-200 pt-8 flex flex-col md:flex-row items-center justify-between">

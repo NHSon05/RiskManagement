@@ -5,7 +5,7 @@ import iso from '../../assets/imgs/ISO.png'
 import building from '../../assets/imgs/DaNang.png';
 
 import { Button, FadedDiv, Title, Image } from '@/components/ui';
-import Card from '../../components/ui/PublicComponents/Cards';
+import Card from '../../components/ui/molecules/Cards';
 
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

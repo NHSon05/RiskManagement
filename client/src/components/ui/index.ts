@@ -4,6 +4,9 @@ export {default as FadedDiv} from './FadedDiv'
 // export { Image } from './image'
 export * from "./image"
 export {Badge} from './badge'
+export {default as Input} from './input'
+export {Textarea} from './textarea'
+export {Label} from './label'
 export {
   Title, 
   Description
@@ -16,5 +19,35 @@ export {
   CardDescription,
   CardContent 
 } from './card'
-export {Textarea} from './textarea'
-export {Label} from './label'
+export { 
+  Accordion, 
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent
+} from './accordion'
+export {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  FormLabel
+} from './form'
+export {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './select'
+
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+} from './table'

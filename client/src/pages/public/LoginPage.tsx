@@ -5,7 +5,7 @@ import * as z from "zod";
 import { useNavigate, Link } from "react-router-dom";
 
 // --- SHADCN IMPORTS ---
-import { Button, Title } from "@/components/ui";
+import { Button, Title, Input } from "@/components/ui";
 import {
   Form,
   FormControl,
@@ -14,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
