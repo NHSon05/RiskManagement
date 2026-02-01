@@ -9,7 +9,7 @@ export const useLogout = () => {
     // DeleteToken
     localStorage.removeItem("accessToken")
     localStorage.removeItem("accessToken")
-    // DeleteCache
+    localStorage.removeItem("projectFormData")
     queryClient.clear()
     navigate('/');
   }

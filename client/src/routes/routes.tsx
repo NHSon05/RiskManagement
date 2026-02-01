@@ -28,6 +28,7 @@ const Info = lazy(() => import('@/pages/projects/steps/Info'))
 const Pestel = lazy(() => import('@/pages/projects/steps/Pestel'))
 const Target = lazy(() => import('@/pages/projects/steps/Target'))
 const Evaluation = lazy(() => import('@/pages/projects/steps/Evaluation'))
+const Solution = lazy(() => import('@/pages/projects/steps/Solution'))
 
 // 5. Not Found, Errorr
 const NotFound = lazy(() => import('@/pages/notFound/NotFound'))
@@ -93,6 +94,9 @@ export const router = createBrowserRouter(
             {/* <Route path='identify' element={<Identify />} /> */}
             <Route path='evaluation' element={
               <Suspense fallback={<Loading />}><Evaluation /></Suspense>
+            } />
+            <Route path='solution' element={
+              <Suspense fallback={<Loading />}><Solution /></Suspense>
             } />
           </Route>
 

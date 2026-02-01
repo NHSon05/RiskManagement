@@ -22,11 +22,11 @@ import {
 } from "@/components/ui";
 
 const infoSchema = z.object({
-  projectName: z.string().min(1, "Vui lòng nhập tên dự án"),
-  projectLevel: z.string().min(1, "Vui lòng nhập cấp công trình"),
-  location: z.string().min(1, "Vui lòng nhập địa điểm"),
-  capitalSource: z.string().min(1, "Vui lòng nhập nguồn vốn"),
-  role: z.string().min(1, "Vui lòng chọn vai trò"),
+  prj_name: z.string().min(1, "Vui lòng nhập tên dự án"),
+  prj_level: z.string().min(1, "Vui lòng nhập cấp công trình"),
+  prj_location: z.string().min(1, "Vui lòng nhập địa điểm"),
+  prj_fund: z.string().min(1, "Vui lòng nhập nguồn vốn"),
+  prj_role: z.string().min(1, "Vui lòng chọn vai trò"),
 });
 
 export default function Info() {
@@ -36,11 +36,11 @@ export default function Info() {
   const form = useForm<z.infer<typeof infoSchema>>({
     resolver: zodResolver(infoSchema),
     defaultValues: {
-      projectName: savedData.projectName || "",
-      projectLevel: savedData.projectLevel || "",
-      location: savedData.location || "",
-      capitalSource: savedData.capitalSource || "",
-      role: savedData.role || "",
+      prj_name: savedData.prj_name || "",
+      prj_level: savedData.prj_level || "",
+      prj_location: savedData.prj_location || "",
+      prj_fund: savedData.prj_fund || "",
+      prj_role: savedData.prj_role || "",
     },
   });
   function onSubmit(values: z.infer<typeof infoSchema>) {
@@ -53,7 +53,7 @@ export default function Info() {
   }
 
   return (
-    <div className="flex justify-center p-6 bg-gray-50 min-h-[calc(100vh-100px)]">
+    <div className="flex justify-center md:p-6 bg-gray-50 min-h-[calc(100vh-100px)]">
       <Card className="w-full max-w-2xl shadow-sm h-fit">
         <CardHeader>
           <Title variant="navy" size="large">Thông tin dự án</Title>
@@ -62,7 +62,7 @@ export default function Info() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">   
               {/* Tên dự án */}
-              <FormField control={form.control} name="projectName" render={({ field }) => (
+              <FormField control={form.control} name="prj_name" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Tên dự án</FormLabel>
                   <FormControl><Input placeholder="Nhập tên dự án" {...field} /></FormControl>
@@ -70,7 +70,7 @@ export default function Info() {
                 </FormItem>
               )} />
               {/* Cấp công trình */}
-              <FormField control={form.control} name="projectLevel" render={({ field }) => (
+              <FormField control={form.control} name="prj_level" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Cấp công trình</FormLabel>
                   <FormControl><Input placeholder="Nhập cấp công trình" {...field} /></FormControl>
@@ -78,7 +78,7 @@ export default function Info() {
                 </FormItem>
               )} />
               {/* Địa điểm */}
-              <FormField control={form.control} name="location" render={({ field }) => (
+              <FormField control={form.control} name="prj_location" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Địa điểm</FormLabel>
                   <FormControl><Input placeholder="Ví dụ: TP. Đà Nẵng" {...field} /></FormControl>
@@ -86,7 +86,7 @@ export default function Info() {
                 </FormItem>
               )} />
               {/* Nguồn vốn */}
-              <FormField control={form.control} name="capitalSource" render={({ field }) => (
+              <FormField control={form.control} name="prj_fund" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nguồn vốn</FormLabel>
                   <FormControl><Input placeholder="Nhập nguồn vốn của bạn" {...field} /></FormControl>
@@ -94,7 +94,7 @@ export default function Info() {
                 </FormItem>
               )} />
               {/* Vai trò (Select) */}
-              <FormField control={form.control} name="role" render={({ field }) => (
+              <FormField control={form.control} name="prj_role" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Vai trò</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>

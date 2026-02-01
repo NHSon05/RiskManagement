@@ -15,7 +15,7 @@ import {
   FormControl,
   Input,
 } from "@/components/ui"
-import { FileIcon, Plus, Trash2 } from "lucide-react"
+import { FileIcon, Plus } from "lucide-react"
 import { useFieldArray, useForm } from "react-hook-form"
 import RiskList from "@/components/ui/molecules/riskList"
 
@@ -35,7 +35,7 @@ export default function Target() {
     }
   })
   // useFieldArray cấp 1: Quản lý mục tiêu
-  const {fields, append, remove} = useFieldArray({
+  const {fields, append} = useFieldArray({
     control: form.control,
     name: "targets",
   })
@@ -54,7 +54,7 @@ export default function Target() {
               Sử dụng công cụ này để xác định và phân loại các rủi ro tiềm ẩn cho dự án của bạn
             </Description>
           </Title>
-          <p className="text-[20px] px-24"
+          <p className="text-[20px] px-24 hidden md:block"
             >Phân tích và theo dõi các rủi ro trong dự án của bạn một cách hiệu quả. Bấm vào nút bên dưới để mở tệp tham khảo chứa danh sách các loại rủi ro thường gặp, giúp bạn trong quá trình xác định
           </p>
           <Button variant="primary" size="large">
@@ -102,13 +102,6 @@ export default function Target() {
                             )}
                           />
                         </div>
-                          <Button
-                            variant="none"
-                            size="none"
-                            onClick={() => remove(index)}
-                          >
-                            <Trash2 className="text-(--error)"/>
-                          </Button>
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
