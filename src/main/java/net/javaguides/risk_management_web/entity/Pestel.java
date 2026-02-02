@@ -21,7 +21,6 @@ public class Pestel {
     @JsonIgnore
     private Project project;
 
-    // getters & setters
 
     public Long getId() {
         return id;

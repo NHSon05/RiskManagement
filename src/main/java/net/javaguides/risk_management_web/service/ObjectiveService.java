@@ -26,7 +26,6 @@ public class ObjectiveService {
 
         Objective obj = new Objective();
         obj.setName(req.name);
-        obj.setDescription(req.description);
         obj.setProject(project);
 
         return objectiveRepo.save(obj);
@@ -45,7 +44,6 @@ public class ObjectiveService {
                 .orElseThrow(() -> new RuntimeException("Objective not found"));
 
         obj.setName(req.name);
-        obj.setDescription(req.description);
 
         return objectiveRepo.save(obj);
     }

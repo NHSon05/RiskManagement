@@ -19,7 +19,6 @@ public class Swot {
     @JsonIgnore
     private Project project;
 
-    // getters & setters
 
     public Long getId() {
         return id;

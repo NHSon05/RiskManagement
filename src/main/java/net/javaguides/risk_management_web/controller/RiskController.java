@@ -19,8 +19,9 @@ public class RiskController {
 
     @PostMapping("/objectives/{objectiveId}/risks")
     public Risk create(@PathVariable Long objectiveId,
-                       @RequestBody RiskRequest req) {
-        return service.create(objectiveId, req);
+                       @RequestBody RiskRequest req,
+                       @RequestParam(defaultValue = "false") boolean addToLibrary) {
+        return service.create(objectiveId, req, addToLibrary);
     }
 
     @GetMapping("/objectives/{objectiveId}/risks")
@@ -32,10 +33,11 @@ public class RiskController {
     public List<Risk> getRanking(@PathVariable Long projectId) {
         return service.getByProject(projectId);
     }
+
     @DeleteMapping("/risks/{id}")
     public String delete(@PathVariable Long id) {
         service.delete(id);
-        return "Đã xóa rủi ro!";
+        return "Đã xóa rủi ro thành công!";
     }
 
     @PutMapping("/risks/{id}")

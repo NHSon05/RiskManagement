@@ -14,11 +14,10 @@ public class Risk {
     private String name;
     private String category;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    private String personInCharge;
 
     @ManyToOne
-    @JsonIgnoreProperties({"project", "description", "risks"})
+    @JsonIgnoreProperties({"project", "risks"})
     private Objective objective;
 
     @ManyToOne
@@ -28,60 +27,24 @@ public class Risk {
     @OneToOne(mappedBy = "risk", cascade = CascadeType.ALL)
     private RiskAssessment assessment;
 
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public String getName() {
-        return name;
-    }
+    public String getPersonInCharge() { return personInCharge; }
+    public void setPersonInCharge(String personInCharge) { this.personInCharge = personInCharge; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public Objective getObjective() { return objective; }
+    public void setObjective(Objective objective) { this.objective = objective; }
 
-    public String getCategory() {
-        return category;
-    }
+    public Project getProject() { return project; }
+    public void setProject(Project project) { this.project = project; }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Objective getObjective() {
-        return objective;
-    }
-
-    public void setObjective(Objective objective) {
-        this.objective = objective;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
-    public RiskAssessment getAssessment() {
-        return assessment;
-    }
-
-    public void setAssessment(RiskAssessment assessment) {
-        this.assessment = assessment;
-    }
+    public RiskAssessment getAssessment() { return assessment; }
+    public void setAssessment(RiskAssessment assessment) { this.assessment = assessment; }
 }
