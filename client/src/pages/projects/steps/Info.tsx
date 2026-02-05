@@ -20,8 +20,10 @@ import {
   CardContent,
   CardHeader
 } from "@/components/ui";
+import { nanoid } from "nanoid";
 
 const infoSchema = z.object({
+  prj_id: z.string(),
   prj_name: z.string().min(1, "Vui lòng nhập tên dự án"),
   prj_level: z.string().min(1, "Vui lòng nhập cấp công trình"),
   prj_location: z.string().min(1, "Vui lòng nhập địa điểm"),
@@ -36,6 +38,7 @@ export default function Info() {
   const form = useForm<z.infer<typeof infoSchema>>({
     resolver: zodResolver(infoSchema),
     defaultValues: {
+      prj_id: nanoid(),
       prj_name: savedData.prj_name || "",
       prj_level: savedData.prj_level || "",
       prj_location: savedData.prj_location || "",
