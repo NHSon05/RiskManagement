@@ -67,7 +67,7 @@ function Pestel() {
       {
         code: c.code,
         label: c.label,
-        items: [{ content: ""}]
+        items:  [{ content: ""}]
       }
     ))
   }
