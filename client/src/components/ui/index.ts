@@ -3,7 +3,6 @@ export {default as Loading} from './loading'
 export {default as FadedDiv} from './FadedDiv'
 // export { Image } from './image'
 export * from "./image"
-export {Badge} from './badge'
 export {default as Input} from './input'
 export {Textarea} from './textarea'
 export {Label} from './label'
@@ -39,6 +38,8 @@ export {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectGroup,
+  SelectLabel
 } from './select'
 
 export {
@@ -51,3 +52,7 @@ export {
   TableCell,
   TableCaption,
 } from './table'
+export {
+  Badge,
+  badgeVariants
+} from './badge'
