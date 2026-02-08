@@ -111,10 +111,12 @@ export default function Evaluation() {
   };
    // ✅ Get risk level badge
   const getRiskLevelBadge = (riskLevel: number) => {
-    if (riskLevel >= 20) {
-      return <Badge className="bg-(--error) hover:bg-red-700 text-white">Cao</Badge>;
-    } else if (riskLevel >= 15) {
-      return <Badge className="bg-(--warning) hover:bg-orange-600 text-white">Trung bình</Badge>;
+    if (riskLevel >= 16) {
+      return <Badge className="bg-(--error) hover:bg-red-700 text-white">Rất cao</Badge>;
+    } else if (riskLevel >= 10) {
+      return <Badge className="bg-(--warning) hover:bg-orange-600 text-white">Cao</Badge>;
+    } else if (riskLevel >= 4) {
+      return <Badge className="bg-(--rarely) hover:bg-yellow-400 text-white">Trung bình</Badge>;
     } else if (riskLevel >= 0) {
       return <Badge className="bg-(--solution) hover:bg-green-600 text-white">Yếu</Badge>;
     }
