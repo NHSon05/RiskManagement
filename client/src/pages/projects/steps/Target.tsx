@@ -23,7 +23,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { nanoid } from 'nanoid'
 import { useEffect } from "react"
 
-
 const riskSchema = z.object({
   id: z.string(),
   name: z.string().min(1),
@@ -48,6 +47,16 @@ type FormValues = z.infer<typeof formSchema>
 
 export default function Target() {
   const navigate = useNavigate()
+
+  // titleCase function
+  const titleCase = (str:string) => {
+    const convertToArray = str.toLowerCase().split(' ')
+    const result = convertToArray.map((val) => {
+      return val.replace(val.charAt(0), val.charAt(0).toUpperCase())
+    })
+    return result.join(' ')
+  }
+
   const loadSavedData = () => {
     const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
     if (savedData.prj_targets && savedData.prj_targets.length > 0) {
@@ -100,16 +109,14 @@ export default function Target() {
     
     try {
       const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
-      
-      // ✅ Lưu data với đầy đủ thông tin
       const updatedData = {
-        ...savedData,
+        ...savedData, 
         prj_targets: data.prj_targets.map(target => ({
-          id: target.id, // ✅ Giữ lại ID
-          name: target.name,
+          id: target.id, 
+          name: titleCase(target.name), 
           risks: target.risks.map(risk => ({
-            id: risk.id, // ✅ Giữ lại ID của risk
-            name: risk.name,
+            id: risk.id, 
+            name: titleCase(risk.name),
             probability_level: risk.probability_level ?? 0,
             impact_level: risk.impact_level ?? 0,
             risk_level: risk.risk_level ?? 0,
