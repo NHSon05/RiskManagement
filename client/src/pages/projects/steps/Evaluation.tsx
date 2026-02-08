@@ -117,8 +117,10 @@ export default function Evaluation() {
       return <Badge className="bg-(--warning) hover:bg-orange-600 text-white">Cao</Badge>;
     } else if (riskLevel >= 4) {
       return <Badge className="bg-(--rarely) hover:bg-yellow-400 text-white">Trung bình</Badge>;
-    } else if (riskLevel >= 0) {
+    } else if (riskLevel > 0) {
       return <Badge className="bg-(--solution) hover:bg-green-600 text-white">Yếu</Badge>;
+    } else if (riskLevel == 0) {
+      return <Badge className="bg-(--description) hover:bg-gray-500 text-white">Chưa đánh giá</Badge>;
     }
   };
   return (
