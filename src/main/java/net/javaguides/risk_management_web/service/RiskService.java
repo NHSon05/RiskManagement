@@ -1,12 +1,9 @@
 package net.javaguides.risk_management_web.service;
 
 import net.javaguides.risk_management_web.dto.RiskRequest;
-import net.javaguides.risk_management_web.entity.Objective;
-import net.javaguides.risk_management_web.entity.Risk;
-import net.javaguides.risk_management_web.entity.RiskLibrary;
-import net.javaguides.risk_management_web.repository.ObjectiveRepository;
-import net.javaguides.risk_management_web.repository.RiskLibraryRepository;
-import net.javaguides.risk_management_web.repository.RiskRepository;
+import net.javaguides.risk_management_web.dto.SolutionRequest;
+import net.javaguides.risk_management_web.entity.*;
+import net.javaguides.risk_management_web.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,60 +15,76 @@ public class RiskService {
     private final RiskRepository riskRepo;
     private final ObjectiveRepository objectiveRepo;
     private final RiskLibraryRepository libraryRepo;
+    private final RiskSolutionRepository solutionRepo;
 
     public RiskService(RiskRepository riskRepo,
                        ObjectiveRepository objectiveRepo,
-                       RiskLibraryRepository libraryRepo) {
+                       RiskLibraryRepository libraryRepo,
+                       RiskSolutionRepository solutionRepo) {
         this.riskRepo = riskRepo;
         this.objectiveRepo = objectiveRepo;
         this.libraryRepo = libraryRepo;
+        this.solutionRepo = solutionRepo;
     }
 
+    // 1. Tạo Rủi ro (Chỉ có tên)
     @Transactional
     public Risk create(Long objectiveId, RiskRequest req, boolean addToLibrary) {
-        // 1. Tìm mục tiêu cha
         Objective obj = objectiveRepo.findById(objectiveId)
-                .orElseThrow(() -> new RuntimeException("Objective not found with id: " + objectiveId));
+                .orElseThrow(() -> new RuntimeException("Objective not found"));
 
-        // 2. Tạo rủi ro mới và map dữ liệu
         Risk r = new Risk();
         r.setName(req.getName());
-        r.setCategory(req.getCategory());
-        r.setPersonInCharge(req.getPersonInCharge()); // Lưu người phụ trách
-
+        // Không set category/personInCharge ở đây nữa
         r.setObjective(obj);
-        r.setProject(obj.getProject()); // Gán vào dự án của mục tiêu đó
-
-        // 3. Lưu rủi ro
+        r.setProject(obj.getProject());
         Risk savedRisk = riskRepo.save(r);
 
-        // 4. Logic lưu vào thư viện mẫu (nếu được chọn)
+        // Lưu tên rủi ro vào thư viện
         if (addToLibrary) {
             RiskLibrary lib = new RiskLibrary();
             lib.setName(req.getName());
-            lib.setCategory(req.getCategory());
-            // Lưu ý: Không lưu personInCharge vào thư viện vì mỗi dự án người phụ trách khác nhau
             libraryRepo.save(lib);
         }
-
         return savedRisk;
     }
 
+    // 2. Thêm Giải pháp cho Rủi ro (Kèm người phụ trách)
+    @Transactional
+    public RiskSolution addSolution(Long riskId, SolutionRequest req, boolean updateLibrary) {
+        Risk risk = riskRepo.findById(riskId)
+                .orElseThrow(() -> new RuntimeException("Risk not found"));
+
+        RiskSolution sol = new RiskSolution();
+        sol.setContent(req.getContent());
+        sol.setPersonInCharge(req.getPersonInCharge()); // Người phụ trách gắn với giải pháp
+        sol.setRisk(risk);
+        RiskSolution savedSol = solutionRepo.save(sol);
+
+        // Cập nhật giải pháp mẫu vào thư viện
+        if (updateLibrary) {
+            List<RiskLibrary> libs = libraryRepo.findAll();
+            for (RiskLibrary lib : libs) {
+                // Logic đơn giản: cập nhật cho các item cùng tên trong library
+                if (lib.getName().equalsIgnoreCase(risk.getName())) {
+                    lib.setSuggestedSolution(req.getContent());
+                    libraryRepo.save(lib);
+                }
+            }
+        }
+        return savedSol;
+    }
+
+    // Cập nhật tên rủi ro
     public Risk update(Long id, RiskRequest req) {
         Risk r = riskRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Risk not found with id: " + id));
-
+                .orElseThrow(() -> new RuntimeException("Risk not found"));
         r.setName(req.getName());
-        r.setCategory(req.getCategory());
-        r.setPersonInCharge(req.getPersonInCharge()); // Cập nhật người phụ trách
-
         return riskRepo.save(r);
     }
 
     public void delete(Long id) {
-        if (!riskRepo.existsById(id)) {
-            throw new RuntimeException("Risk not found with id: " + id);
-        }
+        if (!riskRepo.existsById(id)) throw new RuntimeException("Risk not found");
         riskRepo.deleteById(id);
     }
 

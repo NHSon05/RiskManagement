@@ -8,12 +8,16 @@ public class RiskLibrary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String category;
+    // Đã xóa category
 
+    @Column(columnDefinition = "TEXT")
+    private String suggestedSolution; // Giải pháp gợi ý lưu trong thư viện
+
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    public String getSuggestedSolution() { return suggestedSolution; }
+    public void setSuggestedSolution(String suggestedSolution) { this.suggestedSolution = suggestedSolution; }
 }
