@@ -15,11 +15,11 @@ interface ListRiskProps{
   nestIndex:number;
 }
 export default function RiskList({control, nestIndex}:ListRiskProps) {
-const [tempRiskName, setTempRiskName] = useState("");
+  const [tempRiskName, setTempRiskName] = useState("");
   const {fields, append, remove} = useFieldArray({
     control,
     name: `prj_targets.${nestIndex}.risks`,
-    keyName: "id",
+    keyName: "_id",
   })
   const handleQuickAdd = () => {
     if (!tempRiskName.trim()) return
@@ -62,7 +62,7 @@ const [tempRiskName, setTempRiskName] = useState("");
       </div>
       <Title variant="dark" size="small">Danh sách rủi ro</Title>
       {fields.map((field, index) => (
-        <div key={field.id} className="flex gap-2 items-center py-2">
+        <div key={field._id} className="flex gap-2 items-center py-2">
           <FormField
             control={control}
             name={`prj_targets.${nestIndex}.risks.${index}.name`}

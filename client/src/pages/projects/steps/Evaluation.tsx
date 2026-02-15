@@ -123,8 +123,18 @@ export default function Evaluation() {
       return <Badge className="bg-(--description) hover:bg-gray-500 text-white">Chưa đánh giá</Badge>;
     }
   };
+  const handleNext = () => {
+    const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
+    const updatedData = {
+      ...savedData,
+      prj_targets: targets
+    }
+  localStorage.setItem("projectFormData", JSON.stringify(updatedData));
+  console.log("✅ Saved before navigate");
+  navigate('/projects/solution');
+  }
   return (
-    <div>
+    <div className="mx-auto">
       <Title variant="navy" size="large" className="py-4">
         Đánh giá rủi ro
       </Title>
@@ -140,7 +150,7 @@ export default function Evaluation() {
         </TableHeader>
         <TableBody className="bg-(--white)">
           {allRisks.map((risk,index) => (
-              <TableRow key={index}>
+              <TableRow key={risk.id}>
                 <TableCell className="text-left">{index+1}</TableCell>
                 <TableCell className="text-left">
                   {risk.name}
@@ -213,7 +223,7 @@ export default function Evaluation() {
           <Button 
             variant="primary"
             size='medium'
-            onClick={() => navigate('/projects/solution')}
+            onClick={handleNext}
           >
               Tiếp theo
           </Button>

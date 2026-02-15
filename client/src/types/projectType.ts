@@ -5,19 +5,8 @@ export interface Info{
   prj_location: string;
   prj_fund: string;
   prj_role: string;
-  // PESTEL_SWOT
-  // political?: string;
-  // economic?: string;
-  // social?: string;
-  // technology?: string;
-  // environment?: string;
-  // legal?: string;
   pestel: PestelSwot[]
   swot: PestelSwot[]
-  // strengths?: string;
-  // weakness?: string;
-  // opportunities?: string;
-  // threats?: string;
   prj_target: Target[]
 }
 
@@ -40,8 +29,9 @@ export interface Target {
 }
 
 export interface ResponsePlan {
+  id: string;
   owner: string;
-  content: string;
+  name: string;
 }
 
 export interface PestelSwot {

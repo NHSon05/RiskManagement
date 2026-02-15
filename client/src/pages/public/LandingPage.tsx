@@ -27,22 +27,22 @@ function LandingPage() {
 
     return (
         <div>
-            {/* Welcome Screen */}
-            <div
-                className="relative h-[80vh] bg-center bg-cover flex items-center justify-center full"
-                style={{ backgroundImage: `url(${construction})` }}>
-                {/* overlay */}
-                <div className="absolute inset-0 bg-black opacity-30" />
-                <div className="relative py-16 text-(--white)">
-                    <h1 className='font-bold text-[48px]'>
-                        <span className='text-(--main-color)'>Quản lý</span>
-                        <br/>
-                        rủi ro
-                        <span className='text-(--main-color)'> dự án</span> của bạn
-                    </h1>
-                    <p className='p-4 text-[20px] mx-2 sm:mx-16 md:mx-32 lg:mx-64'>Risk Management - Công cụ toàn diện giúp bạn xác định, đánh giá và quản lý rủi ro hiệu quả cho mọi dự án, đảm bảo thành công và giảm thiểu bất ngờ.</p>
-                    <Button variant='outline' size='large'>Xem thêm</Button>
-                </div>
+          {/* Welcome Screen */}
+          <div
+            className="relative h-[80vh] bg-center bg-cover flex items-center justify-center full"
+            style={{ backgroundImage: `url(${construction})` }}>
+            {/* overlay */}
+            <div className="absolute inset-0 bg-black opacity-30" />
+            <div className="relative py-16 text-(--white)">
+                <h1 className='font-bold text-[48px]'>
+                    <span className='text-(--main-color)'>Quản lý</span>
+                    <br/>
+                    rủi ro
+                    <span className='text-(--main-color)'> dự án</span> của bạn
+                </h1>
+                <p className='p-4 text-[20px] mx-2 sm:mx-16 md:mx-32 lg:mx-64'>Risk Management - Công cụ toàn diện giúp bạn xác định, đánh giá và quản lý rủi ro hiệu quả cho mọi dự án, đảm bảo thành công và giảm thiểu bất ngờ.</p>
+                <Button variant='outline' size='large'>Xem thêm</Button>
+              </div>
             </div>
 
             {/* Advantages of Projects */}
@@ -55,7 +55,12 @@ function LandingPage() {
                 </div>
                 <FadedDiv className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8'>
                     {cards.map((card, index) => (
-                        <Card key={index} color={card.color} icon={card.icon} title={card.title} des={card.des}/>
+                        <Card key={index}
+                              color={card.color}
+                              icon={card.icon}
+                              title={card.title}
+                              des={card.des}
+                        />
                     ))}
                 </FadedDiv>
 

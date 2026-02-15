@@ -31,8 +31,9 @@ const riskSchema = z.object({
   risk_level: z.number().default(0),
   strategy: z.string().default(""),
   response_plans: z.array(z.object({
+    id: z.string(),
     owner: z.string(),
-    content: z.string()
+    name: z.string()
   })).default([])
 })
 const targetSchema = z.object({
@@ -142,7 +143,7 @@ export default function Target() {
     }
   }
   return (
-    <div className="mx-auto">
+    <div className="mx-auto p-6">
       {/* Headers */}
       <Card className="bg-(--white) shadow-sm border-none">
         <CardContent className="flex flex-col items-center p-8 space-y-4">

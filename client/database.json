@@ -41,9 +41,11 @@
 
   "prj_targets": [
     {
+      "id": "dasldjsakldajskld",
       "name": "Hoàn thành giải phóng mặt bằng đúng hạn Q3/2024",
       "risks": [
         {
+          "id": "dasjldasjdhasjkd",
           "name": "Người dân không đồng thuận giá đền bù",
           "probability_level": 4,
           "impact_level": 5,
@@ -51,10 +53,12 @@
           "strategy": "Giảm thiểu",
           "response_plans": [
             {
+              "id": "dlkasjlaslkdadskl",
               "owner": "Nguyễn Văn A",
               "content": "Tổ chức họp đối thoại trực tiếp"
             },
             {
+              "id": "dlkasjlaslkdadskl",
               "owner": "Nguyễn Văn B",
               "content": "Đề xuất phương án tái định cư"
             }
