@@ -8,6 +8,7 @@ import {
   Button,
   Card,
   CardContent,
+  Badge,
 } from "@/components/ui";
 import type { ResponsePlan, Risk, Target } from "@/types/projectType";
 import { useRef, useState } from "react";
@@ -60,18 +61,18 @@ export default function ProjectDetail() {
 
   const getRiskLevelBadge = (riskLevel: number) => {
   if (riskLevel >= 16) {
-    return <p className="text-(--error)">Rất cao</p>;
+    return <Badge className="bg-red-200 text-(--error)">Rất cao</Badge>;
   } else if (riskLevel >= 10) {
-    return <p className="text-(--warning)">Cao</p>;
+    return <Badge className="bg-orange-200 text-(--warning)">Cao</Badge>;
   } else if (riskLevel >= 4) {
-    return <p className="text-(--rarely)">Trung bình</p>;
+    return <Badge className="bg-yellow-100 text-(--rarely)">Trung bình</Badge>;
   } else if (riskLevel > 0) {
-    return <p className="text-(--solution)">Yếu</p>;
+    return <Badge className="bg-green-100 text-(--solution)">
+      Yếu</Badge>;
   } else if (riskLevel == 0) {
-    return <p className="text-(--description">Chưa đánh giá</p>;
+    return <Badge className="text-(--descriBadgetion">Chưa đánh giá</Badge>;
   }
 };
-
   // Flatten all risks from all targets
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const allRisks = data.prj_targets?.flatMap((target : Target, targetIndex: any) => 
@@ -114,7 +115,7 @@ export default function ProjectDetail() {
                   </TableCell>
                   <TableCell className="text-right space-y-1">
                     {risk.response_plans.map((plan: ResponsePlan ,index : number) => (
-                      <div key={index}>
+                      <div key={index} className="text-(--political) italic">
                         {plan.owner}
                       </div>
                     ))}

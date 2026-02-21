@@ -109,6 +109,7 @@ export default function Solution() {
       localStorage.setItem("projectFormData", JSON.stringify(newData));
       console.log("Saved Successfully:", newData);
       alert("Lưu thành công!");
+      navigate('/projects/detail')
     } catch (error) {
       console.error("Lỗi khi lưu dữ liệu", error)
     }
