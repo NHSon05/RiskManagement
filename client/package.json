@@ -29,6 +29,8 @@
     "class-variance-authority": "^0.7.1",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
+    "html-to-image": "^1.11.13",
+    "jspdf": "^4.1.0",
     "lucide-react": "^0.562.0",
     "motion": "^12.26.1",
     "nanoid": "^5.1.6",

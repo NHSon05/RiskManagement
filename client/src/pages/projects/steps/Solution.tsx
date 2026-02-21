@@ -48,7 +48,7 @@ const getRiskLevelBadge = (riskLevel: number) => {
 // ------------------------------------------
 export default function Solution() {
   const navigate = useNavigate();
-
+  
   const form  = useForm<FormValues>({
     defaultValues: {risks: []}
   })
@@ -117,7 +117,7 @@ export default function Solution() {
     <div>
       {/* Header */}
       <div className="py-4">
-        <Title variant="navy" size="medium">Giải pháp ứng phó rủi ro</Title>
+        <Title variant="navy" size="large">Giải pháp ứng phó rủi ro</Title>
         <p className="text-(--description)">
           Xác định chiến lược và kế hoạch hành động cho từng rủi ro
         </p>
@@ -149,12 +149,12 @@ export default function Solution() {
                           <Label className="text-start">1. Ứng phó rủi ro</Label>
                           <div className="md:flex flex-start space-x-4">
                             {STRATEGIES.map((strategy) => {
-                              const isSelected = currentStrategy === strategy.value;
+                              const isSelected = currentStrategy === strategy.label;
                               return (
                                 <button
                                   type="button"
-                                  onClick={() => form.setValue(`risks.${index}.strategy`, strategy.value, { shouldDirty: true })}
-                                  key={strategy.value}
+                                  onClick={() => form.setValue(`risks.${index}.strategy`, strategy.label, { shouldDirty: true })}
+                                  key={strategy.label}
                                   // className={`${strategy.color} border p-2 rounded-4xl text-sm`}
                                   className={`
                                   px-4 py-2 rounded-full text-sm font-medium border transition-all
@@ -194,8 +194,8 @@ export default function Solution() {
                 type="submit"
                 variant="primary"
                 size='medium'
-                >
-                Tiếp theo
+              >
+                Hoàn thành
               </Button>
             </div>
         </form>

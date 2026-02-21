@@ -22,6 +22,7 @@ const Support = lazy(() => import('@/pages/dashboard/Support'))
 
 // 3. Project Pages (Nằm trong src/pages/projects)
 const ProjectLists = lazy(() => import('@/pages/projects/ProjectLists'))
+const ProjectDetail = lazy(() => import('@/pages/projects/ProjectDetail'))
 
 // 4. Project Steps (Nằm trong src/pages/projects/steps)
 const Info = lazy(() => import('@/pages/projects/steps/Info'))
@@ -97,6 +98,9 @@ export const router = createBrowserRouter(
             } />
             <Route path='solution' element={
               <Suspense fallback={<Loading />}><Solution /></Suspense>
+            } />
+            <Route path='detail' element={
+              <Suspense fallback={<Loading/>}><ProjectDetail /></Suspense>
             } />
           </Route>
 

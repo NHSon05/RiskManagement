@@ -28,12 +28,22 @@ export default function PlanList({
     control,
     name: `risks.${nestIndex}.response_plans`,
   })
+  
+  const titleCase = (str:string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+  const uppercaseTitle = (str:string) => {
+    const convertToArray = str.toLowerCase().split(' ')
+    const result = convertToArray.map(val => {
+      return val.replace(val.charAt(0), val.charAt(0).toUpperCase())
+    })
+    return result.join(' ')
+  }
+  
   const handleQuickAdd = () => {
     if (!planAction.trim()) return
     const newPlan = {
       id: nanoid(),
-      owner: owner,
-      name: planAction
+      owner: uppercaseTitle(owner),
+      name: titleCase(planAction)
     }
     append(newPlan)
     setPlanAction("")

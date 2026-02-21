@@ -50,13 +50,7 @@ export default function Target() {
   const navigate = useNavigate()
 
   // titleCase function
-  const titleCase = (str:string) => {
-    const convertToArray = str.toLowerCase().split(' ')
-    const result = convertToArray.map((val) => {
-      return val.replace(val.charAt(0), val.charAt(0).toUpperCase())
-    })
-    return result.join(' ')
-  }
+  const titleCase = (str:string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 
   const loadSavedData = () => {
     const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
