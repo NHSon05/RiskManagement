@@ -26,7 +26,7 @@ const Card: React.FC<ItemProps> = ({
     const props = {...passProps};
 
     const boxClasses = classNames(
-        'rounded-lg p-8', 
+        'rounded-lg px-8 py-12 shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]', 
         {
             'bg-[var(--bg-search)]': color === 'blue',
             'bg-[var(--bg-solution)]': color === 'green',
@@ -47,7 +47,6 @@ const Card: React.FC<ItemProps> = ({
     );
 
     const textClasses = classNames(
-        'text-[20px] font-semibold',
         {
             'text-[var(--progress)]': color === 'blue',
             'text-[var(--solution)]': color === 'green',
@@ -62,12 +61,15 @@ const Card: React.FC<ItemProps> = ({
             variants={cardVariants}
         >
             <FontAwesomeIcon icon={icon} className={iconClasses} />
-            <h1 className={textClasses}>
+            <h1 className={`text-[20px] font-semibold ${textClasses}`}>
                 {title}
             </h1>
             <p className="text-(--description) text-sm mt-2">
                 {des}
             </p>
+            <button className={`px-2 py-1 text-sm mt-2 rounded-xl ${textClasses} hover:italic hover:underline cursor-pointer`}>
+              Xem thêm
+            </button>
         </motion.div>
     )
 }

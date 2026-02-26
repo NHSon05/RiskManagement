@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from 'react-toastify';
 import { Description } from "@/components/ui/title";
+import { PageTransition } from "@/components/animated";
 
 
 // --- 1. ĐỊNH NGHĨA SCHEMA (VALIDATION) ---
@@ -71,61 +72,63 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-(--background) p-4">
-      {/* Container Card */}
-      <Card className="w-full max-w-md shadow-lg bg-(--white)">
-        <CardHeader className="space-y-1">
-          <Title size="medium" variant="navy" className="text-center">Chào mừng trở lại</Title>
-          <Description className="text-center">Hệ thống quản lý rủi ro dự án</Description>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              {/*Email */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="admin@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* Password */}
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Mật khẩu</FormLabel>
-                    <FormControl>
-                      <Input type="password" placeholder="••••••" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <PageTransition>
+      <div className="flex items-center justify-center min-h-screen bg-(--background) p-4">
+        {/* Container Card */}
+        <Card className="w-full max-w-md shadow-lg bg-(--white)">
+          <CardHeader>
+            <Title size="medium" variant="navy" className="text-center">Chào mừng trở lại</Title>
+            <Description className="text-center">Hệ thống quản lý rủi ro dự án</Description>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                {/*Email */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="admin@example.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Password */}
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Mật khẩu</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="••••••" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              {/* Submit */}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading? "Đang đăng nhập" : "Đăng nhập"}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-        <CardFooter className="flex justify-center">
-          <p className="text-sm text-gray-500">
-            Chưa có tài khoản?{" "}
-            <Link to="/register" className="text-(--main-color) hover:underline font-semibold">
-              Đăng ký ngay
-            </Link>
-          </p>
-        </CardFooter>
-      </Card>
-    </div>
+                {/* Submit */}
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading? "Đang đăng nhập" : "Đăng nhập"}
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+          <CardFooter className="flex justify-center">
+            <p className="text-sm text-gray-500">
+              Chưa có tài khoản?{" "}
+              <Link to="/register" className="text-(--main-color) hover:underline font-semibold">
+                Đăng ký ngay
+              </Link>
+            </p>
+          </CardFooter>
+        </Card>
+      </div>
+    </PageTransition>
   );
 }

@@ -68,6 +68,7 @@ export default function ProjectCard({
         <Link to='/projects/#'>
             <motion.div className={classes} {...props}
                         variants={cardVariants}
+                        whileHover={{ scale: 1.05 }} whileTap={{ scale: 1 }}
             >
                 <div className="relative w-full pb-[66.66%] bg-gray-200">
                     <Image src={img} alt={title} className='absolute inset-0 w-full h-full object-cover rounded-lg'/>

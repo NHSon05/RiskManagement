@@ -1,5 +1,9 @@
+import { PageTransition } from "@/components/animated";
+
 export default function ProjectLists() {
   return (
-    <div>ProjectLists</div>
+    <PageTransition>
+      <div>ProjectLists</div>
+    </PageTransition>
   )
 }

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   // children: ReactNode;
   variant?: 'primary' | 'outline' | 'red' | 'none' ;
-  size?: 'small' | 'medium' | 'large' | 'none';
+  size?: 'extra-small' |'small' | 'medium' | 'large' | 'none';
   disabled?: boolean;
   to?: string;
   href?: string;
@@ -55,7 +55,8 @@ function Button({
     // Size
     {
       'text-sm': size === 'none',
-      'px-2 py-2 text-sm': size === 'small',
+      'px-3 py-2 text-sm': size === 'small',
+      'px-2 py-1 text-xs': size === 'extra-small',
       'px-4 py-2 text-base': size === 'medium',
       'px-6 py-2 text-lg': size === 'large',
     },

@@ -39,6 +39,7 @@
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.71.0",
     "react-icons": "^5.5.0",
+    "react-pdf": "^10.4.1",
     "react-router-dom": "^7.12.0",
     "react-toastify": "^11.0.5",
     "tailwind-merge": "^3.4.0",

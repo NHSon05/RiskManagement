@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PESTEL_CONFIG, SWOT_CONFIG } from "@/components/constants";
 
 import {
     Title,
@@ -13,22 +14,8 @@ import {
     Form,
 } from "@/components/ui";
 import PestelInput from "@/components/ui/molecules/PestelInput";
+import { PageTransition } from "@/components/animated";
 
-// --- Constants ---
-const PESTEL_CONFIG = [
-    { code: 'P', title: 'Chính trị', label: 'P - Political (Chính trị)', lists: ['Ảnh hưởng từ chính phủ', 'Chính sách', 'Ổn định chính trị'] },
-    { code: 'E', title: 'Kinh tế', label: 'E - Economy (Kinh tế)', lists: ['Lãi suất', 'Tỷ giá', 'Lạm phát', 'Thị trường'] },
-    { code: 'S', title: 'Xã hội', label: 'S - Social (Xã hội)', lists: ['Hành vi khách hàng', 'Nhân khẩu học', 'Xu hướng xã hội'] },
-    { code: 'T', title: 'Công nghệ', label: 'T - Technology (Công nghệ)', lists: ['Đổi mới', 'Công nghệ thông tin', 'Tự động hoá'] },
-    { code: 'E2', title: 'Môi trường', label: 'E - Environment (Môi trường)', lists: ['Khí hậu', 'Biến đổi môi trường', 'Thiên tai'] },
-    { code: 'L', title: 'Pháp luật', label: 'L - Legal (Pháp luật)', lists: ['Nghĩa vụ pháp luật', 'Hợp đồng', 'Trách nhiệm'] }
-];
-const SWOT_CONFIG = [
-    { code: 'S', label: 'S - Strengths (Điểm mạnh)' },
-    { code: 'W', label: 'W - Weakness (Điểm yếu)' },
-    { code: 'O', label: 'O - Oppotunities (Cơ hội)' },
-    { code: 'T', label: 'T - Threats (Thách thức)' },
-];
 const SIDEBAR_SUGGESTS = [
     ...PESTEL_CONFIG.map((i) => (
       {
@@ -145,55 +132,57 @@ function Pestel() {
   );
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Title size="large" variant="navy" className="py-8">Bối cảnh của dự án</Title>
-        <div className="grid grid-cols-4 gap-4">
-          {/* Static) */}
-          <div className="hidden lg:block col-span-1 border-2 border-(--blue-border) text-start bg-(--white) rounded-2xl p-4 shadow-2xl shadow-blue-500/20 h-fit">
-            <div className="flex items-center justify-between">
-              <Title size="medium" variant="navy" className="">Đề xuất</Title>
-              <span className="text-(--main-color) text-sm cursor-pointer hover:italic hover:underline">Xem thêm</span>
+    <PageTransition>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <Title size="large" variant="navy" className="py-8">Bối cảnh của dự án</Title>
+          <div className="grid grid-cols-4 gap-4">
+            {/* Static) */}
+            <div className="hidden lg:block col-span-1 border-2 border-(--blue-border) text-start bg-(--white) rounded-2xl p-4 shadow-2xl shadow-blue-500/20 h-fit">
+              <div className="flex items-center justify-between">
+                <Title size="medium" variant="navy" className="">Đề xuất</Title>
+                <span className="text-(--main-color) text-sm cursor-pointer hover:italic hover:underline">Xem thêm</span>
+              </div>
+              {SIDEBAR_SUGGESTS.map((suggest,index) => (
+                <ul key={index} className="py-2">
+                    <h3 className="font-medium text-lg mb-1 text-(--main-color)">
+                        {suggest.title}
+                    </h3>
+                    {suggest.lists?.map((list, idx) => (
+                        <li key={idx} className="py-0.5 text-sm text-gray-600">{list}</li>
+                    ))}
+                </ul>
+              ))}
             </div>
-            {SIDEBAR_SUGGESTS.map((suggest,index) => (
-              <ul key={index} className="py-2">
-                  <h3 className="font-medium text-lg mb-1 text-(--main-color)">
-                      {suggest.title}
-                  </h3>
-                  {suggest.lists?.map((list, idx) => (
-                      <li key={idx} className="py-0.5 text-sm text-gray-600">{list}</li>
-                  ))}
-              </ul>
-            ))}
+            {/* Input Form */}
+            <div className="col-span-4 lg:col-span-3">
+              {renderSectionGroup(pestelFields, "pestel","Bối cảnh bên ngoài (Dựa trên mô hình PESTEL)")}
+              {renderSectionGroup(swotFields, "swot","Bối cảnh bên trong (Dựa trên mô hình SWOT)")}
+            </div>
           </div>
-          {/* Input Form */}
-          <div className="col-span-4 lg:col-span-3">
-            {renderSectionGroup(pestelFields, "pestel","Bối cảnh bên ngoài (Dựa trên mô hình PESTEL)")}
-            {renderSectionGroup(swotFields, "swot","Bối cảnh bên trong (Dựa trên mô hình SWOT)")}
-          </div>
-        </div>
 
-        {/* Buttons Action */}
-        <div className="py-4 flex gap-2 justify-end sticky bottom-0 bg-white/80 backdrop-blur p-4 border-t mt-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              navigate('/projects/info')
-            }}
-          >
-              Quay lại
-          </Button>
-          <Button 
-            type="submit"
-            variant="primary"
-            size='medium'
-          >
-              Tiếp theo
-          </Button>
-        </div>
-      </form>
-    </Form>
+          {/* Buttons Action */}
+          <div className="py-4 flex gap-2 justify-end sticky bottom-0 bg-white/80 backdrop-blur p-4 border-t mt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                navigate('/projects/info')
+              }}
+            >
+                Quay lại
+            </Button>
+            <Button 
+              type="submit"
+              variant="primary"
+              size='medium'
+            >
+                Tiếp theo
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </PageTransition>
   );
 }
 

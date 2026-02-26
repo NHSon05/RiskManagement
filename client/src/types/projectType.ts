@@ -37,7 +37,7 @@ export interface ResponsePlan {
 export interface PestelSwot {
   code: string
   label: string
-  item: PestelSwotItem[]
+  items: PestelSwotItem[]
 }
 export interface PestelSwotItem {
   content: string

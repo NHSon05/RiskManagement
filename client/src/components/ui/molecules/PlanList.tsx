@@ -8,6 +8,7 @@ import { Label } from "../label";
 import Input from "../input";
 import Button from "../button";
 import { Plus, Trash2 } from "lucide-react";
+import { uppercaseName } from "@/utils";
 
 // -------- SUB COMPONENT: PLAN LIST ---------
 export default function PlanList({
@@ -30,19 +31,12 @@ export default function PlanList({
   })
   
   const titleCase = (str:string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
-  const uppercaseTitle = (str:string) => {
-    const convertToArray = str.toLowerCase().split(' ')
-    const result = convertToArray.map(val => {
-      return val.replace(val.charAt(0), val.charAt(0).toUpperCase())
-    })
-    return result.join(' ')
-  }
   
   const handleQuickAdd = () => {
     if (!planAction.trim()) return
     const newPlan = {
       id: nanoid(),
-      owner: uppercaseTitle(owner),
+      owner: uppercaseName(owner),
       name: titleCase(planAction)
     }
     append(newPlan)
@@ -104,7 +98,7 @@ export default function PlanList({
             >
               <div className="md:col-span-7">
                 <div 
-                  className=" bg-(--white) font-medium text-sm text-gray-700 placeholder:text-gray-400 border h-10 w-full min-w-0 rounded-md px-2 py-2 text-start shadow-xs"
+                  className=" bg-(--white) font-medium text-sm text-gray-700 placeholder:text-gray-400 border min-h-10 w-full min-w-0 rounded-md px-2 py-2 text-start shadow-xs"
                 >
                   {plan.name}
                 </div>

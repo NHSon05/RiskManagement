@@ -6,26 +6,16 @@ import {
   Title, Description,
   Button,
   SelectGroup, SelectItem, SelectLabel,
-  Badge
+  Card,
+  CardContent,
 } from "@/components/ui";
 import { type Target } from "@/types/projectType";
+import { getRiskLevelBadge } from "@/utils";
+import { probabilities, impacts } from "@/components/constants";
+import { PageTransition } from "@/components/animated";
+import { PDFViewer } from "@/components/ui/molecules";
+import matrixPDF from '../../../assets/pdf/Matrix.pdf'
 
-// ------------------✅ OK -----------------------
-// Select Items
-const probabilities = [
-  { label: "Hiếm khi", level: 1  },
-  { label: "Ít xảy ra", level: 2  },
-  { label: "Trung bình", level: 3  },
-  { label: "Thường xuyên", level: 4  },
-  { label: "Gần như chắc chắn", level: 5  }
-]
-const impacts = [
-  { label: "Không đáng kể", level: 1  },
-  { label: "Thấp", level: 2  },
-  { label: "Trung bình", level: 3  },
-  { label: "Nghiêm trọng", level: 4  },
-  { label: "Rất nghiêm trọng", level: 5  }
-]
 // ----------------✅ Ok --------------------------
 export default function Evaluation() {
   const navigate = useNavigate()
@@ -109,20 +99,6 @@ export default function Evaluation() {
       })
     );
   };
-   // ✅ Get risk level badge
-  const getRiskLevelBadge = (riskLevel: number) => {
-    if (riskLevel >= 16) {
-      return <Badge className="bg-(--error) hover:bg-red-700 text-white">Rất cao</Badge>;
-    } else if (riskLevel >= 10) {
-      return <Badge className="bg-(--warning) hover:bg-orange-600 text-white">Cao</Badge>;
-    } else if (riskLevel >= 4) {
-      return <Badge className="bg-(--rarely) hover:bg-yellow-400 text-white">Trung bình</Badge>;
-    } else if (riskLevel > 0) {
-      return <Badge className="bg-(--solution) hover:bg-green-600 text-white">Yếu</Badge>;
-    } else if (riskLevel == 0) {
-      return <Badge className="bg-(--description) hover:bg-gray-500 text-white">Chưa đánh giá</Badge>;
-    }
-  };
   const handleNext = () => {
     const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
     const updatedData = {
@@ -134,100 +110,121 @@ export default function Evaluation() {
   navigate('/projects/solution');
   }
   return (
-    <div className="mx-auto">
-      <Title variant="navy" size="large" className="py-4">
-        Đánh giá rủi ro
-      </Title>
-      <Table>
-        <TableHeader className="bg-(--border)">
-          <TableRow>
-            <TableHead className="text-left">ID</TableHead>
-            <TableHead>Tên rủi ro</TableHead>
-            <TableHead>Khả năng xảy ra</TableHead>
-            <TableHead>Mức độ ảnh hưởng</TableHead>
-            <TableHead className="text-right">Mức độ rủi ro</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="bg-(--white)">
-          {allRisks.map((risk,index) => (
-              <TableRow key={risk.id}>
-                <TableCell className="text-left">{index+1}</TableCell>
-                <TableCell className="text-left">
-                  {risk.name}
-                  <Description className="text-sm">
-                    Mục tiêu: {risk.targetName}
-                  </Description>
-                </TableCell>
-                <TableCell className="text-left">
-                  <Select
-                    value={getProbability(risk.probability_level)}
-                    onValueChange={(value) => handleProbability(risk.targetId, risk.id, value)}
-                  >
-                    <SelectTrigger className="bg-(--white)">
-                      <SelectValue placeholder="Chọn khả năng xảy ra"/>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup className="bg-(--white)">
-                        <SelectLabel>Probablitity</SelectLabel>
-                        {probabilities.map((probability) => (
-                          <SelectItem 
-                            key={probability.level}
-                            value={probability.label}
-                            className="hover:bg-(--border)"
-                          >
-                            {probability.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </TableCell>
-                <TableCell className="text-left">
-                  <Select
-                    value={getImpact(risk.impact_level)}
-                    onValueChange={(value) => handleImpact(risk.targetId, risk.id, value)}
-                  >
-                    <SelectTrigger className="bg-(--white)">
-                      <SelectValue placeholder="Chọn mức độ ảnh hưởng"/>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup className="bg-(--white)">
-                        <SelectLabel>Probablitity</SelectLabel>
-                        {impacts.map((impact) => (
-                          <SelectItem key={impact.level} value={impact.label} className="hover:bg-(--border)">
-                            {impact.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </TableCell>
-                <TableCell className="text-right rounded-2xl">
-                  {/* <span className="text-(--error) rounded-xl">
-                    {risk.risk_level}
-                  </span> */}
-                  {getRiskLevelBadge(risk.risk_level)}
-                </TableCell>
-              </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-        <div className="py-4 flex gap-2 justify-end sticky bottom-0 bg-white/80 backdrop-blur p-4 border-t mt-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => navigate('/projects/target')}
-          >
-              Quay lại
-          </Button>
-          <Button 
-            variant="primary"
-            size='medium'
-            onClick={handleNext}
-          >
-              Tiếp theo
-          </Button>
-        </div>
-    </div>
+    <PageTransition>
+      <div className="mx-auto max-w-5xl space-y-4">
+        <Card className="bg-(--white) shadow-sm border-none">
+          <CardContent className="flex flex-col items-center p-8 space-y-4">
+            <Title variant="navy" size="large">
+              Đánh giá rủi ro
+              <Description className="">
+                Sử dụng công cụ này để đánh giá các rủi ro cho dự án của bạn
+              </Description>
+            </Title>
+            <p className="text-[16px] px-24 hidden md:block"
+              >Phân tích và theo dõi các rủi ro trong dự án của bạn một cách hiệu quả. Bấm vào nút bên dưới để mở tệp tham khảo ma trận 5x5, giúp bạn trong quá trình đánh giá
+            </p>
+            {/* View PDF */}
+            <PDFViewer
+              fileUrl={matrixPDF}
+              fileName="Risk_CheckList.pdf"
+            />
+          </CardContent>
+        </Card>
+        <Card className="bg-(--white) shadow-sm border-none">
+          <CardContent className="px-6 py-2 space-y-4" >
+            <Table className="md:table-fixed">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="md:w-[5%] text-left">ID</TableHead>
+                  <TableHead className=" md:w-[30%]">Tên rủi ro</TableHead>
+                  <TableHead className="md:w-[25%]">Khả năng xảy ra</TableHead>
+                  <TableHead className="md:w-[25%]">Mức độ ảnh hưởng</TableHead>
+                  <TableHead className="md:w-[15%] text-right">Mức độ rủi ro</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="bg-(--white)">
+                {allRisks.map((risk,index) => (
+                    <TableRow key={risk.id}>
+                      <TableCell className="text-left font-medium">{index+1}</TableCell>
+                      <TableCell className="text-left text-sm font-medium md:wrap-break-word md:whitespace-normal">
+                        {risk.name}
+                        <Description className="text-xs font-normal">
+                          Mục tiêu: {risk.targetName}
+                        </Description>
+                      </TableCell>
+                      <TableCell className="text-left">
+                        <Select
+                          value={getProbability(risk.probability_level)}
+                          onValueChange={(value) => handleProbability(risk.targetId, risk.id, value)}
+                        >
+                          <SelectTrigger className="bg-(--white)">
+                            <SelectValue placeholder="Chọn khả năng xảy ra"/>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup className="bg-(--white)">
+                              <SelectLabel>Probablitity</SelectLabel>
+                              {probabilities.map((probability) => (
+                                <SelectItem 
+                                  key={probability.level}
+                                  value={probability.label}
+                                  className="hover:bg-(--border)"
+                                >
+                                  {probability.label}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell className="text-left">
+                        <Select
+                          value={getImpact(risk.impact_level)}
+                          onValueChange={(value) => handleImpact(risk.targetId, risk.id, value)}
+                        >
+                          <SelectTrigger className="bg-(--white)">
+                            <SelectValue placeholder="Chọn mức độ ảnh hưởng"/>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup className="bg-(--white)">
+                              <SelectLabel>Probablitity</SelectLabel>
+                              {impacts.map((impact) => (
+                                <SelectItem key={impact.level} value={impact.label} className="hover:bg-(--border)">
+                                  {impact.label}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell className="text-right rounded-2xl">
+                        {/* <span className="text-(--error) rounded-xl">
+                          {risk.risk_level}
+                        </span> */}
+                        {getRiskLevelBadge(risk.risk_level)}
+                      </TableCell>
+                    </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+          <div className="py-4 flex gap-2 justify-end sticky bottom-0 bg-white/80 backdrop-blur p-4 border-t mt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate('/projects/target')}
+            >
+                Quay lại
+            </Button>
+            <Button 
+              variant="primary"
+              size='medium'
+              onClick={handleNext}
+            >
+                Tiếp theo
+            </Button>
+          </div>
+      </div>
+    </PageTransition>
   )
 }
