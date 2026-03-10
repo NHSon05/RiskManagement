@@ -73,7 +73,7 @@ export default function LoginPage() {
 
   return (
     <PageTransition>
-      <div className="flex items-center justify-center min-h-screen bg-(--background) p-4">
+      <div className="flex items-center justify-center min-h-screen p-4 relative">
         {/* Container Card */}
         <Card className="w-full max-w-md shadow-lg bg-(--white)">
           <CardHeader>
@@ -90,7 +90,7 @@ export default function LoginPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Email</FormLabel>
-                      <FormControl>
+                      <FormControl> 
                         <Input placeholder="admin@example.com" {...field} />
                       </FormControl>
                       <FormMessage />

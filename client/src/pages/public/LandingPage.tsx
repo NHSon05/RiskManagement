@@ -30,6 +30,15 @@ function LandingPage() {
       <PageTransition>
         <div>
           {/* Welcome Screen */}
+          <div
+            className="absolute inset-0 z-0"
+            style={{
+              background: "#ffffff",
+              backgroundImage: `
+                radial-gradient(circle at top center, rgba(59, 130, 246, 0.5),transparent 70%)
+              `,
+            }}
+          />
           <FadedDiv className="relative py-16 text-(--black)">
             <h1 className='font-semibold text-[48px]'>
                 <span className='text-(--main-color)'>Quản lý</span>
@@ -37,7 +46,9 @@ function LandingPage() {
                 rủi ro
                 <span className='text-(--main-color)'> dự án</span> của bạn
             </h1>
-            <p className='p-4 text-[20px] mx-2 sm:mx-16 md:mx-32 lg:mx-64'>Risk Management - Công cụ toàn diện giúp bạn xác định, đánh giá và quản lý rủi ro hiệu quả cho mọi dự án, đảm bảo thành công và giảm thiểu bất ngờ.</p>
+            <p className='p-4 text-[20px] mx-2 sm:mx-16 md:mx-32 lg:mx-64'>
+              Risk Management - Công cụ toàn diện giúp bạn xác định, đánh giá và quản lý rủi ro hiệu quả cho mọi dự án, đảm bảo thành công và giảm thiểu bất ngờ.
+            </p>
             <div className='space-x-2'>
               <Button size='large'>
                 Khám phá
@@ -52,7 +63,7 @@ function LandingPage() {
             shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]"
             style={{ backgroundImage: `url(${construction})` }}>
             {/* overlay */}
-            </div>
+          </div>
 
             {/* Advantages of Projects */}
             <div className='py-20 space-y-8'>

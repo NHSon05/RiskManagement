@@ -8,7 +8,7 @@ import ScrollToTop from "../hooks/ScrollToTop";
 function MainLayout() {
     return (  
         <div>
-            <NavBar isLogin={true}/>
+            <NavBar isLogin={true} className="bg-(--white) border-b border-(--border) sticky"/>
             <ScrollToTop/>
             <div className="wrapper text-center items-center my-8">
                 <Outlet/>

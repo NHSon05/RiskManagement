@@ -9,7 +9,7 @@ import ScrollToTop from "../hooks/ScrollToTop";
 function PublicLayout() {
     return (  
         <div>
-            <NavBar isLogin={false}/>
+            <NavBar isLogin={false} className="relative"/>
             <ScrollToTop/>
             <div className="wrapper text-center items-center">
                 <Outlet/>

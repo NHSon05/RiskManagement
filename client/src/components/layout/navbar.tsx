@@ -10,6 +10,7 @@ import { Button } from "@/components/ui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket, faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useLogout } from "@/hooks/useAuth";
+import { cn } from "@/lib/utils";
 // import ScrollToTop from "../../../hooks/ScrollToTop";
 // import './NavBar.css'
 
@@ -19,10 +20,14 @@ interface Links{
 }
 interface NavBarProps{
     isLogin?:boolean;
+    className?: string;
 }
 
 
-function NavBar({isLogin = true}: NavBarProps){
+function NavBar({
+  isLogin = true,
+  className,
+}: NavBarProps){
     
     const [isLoggedIn, setIsLoggedIn] = useState(isLogin);
     const navigate = useNavigate();
@@ -35,7 +40,7 @@ function NavBar({isLogin = true}: NavBarProps){
         { label: "Hỗ trợ", to: "/support" },
     ];
     return (
-        <div className="w-full border-b border-(--border) bg-(--white) sticky z-99 top-0">
+        <div className={cn("w-full z-99 top-0", className)}>
             <nav className="flex justify-between items-center px-2 sm:px-12">
                 <Link to='/home'>
                     <img src={logo} alt="Logo" className="h-12"/>
