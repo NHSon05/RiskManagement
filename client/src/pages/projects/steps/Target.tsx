@@ -153,7 +153,7 @@ export default function Target() {
   
   return (
     <PageTransition>
-      <div className="mx-auto md:p-6  space-y-4">
+      <div className="mx-auto md:p-2  space-y-4">
         {/* Headers */}
         <Card className="bg-(--white) shadow-sm border-none">
           <CardContent className="flex flex-col items-center p-8 space-y-4">

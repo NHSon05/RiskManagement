@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { Title, Button,  } from '@/components/ui';
+import { Title,  } from '@/components/ui';
 import StatCard from './components/statCard';
 import ProjectCard from './components/projectCard';
 
@@ -73,18 +73,17 @@ const recentProjects : recentProjects[] = [
 ];
 
 const HomePage: React.FC = () => {
-  const navigate = useNavigate();
 
   return (
     <PageTransition>
-      <div className='space-y-8'>
+      <div className='space-y-8 bg-(--white)'>
           <div className='bg-(--bg-search) text-start rounded-lg p-6 space-y-4'>
               <Title size='large' variant='dark'>Xin chào, Nguyễn Văn A</Title>
               <p className='text-gray-800 text-[16px]'>
                   Chào mừng bạn đến với <span className='font-bold text-(--primary-btn)'>Risk Management</span>. 
                   Bắt đầu quản lý rủi ro của bạn một cách hiệu quả
               </p>
-              <Button variant="primary" size='medium' onClick={() => navigate('/projects/info')}>Thêm dự án</Button>
+              {/* <Button variant="primary" size='medium' onClick={() => navigate('/projects/info')}>Thêm dự án</Button> */}
           </div>
 
           {/* 2. Khối "Tổng quan dự án của tôi" */}

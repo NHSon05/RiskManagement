@@ -40,13 +40,13 @@ function LandingPage() {
             }}
           />
           <FadedDiv className="relative py-16 text-(--black)">
-            <h1 className='font-semibold text-[48px]'>
-                <span className='text-(--main-color)'>Quản lý</span>
+            <h1 className='font-semibold text-[64px]'>
+                Nền tảng {' '}
+                <span className='text-(--main-color)'>Quản lý rủi ro</span>
                 <br/>
-                rủi ro
-                <span className='text-(--main-color)'> dự án</span> của bạn
+                <span className='text-(--black)'> dự án của bạn</span>
             </h1>
-            <p className='p-4 text-[20px] mx-2 sm:mx-16 md:mx-32 lg:mx-64'>
+            <p className='p-4 text-[20px] mx-2 sm:mx-16 md:mx-32 lg:mx-64 text-(--description) font-medium'>
               Risk Management - Công cụ toàn diện giúp bạn xác định, đánh giá và quản lý rủi ro hiệu quả cho mọi dự án, đảm bảo thành công và giảm thiểu bất ngờ.
             </p>
             <div className='space-x-2'>

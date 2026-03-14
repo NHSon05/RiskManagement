@@ -1,23 +1,27 @@
 // import React from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import logo from '../../assets/imgs/logo.svg'
 
 
-import { Button } from "@/components/ui";
+import {
+  Button,
+  Input,
+  // Separator,
+  // SidebarTrigger
+} from "@/components/ui";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightFromBracket, faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { useLogout } from "@/hooks/useAuth";
+import { faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { cn } from "@/lib/utils";
 // import ScrollToTop from "../../../hooks/ScrollToTop";
 // import './NavBar.css'
 
-interface Links{
-    label:string;
-    to: string
-}
+// interface Links{
+//     label:string;
+//     to: string
+// }
 interface NavBarProps{
     isLogin?:boolean;
     className?: string;
@@ -31,46 +35,40 @@ function NavBar({
     
     const [isLoggedIn, setIsLoggedIn] = useState(isLogin);
     const navigate = useNavigate();
-    const { logout } = useLogout()
 
-    const links:Links[] = [
-        { label: "Trang chủ", to: "/home" },
-        { label: "Dự án", to: "/projects" },
-        { label: "Báo cáo", to: "/reports" },
-        { label: "Hỗ trợ", to: "/support" },
-    ];
+    // const links:Links[] = [
+    //     { label: "Trang chủ", to: "/home" },
+    //     { label: "Dự án", to: "/projects" },
+    //     { label: "Báo cáo", to: "/reports" },
+    //     { label: "Hỗ trợ", to: "/support" },
+    // ];
     return (
-        <div className={cn("w-full z-99 top-0", className)}>
-            <nav className="flex justify-between items-center px-2 sm:px-12">
+        <div className={cn("w-full z-98 top-0", className)}>
+            <nav className="flex justify-between items-center px-4">
+              <div className="flex items-center">
+                {/* <SidebarTrigger className="-ml-1" />
+                <Separator
+                  orientation="vertical"
+                  className="mx-2 data-[orientation=vertical]:h-4"
+                /> */}
                 <Link to='/home'>
                     <img src={logo} alt="Logo" className="h-12"/>
                 </Link>
+              </div>
                 <div className="flex items-center py-2 gap-2">
-                    <ul className={`hidden ${isLoggedIn ? 'lg:block' : 'lg:hidden'}`}>
-                        {links.map((link)=>(
-                            <li key={link.to} className="inline-flex hover:text-gray-500 cursor-pointer mx-2.5 my-0">
-                                <NavLink to={link.to}><span>{link.label}</span></NavLink>
-                            </li>
-                        ))} 
-                    </ul>
+                    <div className={`hidden ${isLoggedIn ? 'lg:block' : 'lg:hidden'} w-72`}>
+                      <Input type="search" placeholder="Tìm kiếm..."/>  
+                    </div>
                     <div>
                         {isLoggedIn ? (
-                            <div className="flex gap-2">
-                                <Button variant="primary" 
-                                    icon={<FontAwesomeIcon icon={faPlus}/>}
-                                    onClick={() => {navigate('projects/info')}}
-                                >
-                                  Thêm dự án
-                                </Button>
-                                <Button variant="red"
-                                    className="hidden sm:inline-flex"
-                                    onClick={logout}
-                                    icon={<FontAwesomeIcon icon={faArrowRightFromBracket}/>}
-                                    iconPosition="right"
-                                >
-                                  Đăng xuất
-                                </Button>
-                            </div>
+                          <div className="flex gap-2">
+                            <Button variant="primary" 
+                                icon={<FontAwesomeIcon icon={faPlus}/>}
+                                onClick={() => {navigate('projects/info')}}
+                            >
+                              Thêm dự án
+                            </Button>
+                          </div>
                         ) : (
                             <div className="flex gap-2">
                                 <Button variant="primary"

@@ -135,8 +135,14 @@ function Pestel() {
     <PageTransition>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <Title size="large" variant="navy" className="py-8">Bối cảnh của dự án</Title>
+          <Title size="large" variant="navy" className="py-2">Bối cảnh của dự án</Title>
           <div className="grid grid-cols-4 gap-4">
+            
+            {/* Input Form */}
+            <div className="col-span-4 lg:col-span-3">
+              {renderSectionGroup(pestelFields, "pestel","Bối cảnh bên ngoài (Dựa trên mô hình PESTEL)")}
+              {renderSectionGroup(swotFields, "swot","Bối cảnh bên trong (Dựa trên mô hình SWOT)")}
+            </div>
             {/* Static) */}
             <div className="hidden lg:block col-span-1 border-2 border-(--blue-border) text-start bg-(--white) rounded-2xl p-4 shadow-2xl shadow-blue-500/20 h-fit">
               <div className="flex items-center justify-between">
@@ -153,11 +159,6 @@ function Pestel() {
                     ))}
                 </ul>
               ))}
-            </div>
-            {/* Input Form */}
-            <div className="col-span-4 lg:col-span-3">
-              {renderSectionGroup(pestelFields, "pestel","Bối cảnh bên ngoài (Dựa trên mô hình PESTEL)")}
-              {renderSectionGroup(swotFields, "swot","Bối cảnh bên trong (Dựa trên mô hình SWOT)")}
             </div>
           </div>
 

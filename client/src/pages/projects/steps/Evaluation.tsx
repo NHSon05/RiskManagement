@@ -111,7 +111,7 @@ export default function Evaluation() {
   }
   return (
     <PageTransition>
-      <div className="mx-auto max-w-5xl space-y-4">
+      <div className="mx-auto md:px-2 space-y-4">
         <Card className="bg-(--white) shadow-sm border-none">
           <CardContent className="flex flex-col items-center p-8 space-y-4">
             <Title variant="navy" size="large">

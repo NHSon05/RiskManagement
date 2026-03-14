@@ -111,25 +111,37 @@ export default function ProjectDetail() {
               </Title>
               <Badge className="bg-green-100 text-(--solution) text-sm">Đang tiến hành</Badge>
             </div>
-            <h2 className="text-sm text-(--political) italic font-medium flex items-center">
+            <h2 className="text-md text-(--political) italic font-medium flex items-center">
               <UserCircle size={20} className="mr-1"/> 
               Nguyễn Văn A
             </h2>
-            <h2 className="text-sm text-(--political) italic font-medium flex items-center">
+            <h2 className="text-md text-(--political) italic font-medium flex items-center">
               <Contact size={20} className="mr-1"/>
-              {data.prj_role}
+                Vai trò:
+               <span className="text-(--black) ml-1">
+                {data.prj_role}
+              </span>
             </h2>
-            <h2 className="text-sm text-(--political) italic font-medium flex items-center">
+            <h2 className="text-md text-(--political) italic font-medium flex items-center">
               <Clock size={20} className="mr-1"/>
-              01/01/2026
+              Thời gian báo cáo:
+              <span className="text-(--black) ml-1">
+                01/01/2026
+              </span>
             </h2>
-            <h2 className="text-sm text-(--political) italic font-medium flex items-center">
+            <h2 className="text-md text-(--political) italic font-medium flex items-center">
               <MapPin size={20} className="mr-1"/>
-              {data.prj_location}
+              Địa điểm: 
+               <span className="text-(--black) ml-1">
+                {data.prj_location}
+              </span>
             </h2>
-            <h2 className="text-sm text-(--political) italic font-medium flex items-center">
+            <h2 className="text-md text-(--political) italic font-medium flex items-center">
               <CircleDollarSign size={20} className="mr-1"/>
-              {data.prj_fund}
+              Nguồn vốn: 
+               <span className="text-(--black) ml-1">
+                {data.prj_fund}
+              </span>
             </h2>
             <div className="flex space-x-2 items-center my-2">
               <span>Chia sẻ</span>
@@ -140,20 +152,73 @@ export default function ProjectDetail() {
               </div>
             </div>
           </div>
-          <Tabs defaultValue="overview" className="">
-            <TabsList>
-              <TabsTrigger value="pestel">Bối cảnh bên ngoài</TabsTrigger>
-              <TabsTrigger value="swot">Bối cảnh bên trong</TabsTrigger>
-            </TabsList>
+          {/* PESTEL and SWOT */}
+
+          {/* Desktop View - 2 cột song song */}
+          <div className="hidden md:grid md:grid-cols-2 gap-6">
+            {/* Bối cảnh bên ngoài */}
+            <div className="space-y-4">
+              <h3 className="text-[24px] font-semibold text-(--logo) border-b-2 border-navy-600 pb-2">
+                Bối cảnh bên ngoài (PESTEL)
+              </h3>
+              <PageTransition>
+                <div className="space-y-4">
+                  {data.pestel.map((pestel: PestelSwot) => (
+                    <div key={pestel.code} className="text-start">
+                      <Title size="small" className="text-(--political)">{pestel.label}</Title>
+                      <ul className="space-y-2 list-disc pl-5 mt-2">
+                        {pestel.items.map((item: PestelSwotItem, index: number) => (
+                          <li key={index} className="text-md text-gray-700">
+                            {item.content}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </PageTransition>
+            </div>
+
+            {/* Bối cảnh bên trong */}
+            <div className="space-y-4">
+              <h3 className="text-[24px] font-semibold text-(--logo) border-b-2 border-navy-600 pb-2">
+                Bối cảnh bên trong (SWOT)
+              </h3>
+              <PageTransition>
+                <div className="space-y-4">
+                  {data.swot.map((swot: PestelSwot) => (
+                    <div key={swot.code} className="text-start">
+                      <Title size="small" className="text-(--political)">{swot.label}</Title>
+                      <ul className="space-y-2 list-disc pl-5 mt-2">
+                        {swot.items.map((item: PestelSwotItem, index: number) => (
+                          <li key={index} className="text-md text-gray-700">
+                            {item.content}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </PageTransition>
+            </div>
+          </div>
+          {/* Mobile-View */}
+          <Tabs defaultValue="pestel" className="md:hidden">
+            <div>
+              <TabsList variant="line" className="text-xl font-medium text-(--logo)">
+                <TabsTrigger value="pestel">Bối cảnh bên ngoài</TabsTrigger>
+                <TabsTrigger value="swot">Bối cảnh bên trong</TabsTrigger>
+              </TabsList>
+            </div>
             <TabsContent value="pestel">
               <PageTransition>
                 <div className="space-y-4">
                   {data.pestel.map((pestel: PestelSwot) => (
                       <div key={pestel.code} className="text-start px-4">
-                        <Title variant="navy" size="small">{pestel.label}</Title>
+                      <Title size="small" className="text-(--political)">{pestel.label}</Title>
                         <ul className="space-y-1 list-disc px-8">
                           {pestel.items.map((item: PestelSwotItem, index: any) => (
-                            <li className="flex text-sm display-list-item" 
+                            <li className="flex text-md display-list-item" 
                                 key={index}
                                 style={{ display: 'list-item' }}
                             >
@@ -172,7 +237,7 @@ export default function ProjectDetail() {
                 <div className="space-y-4">
                   {data.swot.map((swot: PestelSwot) => (
                     <div key={swot.code} className="text-start px-4">
-                      <Title variant="navy" size="small">{swot.label}</Title>
+                      <Title size="small" className="text-(--political)">{swot.label}</Title>
                       <ul className="space-y-1 list-disc px-8">
                         {swot.items.map((item: PestelSwotItem, index: any) => (
                           <li className="flex text-sm display-list-item" 
@@ -190,8 +255,9 @@ export default function ProjectDetail() {
               </PageTransition>
             </TabsContent>
           </Tabs>
+          {/* Target */}
           <div className="text-start">
-            <Title variant="dark" size="small">Mục tiêu</Title>
+            <Title size="medium" className="text-(--logo)">Mục tiêu</Title>
             <div className="relative p-2">
               {/* Đường line dọc chạy suốt timeline */}
               <div className="absolute left-4.75 top-2 bottom-2 w-[1.5px] bg-green-200" />
@@ -213,7 +279,7 @@ export default function ProjectDetail() {
           </div>
         </CardContent>
       </Card>
-      {/* Label */}
+      {/* Table */}
       <div className="flex justify-between mb-2 items-center">
         <Title size="small">Bảng báo cáo</Title>
         <ButtonGroup className="ml-0 max-w-5xl">
