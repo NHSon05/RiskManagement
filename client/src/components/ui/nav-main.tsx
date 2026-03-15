@@ -40,17 +40,17 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon && <item.icon />}
-                <NavLink
-                  to={item.to}
-                  className={({ isActive }) => 
-                            isActive ? "text-black font-semibold" : ""
+              <NavLink
+                to={item.to}
+                className={({ isActive }) => 
+                              isActive ? "text-black font-semibold" : ""
                           }
-                >
-                  <span className="text-[16px]">{item.title}</span>
-                </NavLink>
-              </SidebarMenuButton>
+              >
+                <SidebarMenuButton tooltip={item.title}>
+                  {item.icon && <item.icon />}
+                    <div className="text-[16px]">{item.title}</div>
+                </SidebarMenuButton>
+              </NavLink>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
