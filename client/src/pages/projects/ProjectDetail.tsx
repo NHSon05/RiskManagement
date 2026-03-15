@@ -32,6 +32,7 @@ import { FaTwitter, FaFacebookF, FaInstagram } from 'react-icons/fa';
 
 import { getRiskLevelBadge } from "@/utils";
 import building from '../../assets/imgs/DaNang.png';
+import ImageUpload from "@/components/ui/molecules/ImageUpload";
 
 export default function ProjectDetail() {
 
@@ -75,11 +76,7 @@ export default function ProjectDetail() {
         <Card className="bg-(--white) shadow-sm border-none">
           <CardContent className="space-y-8">
             {/* Img */}
-            <div
-              className="h-[40vh] bg-center bg-cover flex items-center justify-center rounded-xl
-              shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]"
-              style={{ backgroundImage: `url(${building})` }}>
-            </div>
+            <ImageUpload/>
             {/* Information */}
             <div className="text-start space-y-2">
               <div className="flex justify-between">
