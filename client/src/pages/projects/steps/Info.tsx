@@ -70,7 +70,7 @@ export default function Info() {
                 <FormField control={form.control} name="prj_name" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Tên dự án</FormLabel>
-                    <FormControl><Input placeholder="Nhập tên dự án" {...field} /></FormControl>
+                    <FormControl><Input placeholder="Hệ thống quản lý kho ERP" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />

@@ -38,20 +38,27 @@ export function NavMain({
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <NavLink
-                to={item.to}
-                className={({ isActive }) => 
-                              isActive ? "text-black font-semibold" : ""
-                          }
-              >
+          {items.map((item, index) => (
+            <NavLink
+              key={index}
+              to={item.to}
+              className={({ isActive }) => 
+                `flex items-center gap-2 px-2 py-2 rounded-lg transition-all duration-200 ${
+                  isActive 
+                    ? "text-black font-semibold bg-(--blue-border) shadow-sm" 
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                }`
+              }
+            >
+              <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton tooltip={item.title}>
-                  {item.icon && <item.icon />}
-                    <div className="text-[16px]">{item.title}</div>
+                  <span>
+                    {item.icon && <item.icon size={24} />}
+                  </span>
+                  <div className="text-[16px]">{item.title}</div>
                 </SidebarMenuButton>
-              </NavLink>
-            </SidebarMenuItem>
+              </SidebarMenuItem>
+            </NavLink>
           ))}
         </SidebarMenu>
       </SidebarGroupContent>

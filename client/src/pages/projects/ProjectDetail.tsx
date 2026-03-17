@@ -31,7 +31,6 @@ import { CircleDollarSign, Clock, Contact, Download, Edit, MapPin, MoreHorizonta
 import { FaTwitter, FaFacebookF, FaInstagram } from 'react-icons/fa';
 
 import { getRiskLevelBadge } from "@/utils";
-import building from '../../assets/imgs/DaNang.png';
 import ImageUpload from "@/components/ui/molecules/ImageUpload";
 
 export default function ProjectDetail() {
@@ -47,9 +46,9 @@ export default function ProjectDetail() {
   const [data] = useState(() => {
     try {
       const saved = localStorage.getItem("projectFormData")
-      return saved ? JSON.parse(saved) : { prj_targets: []}
+      return saved ? JSON.parse(saved) : { prj_targets: [] }
     } catch (error) {
-       console.error('Lỗi khi lấy dữ liệu', error)
+      console.error('Lỗi khi lấy dữ liệu', error)
       return { prj_targets: [] }
     }
   })
@@ -62,7 +61,7 @@ export default function ProjectDetail() {
     )
   }
   // Flatten all risks from all targets
-  const allRisks = data.prj_targets?.flatMap((target : Target, targetIndex: any) => 
+  const allRisks = data.prj_targets?.flatMap((target: Target, targetIndex: any) =>
     target.risks?.map((risk: Risk, riskIndex: any) => ({
       ...risk,
       targetName: target.name,
@@ -76,7 +75,7 @@ export default function ProjectDetail() {
         <Card className="bg-(--white) shadow-sm border-none">
           <CardContent className="space-y-8">
             {/* Img */}
-            <ImageUpload/>
+            <ImageUpload />
             {/* Information */}
             <div className="text-start space-y-2">
               <div className="flex justify-between">
@@ -86,33 +85,33 @@ export default function ProjectDetail() {
                 <Badge className="bg-green-100 text-(--solution) text-sm">Đang tiến hành</Badge>
               </div>
               <h2 className="text-md text-(--political) italic font-medium flex items-center">
-                <UserCircle size={20} className="mr-1"/> 
+                <UserCircle size={20} className="mr-1" />
                 Nguyễn Văn A
               </h2>
               <h2 className="text-md text-(--political) italic font-medium flex items-center">
-                <Contact size={20} className="mr-1"/>
-                  Vai trò:
+                <Contact size={20} className="mr-1" />
+                Vai trò:
                 <span className="text-(--black) ml-1">
                   {data.prj_role}
                 </span>
               </h2>
               <h2 className="text-md text-(--political) italic font-medium flex items-center">
-                <Clock size={20} className="mr-1"/>
+                <Clock size={20} className="mr-1" />
                 Thời gian báo cáo:
                 <span className="text-(--black) ml-1">
                   01/01/2026
                 </span>
               </h2>
               <h2 className="text-md text-(--political) italic font-medium flex items-center">
-                <MapPin size={20} className="mr-1"/>
-                Địa điểm: 
+                <MapPin size={20} className="mr-1" />
+                Địa điểm:
                 <span className="text-(--black) ml-1">
                   {data.prj_location}
                 </span>
               </h2>
               <h2 className="text-md text-(--political) italic font-medium flex items-center">
-                <CircleDollarSign size={20} className="mr-1"/>
-                Nguồn vốn: 
+                <CircleDollarSign size={20} className="mr-1" />
+                Nguồn vốn:
                 <span className="text-(--black) ml-1">
                   {data.prj_fund}
                 </span>
@@ -120,9 +119,9 @@ export default function ProjectDetail() {
               <div className="flex space-x-2 items-center my-2">
                 <span>Chia sẻ</span>
                 <div className="flex space-x-1 items-center">
-                  <a href="#" className="bg-(--main-color) w-8 h-8 flex items-center justify-center rounded-full"><FaTwitter size={16} className="text-white"/></a>
+                  <a href="#" className="bg-(--main-color) w-8 h-8 flex items-center justify-center rounded-full"><FaTwitter size={16} className="text-white" /></a>
                   <a href="#" className="bg-(--main-color) w-8 h-8 flex items-center justify-center rounded-full"><FaFacebookF size={16} className="text-white" /></a>
-                  <a href="#" className="bg-pink-500 w-8 h-8 flex items-center justify-center rounded-full"><FaInstagram size={16} className="text-white"/></a>
+                  <a href="#" className="bg-pink-500 w-8 h-8 flex items-center justify-center rounded-full"><FaInstagram size={16} className="text-white" /></a>
                 </div>
               </div>
             </div>
@@ -188,19 +187,19 @@ export default function ProjectDetail() {
                 <PageTransition>
                   <div className="space-y-4">
                     {data.pestel.map((pestel: PestelSwot) => (
-                        <div key={pestel.code} className="text-start px-4">
+                      <div key={pestel.code} className="text-start px-4">
                         <Title size="small" className="text-(--political)">{pestel.label}</Title>
-                          <ul className="space-y-1 list-disc px-8">
-                            {pestel.items.map((item: PestelSwotItem, index: any) => (
-                              <li className="flex text-md display-list-item" 
-                                  key={index}
-                                  style={{ display: 'list-item' }}
-                              >
-                                {item.content}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                        <ul className="space-y-1 list-disc px-8">
+                          {pestel.items.map((item: PestelSwotItem, index: any) => (
+                            <li className="flex text-md display-list-item"
+                              key={index}
+                              style={{ display: 'list-item' }}
+                            >
+                              {item.content}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     ))}
                   </div>
                 </PageTransition>
@@ -213,9 +212,9 @@ export default function ProjectDetail() {
                         <Title size="small" className="text-(--political)">{swot.label}</Title>
                         <ul className="space-y-1 list-disc px-8">
                           {swot.items.map((item: PestelSwotItem, index: any) => (
-                            <li className="flex text-sm display-list-item" 
-                                  key={index}
-                                  style={{ display: 'list-item' }}
+                            <li className="flex text-sm display-list-item"
+                              key={index}
+                              style={{ display: 'list-item' }}
                             >
                               {/* <Dot className="w-8 h-8 mr-2"/> */}
                               {item.content}
@@ -239,7 +238,7 @@ export default function ProjectDetail() {
                     <div key={target.id} className="relative pl-10">
                       {/* Icon tròn nằm trên đường line */}
                       <div className="absolute left-0 top-1 z-10 h-6 w-6 rounded-full bg-green-100 ring-2 ring-white flex items-center justify-center">
-                      {/* Chấm tròn nhỏ đậm bên trong nếu muốn giống 100% hình mẫu */}
+                        {/* Chấm tròn nhỏ đậm bên trong nếu muốn giống 100% hình mẫu */}
                         <div className="h-2 w-2 rounded-full bg-green-500" />
                       </div>
                       <h3 className="text-md font-medium leading-relaxed">
@@ -257,24 +256,24 @@ export default function ProjectDetail() {
           <Title size="small">Bảng báo cáo</Title>
           <ButtonGroup className="ml-0 max-w-5xl no-print">
             <Button onClick={handleGeneratePDF} size="extra-small" className="flex">
-              <Download size={16} className="mr-1"/>Tải xuống PDF
+              <Download size={16} className="mr-1" />Tải xuống PDF
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="extra-small">
-                  <MoreHorizontalIcon/>
+                  <MoreHorizontalIcon />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
                 <DropdownMenuGroup>
                   <DropdownMenuItem className="bg-(--white) hover:bg-(--border)">
-                      <Download size={16} className="mr-1"/>Tải xuống trang
+                    <Download size={16} className="mr-1" />Tải xuống trang
                   </DropdownMenuItem>
                   <DropdownMenuItem className="bg-(--white) hover:bg-(--border)">
-                      <Edit size={16} className="mr-1"/>Chỉnh sửa
+                    <Edit size={16} className="mr-1" />Chỉnh sửa
                   </DropdownMenuItem>
                   <DropdownMenuItem className="bg-(--white) hover:bg-(--border)">
-                      <Trash2 size={16} className="mr-1"/>Xoá bảng
+                    <Trash2 size={16} className="mr-1" />Xoá bảng
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
@@ -316,7 +315,7 @@ export default function ProjectDetail() {
                       <div className="flex flex-col divide-y divide-slate-200">
                         {risk.response_plans.map((plan: ResponsePlan, index: number) => (
                           <div key={index} className="px-4 py-2 min-h-10 flex items-center text-(--political) italic font-medium">
-                            <UserCircle size={16} className="mr-2"/> 
+                            <UserCircle size={16} className="mr-2" />
                             {plan.owner}
                           </div>
                         ))}
@@ -325,10 +324,10 @@ export default function ProjectDetail() {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table> 
+            </Table>
           </CardContent>
         </Card>
-        <PDFPreviewDialog 
+        <PDFPreviewDialog
           ref={pdfPreviewRef}
           fileName="Bao_cao_du_an.pdf"
         />
