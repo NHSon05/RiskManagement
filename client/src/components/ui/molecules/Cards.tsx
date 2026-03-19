@@ -1,0 +1,77 @@
+import React from "react";
+import classNames from "classnames";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {type IconProp } from '@fortawesome/fontawesome-svg-core';
+import { motion } from "motion/react"
+import { cardVariants } from "@/types/CardVariants";
+
+interface ItemProps{
+    title: string; 
+    des: string;   
+    icon: IconProp; 
+    color: 'blue' | 'green' | 'orange' | 'purple'; 
+    className?: string;
+    delay?: number;
+}
+
+const Card: React.FC<ItemProps> = ({   
+    icon, 
+    color,
+    title,
+    des,
+    className,
+    ...passProps
+}) => {
+
+    const props = {...passProps};
+
+    const boxClasses = classNames(
+        'rounded-lg px-8 py-12 shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]', 
+        {
+            'bg-[var(--bg-search)]': color === 'blue',
+            'bg-[var(--bg-solution)]': color === 'green',
+            'bg-[var(--bg-report)]': color === 'orange',
+            'bg-[var(--bg-analyst)]': color === 'purple',
+        },
+        className
+    );
+
+    const iconClasses = classNames(
+        'p-4 rounded-lg text-white font-bold text-2xl mb-4 inline-block',
+        {
+            'bg-[var(--progress)]': color === 'blue',   
+            'bg-[var(--solution)]': color === 'green',
+            'bg-[var(--warning)]': color === 'orange', 
+            'bg-[var(--report)]': color === 'purple',   
+        }
+    );
+
+    const textClasses = classNames(
+        {
+            'text-[var(--progress)]': color === 'blue',
+            'text-[var(--solution)]': color === 'green',
+            'text-[var(--warning)]': color === 'orange', 
+            'text-[var(--report)]': color === 'purple', 
+        }
+    )
+
+    return(
+        <motion.div className={boxClasses} {...props} 
+            whileHover={{ scale: 1.05 }}
+            variants={cardVariants}
+        >
+            <FontAwesomeIcon icon={icon} className={iconClasses} />
+            <h1 className={`text-[20px] font-semibold ${textClasses}`}>
+                {title}
+            </h1>
+            <p className="text-(--description) text-sm mt-2">
+                {des}
+            </p>
+            <button className={`px-2 py-1 text-sm mt-2 rounded-xl ${textClasses} hover:italic hover:underline cursor-pointer`}>
+              Xem thêm
+            </button>
+        </motion.div>
+    )
+}
+
+export default Card;
