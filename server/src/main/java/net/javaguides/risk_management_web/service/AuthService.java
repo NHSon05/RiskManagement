@@ -1,10 +1,12 @@
 package net.javaguides.risk_management_web.service;
 
 import net.javaguides.risk_management_web.dto.LoginRequest;
+import net.javaguides.risk_management_web.dto.LoginResponse;
 import net.javaguides.risk_management_web.dto.RegisterRequest;
 import net.javaguides.risk_management_web.entity.User;
 import net.javaguides.risk_management_web.repository.UserRepository;
 import net.javaguides.risk_management_web.util.PasswordUtil;
+import net.javaguides.risk_management_web.util.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,28 +15,26 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil; // Thêm JwtUtil
 
-    public AuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     public User register(RegisterRequest req) {
         if (userRepository.existsByEmail(req.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email đã được sử dụng!");
         }
-
         if (req.getPassword() == null || !req.getPassword().equals(req.getConfirmPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mật khẩu xác nhận không khớp!");
         }
 
-        // 3. Lưu User
         User user = new User();
         user.setName(req.getName());
         user.setEmail(req.getEmail());
         user.setPhoneNumber(req.getPhoneNumber());
-
         user.setCompany(req.getCompany());
-
         user.setPassword(PasswordUtil.hash(req.getPassword()));
         user.setRole("USER");
         user.setActive(true);
@@ -42,7 +42,8 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-    public User login(LoginRequest req) {
+    // PHƯƠNG THỨC LOGIN MỚI - Đảm bảo chỉ có DUY NHẤT một hàm login này
+    public LoginResponse login(LoginRequest req) {
         User user = userRepository.findByEmail(req.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tài khoản hoặc mật khẩu không đúng!"));
 
@@ -50,6 +51,7 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tài khoản hoặc mật khẩu không đúng!");
         }
 
-        return user;
+        String token = jwtUtil.generateToken(user.getEmail());
+        return new LoginResponse("Đăng nhập thành công!", token, user.getId());
     }
 }
