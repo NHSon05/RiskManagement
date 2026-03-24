@@ -28,7 +28,6 @@ import type { PestelSwot, PestelSwotItem, ResponsePlan, Risk, Target } from "@/t
 
 import { useRef, useState } from "react";
 import { CircleDollarSign, Clock, Contact, Download, Edit, MapPin, MoreHorizontalIcon, Trash2, UserCircle } from "lucide-react";
-import { FaTwitter, FaFacebookF, FaInstagram } from 'react-icons/fa';
 
 import { getRiskLevelBadge } from "@/utils";
 import ImageUpload from "@/components/ui/molecules/ImageUpload";
@@ -73,58 +72,47 @@ export default function ProjectDetail() {
     <PageTransition>
       <div className="mx-auto max-w-6xl space-y-8" ref={contentRef}>
         <Card className="bg-(--white) shadow-sm border-none">
-          <CardContent className="space-y-8">
-            {/* Img */}
-            <ImageUpload />
-            {/* Information */}
-            <div className="text-start space-y-2">
-              <div className="flex justify-between">
-                <Title variant="dark" size="medium">
-                  {data.prj_name}
-                </Title>
-                <Badge className="bg-green-100 text-(--solution) text-sm">Đang tiến hành</Badge>
-              </div>
-              <h2 className="text-md text-(--political) italic font-medium flex items-center">
+          <CardContent className="text-start space-y-1">
+            <Badge className="bg-green-100 text-(--solution) text-sm">Đang tiến hành</Badge>
+            <Title variant="dark" size="large">{data.prj_name}</Title>
+            <div className="flex space-x-8 text-md font-medium">
+              <h2 className="text-(--primary-btn) flex items-center">
                 <UserCircle size={20} className="mr-1" />
-                Nguyễn Văn A
+                <span className="text-(--black) ml-1">
+                  Nguyễn Văn A
+                </span>
               </h2>
-              <h2 className="text-md text-(--political) italic font-medium flex items-center">
+              <h2 className=" text-(--primary-btn) flex items-center">
                 <Contact size={20} className="mr-1" />
-                Vai trò:
                 <span className="text-(--black) ml-1">
                   {data.prj_role}
                 </span>
               </h2>
-              <h2 className="text-md text-(--political) italic font-medium flex items-center">
+              <h2 className=" text-(--primary-btn) flex items-center">
                 <Clock size={20} className="mr-1" />
-                Thời gian báo cáo:
                 <span className="text-(--black) ml-1">
                   01/01/2026
                 </span>
               </h2>
-              <h2 className="text-md text-(--political) italic font-medium flex items-center">
-                <MapPin size={20} className="mr-1" />
-                Địa điểm:
-                <span className="text-(--black) ml-1">
-                  {data.prj_location}
-                </span>
-              </h2>
-              <h2 className="text-md text-(--political) italic font-medium flex items-center">
-                <CircleDollarSign size={20} className="mr-1" />
-                Nguồn vốn:
-                <span className="text-(--black) ml-1">
-                  {data.prj_fund}
-                </span>
-              </h2>
-              <div className="flex space-x-2 items-center my-2">
-                <span>Chia sẻ</span>
-                <div className="flex space-x-1 items-center">
-                  <a href="#" className="bg-(--main-color) w-8 h-8 flex items-center justify-center rounded-full"><FaTwitter size={16} className="text-white" /></a>
-                  <a href="#" className="bg-(--main-color) w-8 h-8 flex items-center justify-center rounded-full"><FaFacebookF size={16} className="text-white" /></a>
-                  <a href="#" className="bg-pink-500 w-8 h-8 flex items-center justify-center rounded-full"><FaInstagram size={16} className="text-white" /></a>
-                </div>
-              </div>
             </div>
+            <h2 className="text-md text-(--primary-btn) flex items-center font-medium">
+              <MapPin size={20} className="mr-1" />
+              <span className="text-(--black) ml-1">
+                {data.prj_location}
+              </span>
+            </h2>
+            <h2 className="text-md text-(--primary-btn) font-medium flex items-center">
+              <CircleDollarSign size={20} className="mr-1" />
+              <span className="text-(--black) ml-1">
+                {data.prj_fund}
+              </span>
+            </h2>
+          </CardContent>
+        </Card>
+        <Card className="bg-(--white) shadow-sm border-none">
+          <CardContent className="space-y-8">
+            {/* Img */}
+            <ImageUpload />
             {/* PESTEL and SWOT */}
 
             {/* Desktop View - 2 cột song song */}
@@ -138,7 +126,7 @@ export default function ProjectDetail() {
                   <div className="space-y-4">
                     {data.pestel.map((pestel: PestelSwot) => (
                       <div key={pestel.code} className="text-start">
-                        <Title size="small" className="text-(--political)">{pestel.label}</Title>
+                        <Title size="small" className="text-(--primary-btn)">{pestel.label}</Title>
                         <ul className="space-y-2 list-disc pl-5 mt-2">
                           {pestel.items.map((item: PestelSwotItem, index: number) => (
                             <li key={index} className="text-md text-gray-700">
@@ -161,7 +149,7 @@ export default function ProjectDetail() {
                   <div className="space-y-4">
                     {data.swot.map((swot: PestelSwot) => (
                       <div key={swot.code} className="text-start">
-                        <Title size="small" className="text-(--political)">{swot.label}</Title>
+                        <Title size="small" className="text-(--primary-btn)">{swot.label}</Title>
                         <ul className="space-y-2 list-disc pl-5 mt-2">
                           {swot.items.map((item: PestelSwotItem, index: number) => (
                             <li key={index} className="text-md text-gray-700">
@@ -314,8 +302,8 @@ export default function ProjectDetail() {
                     <TableCell className="p-0 text-left">
                       <div className="flex flex-col divide-y divide-slate-200">
                         {risk.response_plans.map((plan: ResponsePlan, index: number) => (
-                          <div key={index} className="px-4 py-2 min-h-10 flex items-center text-(--political) italic font-medium">
-                            <UserCircle size={16} className="mr-2" />
+                          <div key={index} className="px-4 py-2 min-h-10 flex items-center text-(--political) italic font-medium wrap-break-word whitespace-normal">
+                            {/* <UserCircle size={16} className="mr-2" /> */}
                             {plan.owner}
                           </div>
                         ))}

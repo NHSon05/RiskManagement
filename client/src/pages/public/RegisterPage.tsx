@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Link, useNavigate } from "react-router-dom";
 
-<<<<<<< HEAD
 import {
   Button, Title, Input,
   Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
@@ -14,39 +13,13 @@ import {
 import { toast } from "react-toastify";
 import { PageTransition } from "@/components/animated";
 import { useAuth } from "@/hooks/useAuth";
-=======
-import { useRegisterMutation } from "@/apis/authService";
-
-import { Button, Title, Input } from "@/components/ui";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { toast } from "react-toastify";
-import { PageTransition } from "@/components/animated";
->>>>>>> ee8c5eeda4918403019f3ed8b846c5254dec8704
 
 // --- 1. ĐỊNH NGHĨA SCHEMA ---
 const registerSchema = z
   .object({
     fullName: z.string().min(2, "Họ tên phải có ít nhất 2 ký tự"),
     email: z.email("Email không hợp lệ"),
-<<<<<<< HEAD
     phoneNumber: z.string().min(10, "Số điện thoại không hợp lệ").regex(/^[0-9]+$/, "Chỉ được nhập số"),
-=======
-    phone: z.string().min(10, "Số điện thoại không hợp lệ").regex(/^[0-9]+$/, "Chỉ được nhập số"),
->>>>>>> ee8c5eeda4918403019f3ed8b846c5254dec8704
     organization: z.string().min(2, "Tên đơn vị quá ngắn"),
     password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
     confirmPassword: z.string().min(6, "Vui lòng xác nhận mật khẩu"),
@@ -61,12 +34,8 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 export default function RegisterPage() {
   const navigate = useNavigate();
 
-<<<<<<< HEAD
   const { register } = useAuth()
   const { isPending } = register
-=======
-  const { mutate, isPending } = useRegisterMutation();
->>>>>>> ee8c5eeda4918403019f3ed8b846c5254dec8704
 
   // Setup Form
   const form = useForm<RegisterFormValues>({
@@ -74,7 +43,6 @@ export default function RegisterPage() {
     defaultValues: {
       fullName: "",
       email: "",
-<<<<<<< HEAD
       password: "",
       confirmPassword: "",
       phoneNumber: "",
@@ -114,27 +82,6 @@ export default function RegisterPage() {
     }
   );
 }
-=======
-      phone: "",
-      organization: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
-
-  function onSubmit(values: RegisterFormValues) {
-    mutate(values, {
-      onSuccess: () => {
-        toast("Đăng ký thành công!");
-        navigate("/home");
-      },
-      onError: () => {
-        form.setError("root", { message: "Đăng ký thất bại. Vui lòng thử lại." });
-      },
-    });
-  }
-
->>>>>>> ee8c5eeda4918403019f3ed8b846c5254dec8704
   return (
     <PageTransition>
       <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -183,11 +130,7 @@ export default function RegisterPage() {
                 {/* Phone */}
                 <FormField
                   control={form.control}
-<<<<<<< HEAD
                   name="phoneNumber"
-=======
-                  name="phone"
->>>>>>> ee8c5eeda4918403019f3ed8b846c5254dec8704
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Số điện thoại</FormLabel>
@@ -247,11 +190,7 @@ export default function RegisterPage() {
                   className="w-full bg-blue-600 hover:bg-blue-700 mt-4" 
                   disabled={isPending}
                 >
-<<<<<<< HEAD
                   {isPending ? "Đang đăng ký" : "Đăng ký ngay"}
-=======
-                  Đăng ký ngay
->>>>>>> ee8c5eeda4918403019f3ed8b846c5254dec8704
                 </Button>
               </form>
             </Form>

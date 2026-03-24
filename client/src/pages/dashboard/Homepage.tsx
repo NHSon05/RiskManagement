@@ -73,10 +73,6 @@ const recentProjects : recentProjects[] = [
 ];
 
 const HomePage: React.FC = () => {
-<<<<<<< HEAD
-=======
-
->>>>>>> ee8c5eeda4918403019f3ed8b846c5254dec8704
   return (
     <PageTransition>
       <div className='space-y-8 bg-(--white)'>
