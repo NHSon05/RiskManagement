@@ -7,9 +7,22 @@ export interface Info{
   prj_role: string;
   pestel: PestelSwot[]
   swot: PestelSwot[]
-  prj_target: Target[]
+  prj_targets: Target[]
 }
 
+export interface PestelSwot {
+  code: string
+  label: string
+  items: PestelSwotItem[]
+}
+export interface PestelSwotItem {
+  content: string
+}
+export interface Target {
+  id: string;
+  name: string;
+  risks: Risk[];
+}
 
 export interface Risk {
   id: string;
@@ -22,11 +35,6 @@ export interface Risk {
   strategy: string
   response_plans: ResponsePlan[]
 }
-export interface Target {
-  id: string;
-  name: string;
-  risks: Risk[];
-}
 
 export interface ResponsePlan {
   id: string;
@@ -34,11 +42,3 @@ export interface ResponsePlan {
   name: string;
 }
 
-export interface PestelSwot {
-  code: string
-  label: string
-  items: PestelSwotItem[]
-}
-export interface PestelSwotItem {
-  content: string
-}

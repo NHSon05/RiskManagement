@@ -5,7 +5,6 @@ import {
   IconCamera,
   IconChartBar,
   IconDashboard,
-  IconDatabase,
   IconFileAi,
   IconFileDescription,
   IconFileWord,
@@ -127,11 +126,6 @@ const data = {
     },
   ],
   documents: [
-    {
-      name: "Thư viện dữ liệu",
-      to: "/library",
-      icon: IconDatabase,
-    },
     {
       name: "Báo cáo",
       to: "/reports",

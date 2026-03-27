@@ -8,10 +8,10 @@ import { Plus, Trash2 } from "lucide-react";
 import Button from "../button";
 import { useState  } from "react";
 import { nanoid } from "nanoid";
+import type { Info } from "@/types/projectType";
 
 interface ListRiskProps{
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>;
+  control: Control<Info>;
   nestIndex:number;
 }
 export default function RiskList({control, nestIndex}:ListRiskProps) {
@@ -26,7 +26,9 @@ export default function RiskList({control, nestIndex}:ListRiskProps) {
     const newRisk = {
       id: nanoid(),
       name: tempRiskName,
+      probability: "",
       probability_level: 0,
+      impact: "",
       impact_level: 0,
       risk_level: 0,
       strategy: "",

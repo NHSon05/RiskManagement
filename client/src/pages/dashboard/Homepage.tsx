@@ -75,7 +75,7 @@ const recentProjects : recentProjects[] = [
 const HomePage: React.FC = () => {
   return (
     <PageTransition>
-      <div className='space-y-8 bg-(--white)'>
+      <div className='space-y-8'>
           <div className='bg-(--bg-search) text-start rounded-lg p-6 space-y-4'>
               <Title size='large' variant='dark'>Xin chào, Nguyễn Văn A</Title>
               <p className='text-gray-800 text-[16px]'>

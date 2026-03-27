@@ -103,7 +103,6 @@ export const router = createBrowserRouter(
               <Suspense fallback={<Loading/>}><ProjectDetail /></Suspense>
             } />
           </Route>
-
         </Route>
       </Route>
 

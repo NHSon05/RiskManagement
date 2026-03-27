@@ -8,20 +8,12 @@ import logo from '../../assets/imgs/logo.svg'
 import {
   Button,
   Input,
-  // Separator,
-  // SidebarTrigger
 } from "@/components/ui";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { cn } from "@/lib/utils";
-// import ScrollToTop from "../../../hooks/ScrollToTop";
-// import './NavBar.css'
-
-// interface Links{
-//     label:string;
-//     to: string
-// }
+import { Bell } from "lucide-react";
 interface NavBarProps{
     isLogin?:boolean;
     className?: string;
@@ -35,13 +27,6 @@ function NavBar({
     
     const [isLoggedIn, setIsLoggedIn] = useState(isLogin);
     const navigate = useNavigate();
-
-    // const links:Links[] = [
-    //     { label: "Trang chủ", to: "/home" },
-    //     { label: "Dự án", to: "/projects" },
-    //     { label: "Báo cáo", to: "/reports" },
-    //     { label: "Hỗ trợ", to: "/support" },
-    // ];
     return (
         <div className={cn("w-full z-98 top-0", className)}>
             <nav className="flex justify-between items-center px-4">
@@ -62,12 +47,17 @@ function NavBar({
                     <div>
                         {isLoggedIn ? (
                           <div className="flex gap-2">
-                            <Button variant="primary" 
+                            {/* <Button variant="primary" 
                                 icon={<FontAwesomeIcon icon={faPlus}/>}
                                 onClick={() => {navigate('projects/info')}}
                             >
                               Thêm dự án
-                            </Button>
+                            </Button> */}
+                            <button
+                              className="p-1.5 rounded-lg"
+                            >
+                              <Bell className="text-(--description)"/>
+                            </button>
                           </div>
                         ) : (
                             <div className="flex gap-2">

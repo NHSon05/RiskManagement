@@ -6,10 +6,10 @@ import { motion } from "motion/react"
 import { cardVariants } from "@/types/CardVariants";
 
 interface ItemProps{
-    title: string; 
-    des: string;   
+    title?: string; 
+    des?: string;   
     icon: IconProp; 
-    color: 'blue' | 'green' | 'orange' | 'purple'; 
+    color?: 'blue' | 'green' | 'orange' | 'purple'; 
     className?: string;
     delay?: number;
 }

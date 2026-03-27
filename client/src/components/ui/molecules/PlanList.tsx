@@ -111,7 +111,7 @@ export default function PlanList({
               {/* Hiển thị & Chỉnh sửa Người phụ trách */}
               <div className="md:col-span-4">
                 <div 
-                  className=" bg-(--white) font-medium text-(--black) text-sm placeholder:text-gray-400 border h-10 w-full min-w-0 rounded-md px-2 py-2 text-start shadow-xs"
+                  className=" bg-(--white) font-medium text-(--black) text-sm placeholder:text-gray-400 border min-h-10 w-full min-w-0 rounded-md px-2 py-2 text-start shadow-xs"
                 >
                   {plan.owner}
                 </div>

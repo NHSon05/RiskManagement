@@ -8,9 +8,9 @@ import { Link } from "react-router-dom";
 // import { icon } from "@fortawesome/fontawesome-svg-core";
 
 interface StatCardProps {
-  title: string;
-  value: string | number;
-  description: string;
+  title?: string;
+  value?: string | number;
+  description?: string;
   icon: IconProp;
   color?: 'green' | 'blue' | 'orange';
   className?: string;
@@ -35,19 +35,19 @@ function StatCard({
         },
         className
     )
-    const bgClasses = classNames(
-        {
-            'bg-[var(--bg-search)]': color == 'blue',
-            'bg-[var(--bg-solution)]': color == 'green',
-            'bg-[var(--bg-report)]': color == 'orange',
-        },
-        className
-    )
+    // const bgClasses = classNames(
+    //     {
+    //         'bg-[var(--bg-search)]': color == 'blue',
+    //         'bg-[var(--bg-solution)]': color == 'green',
+    //         'bg-[var(--bg-report)]': color == 'orange',
+    //     },
+    //     className
+    // )
 
 
     return (
       <Link to='/projects/'>      
-        <motion.div className={`p-6 rounded-lg shadow-md flex justify-between items-start ${bgClasses}`} {...props} 
+        <motion.div className={`p-6 rounded-lg shadow-md flex justify-between items-start bg-(--white)`} {...props} 
                     whileHover={{ scale: 1.05 }} whileTap={{ scale: 1 }}
                     variants={cardVariants}
         >

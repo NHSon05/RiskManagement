@@ -208,7 +208,7 @@ export default function Evaluation() {
             </Table>
           </CardContent>
         </Card>
-          <div className="py-4 flex gap-2 justify-end sticky bottom-0 bg-white/80 backdrop-blur p-4 border-t mt-4">
+          <div className="py-4 flex gap-2 justify-end bottom-0 bg-white/80 backdrop-blur p-4 border-t mt-4">
             <Button
               type="button"
               variant="outline"

@@ -19,7 +19,7 @@ import {
 import { Plus, Trash2 } from "lucide-react"
 import { useFieldArray, useForm, useWatch } from "react-hook-form"
 import z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
+// import { zodResolver } from "@hookform/resolvers/zod"
 import { nanoid } from 'nanoid'
 import { useEffect, useState } from "react"
 import { titleCase } from "@/utils"
@@ -28,6 +28,7 @@ import { PDFViewer,RiskList } from "@/components/ui/molecules"
 import pdf from '../../../assets/pdf/RISK-CHECKLIST.pdf'
 import { fishBoneChart, swotModel } from "@/assets/imgs"
 import { RISK_CHECKLIST } from "@/components/constants"
+import type { Info } from "@/types/projectType"
 
 
 const riskSchema = z.object({
@@ -77,8 +78,8 @@ export default function Target() {
       risks: [] 
     }]
   }
-  const form = useForm({
-    resolver: zodResolver(formSchema),
+  const form = useForm<Info>({
+    // resolver: zodResolver(formSchema),
     defaultValues: {
       prj_targets: loadSavedData()
     }
@@ -277,7 +278,7 @@ export default function Target() {
                       <Plus/>
                       Thêm mục tiêu
                     </Button>
-                    <div className="py-4 flex gap-2 justify-end sticky bottom-0  backdrop-blur border-t mt-4">
+                    <div className="py-4 flex gap-2 justify-end bottom-0  backdrop-blur border-t mt-4">
                       <Button
                           type="button"
                           variant="outline"

@@ -18,12 +18,12 @@ export const authService = {
   // Get Profile
   getProfile: () => http.get('/users/me'),
 
-  // logout: () => http.post('/auth/logout')
-  logout: () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ data: { message: "Đăng xuất local thành công" } });
-      }, 100); 
-    });
-  }
+  logout: () => http.post('/auth/logout')
+  // logout: () => {
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => {
+  //       resolve({ data: { message: "Đăng xuất local thành công" } });
+  //     }, 100); 
+  //   });
+  // }
 }
