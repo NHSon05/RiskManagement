@@ -24,4 +24,25 @@ public class JwtUtil {
                 .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    public boolean validateToken(String token) {
+        try {
+            io.jsonwebtoken.Jwts.parserBuilder()
+                    .setSigningKey(io.jsonwebtoken.security.Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Token không hợp lệ: " + e.getMessage());
+            return false;
+        }
+    }
+    public String extractEmail(String token) {
+        return io.jsonwebtoken.Jwts.parserBuilder()
+                .setSigningKey(io.jsonwebtoken.security.Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
 }

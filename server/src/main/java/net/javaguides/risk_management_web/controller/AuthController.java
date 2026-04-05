@@ -3,11 +3,14 @@ package net.javaguides.risk_management_web.controller;
 import net.javaguides.risk_management_web.dto.LoginRequest;
 import net.javaguides.risk_management_web.dto.LoginResponse; // Quan trọng
 import net.javaguides.risk_management_web.dto.RegisterRequest;
+import net.javaguides.risk_management_web.dto.UserResponse;
 import net.javaguides.risk_management_web.entity.User;
 import net.javaguides.risk_management_web.service.AuthService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity; // Quan trọng
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Map; // Quan trọng
 
 @RestController
@@ -34,5 +37,15 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout() {
         return ResponseEntity.ok(Map.of("message", "Đăng xuất thành công!"));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String email = principal.getName();
+        UserResponse userInfo = authService.getCurrentUserInfo(email);
+        return ResponseEntity.ok(userInfo);
     }
 }

@@ -3,6 +3,7 @@ package net.javaguides.risk_management_web.service;
 import net.javaguides.risk_management_web.dto.LoginRequest;
 import net.javaguides.risk_management_web.dto.LoginResponse;
 import net.javaguides.risk_management_web.dto.RegisterRequest;
+import net.javaguides.risk_management_web.dto.UserResponse;
 import net.javaguides.risk_management_web.entity.User;
 import net.javaguides.risk_management_web.repository.UserRepository;
 import net.javaguides.risk_management_web.util.PasswordUtil;
@@ -53,5 +54,21 @@ public class AuthService {
 
         String token = jwtUtil.generateToken(user.getEmail());
         return new LoginResponse("Đăng nhập thành công!", token, user.getId());
+    }
+    // PHƯƠNG THỨC RESPONSE THÔNG TIN USER
+    public UserResponse getCurrentUserInfo(String email) {
+        // Tìm user theo email (hoặc username) trích xuất được từ token
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy user"));
+        // Map từ Entity sang DTO
+        UserResponse response = new UserResponse();
+        response.setId(user.getId());
+        response.setName(user.getName());
+        response.setEmail(user.getEmail());
+        response.setPhoneNumber(user.getPhoneNumber());
+        response.setCompany(user.getCompany());
+        response.setActive(user.isActive());
+
+        return response;
     }
 }
