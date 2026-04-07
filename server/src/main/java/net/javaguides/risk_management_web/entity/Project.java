@@ -4,7 +4,7 @@ package net.javaguides.risk_management_web.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
+//import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,7 +18,7 @@ public class Project {
     private String name;
     private String prjLevel;
     private String location;
-    private BigDecimal capital;
+    private String capital;
 
     private String role;
 
@@ -64,11 +64,11 @@ public class Project {
         this.location = location;
     }
 
-    public BigDecimal getCapital() {
+    public String getCapital() {
         return capital;
     }
 
-    public void setCapital(BigDecimal capital) {
+    public void setCapital(String capital) {
         this.capital = capital;
     }
 
