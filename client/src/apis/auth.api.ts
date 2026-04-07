@@ -1,6 +1,6 @@
 import http from "@/utils/http";
 
-export const authService = {
+export const authApi = {
   login: (data: {
     email: string,
     password: string
@@ -16,14 +16,7 @@ export const authService = {
   }) => http.post('/auth/register', data),
 
   // Get Profile
-  getProfile: () => http.get('/users/me'),
+  getProfile: () => http.get('/auth/me'),
 
   logout: () => http.post('/auth/logout')
-  // logout: () => {
-  //   return new Promise((resolve) => {
-  //     setTimeout(() => {
-  //       resolve({ data: { message: "Đăng xuất local thành công" } });
-  //     }, 100); 
-  //   });
-  // }
 }

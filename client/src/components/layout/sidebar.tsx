@@ -33,11 +33,11 @@ import {
 } from "@/components/ui/sidebar"
 
 const data = {
-  user: {
-    name: "Nguyễn Văn A",
-    email: "sonmcr@gmail.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
+  // user: {
+  //   name: "Nguyễn Văn A",
+  //   email: "sonmcr@gmail.com",
+  //   avatar: "/avatars/shadcn.jpg",
+  // },
   navMain: [
     {
       title: "Trang chủ",
@@ -144,7 +144,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader className="bg-(--white)">
         <SidebarMenu>
-        <NavUser user={data.user} />
+        <NavUser/>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>

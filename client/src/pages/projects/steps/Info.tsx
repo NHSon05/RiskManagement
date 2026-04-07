@@ -20,39 +20,58 @@ import {
   CardContent,
   CardHeader
 } from "@/components/ui";
-import { nanoid } from "nanoid";
 import { PageTransition } from "@/components/animated";
+import { useCreateProject } from "@/hooks/useProject";
 
 const infoSchema = z.object({
-  prj_id: z.string(),
-  prj_name: z.string().min(1, "Vui lòng nhập tên dự án"),
-  prj_level: z.string().min(1, "Vui lòng nhập cấp công trình"),
-  prj_location: z.string().min(1, "Vui lòng nhập địa điểm"),
-  prj_fund: z.string().min(1, "Vui lòng nhập nguồn vốn"),
-  prj_role: z.string().min(1, "Vui lòng chọn vai trò"),
+  name: z.string().min(1, "Vui lòng nhập tên dự án"),
+  prjLevel: z.string().min(1, "Vui lòng nhập cấp công trình"),
+  location: z.string().min(1, "Vui lòng nhập địa điểm"),
+  capital: z.string().min(1, "Vui lòng nhập nguồn vốn"),
+  // capital: z.coerce.number().min(1, "Vui lòng nhập nguồn vốn"),
+  role: z.string().min(1, "Vui lòng chọn vai trò"),
 });
 
 export default function Info() {
   const navigate = useNavigate();
   const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}");
 
+  // hook api
+  const { mutate: createProject , isPending } =  useCreateProject();
+
   const form = useForm<z.infer<typeof infoSchema>>({
     resolver: zodResolver(infoSchema),
     defaultValues: {
-      prj_id: nanoid(),
-      prj_name: savedData.prj_name || "",
-      prj_level: savedData.prj_level || "",
-      prj_location: savedData.prj_location || "",
-      prj_fund: savedData.prj_fund || "",
-      prj_role: savedData.prj_role || "",
+      name: savedData.name || "",
+      prjLevel: savedData.prjLevel || "",
+      location: savedData.location || "",
+      capital: savedData.capital || "",
+      role: savedData.role || "",
     },
   });
   function onSubmit(values: z.infer<typeof infoSchema>) {
-    localStorage.setItem("projectFormData", JSON.stringify({ ...savedData, ...values }));
-    navigate("/projects/pestel");
+    const userId = Number(localStorage.getItem("userId"))
+
+    if (!userId) {
+      alert("Không tìm thấy thông tin đăng nhập. Vui lòng đăng nhập lại");
+      return;
+    }
+
+    // Push API to backend
+
+    createProject(
+      {userId, body: values},
+      {
+        onSuccess: (res) => {
+          localStorage.setItem("currentProjectId", res.data.id.toString());
+          localStorage.setItem("projectFormData", JSON.stringify({ ...savedData, ...values }));
+          navigate("/projects/pestel");
+        }
+      }
+    )
   }
   const handleCancel = () => {
-    localStorage.removeItem("projectFormData");
+    form.reset();
     navigate("/home")
   }
 
@@ -67,7 +86,7 @@ export default function Info() {
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">   
                 {/* Tên dự án */}
-                <FormField control={form.control} name="prj_name" render={({ field }) => (
+                <FormField control={form.control} name="name" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Tên dự án</FormLabel>
                     <FormControl><Input placeholder="Hệ thống quản lý kho ERP" {...field} /></FormControl>
@@ -75,7 +94,7 @@ export default function Info() {
                   </FormItem>
                 )} />
                 {/* Cấp công trình */}
-                <FormField control={form.control} name="prj_level" render={({ field }) => (
+                <FormField control={form.control} name="prjLevel" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Cấp công trình</FormLabel>
                     <FormControl><Input placeholder="Nhập cấp công trình" {...field} /></FormControl>
@@ -83,7 +102,7 @@ export default function Info() {
                   </FormItem>
                 )} />
                 {/* Địa điểm */}
-                <FormField control={form.control} name="prj_location" render={({ field }) => (
+                <FormField control={form.control} name="location" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Địa điểm</FormLabel>
                     <FormControl><Input placeholder="Ví dụ: TP. Đà Nẵng" {...field} /></FormControl>
@@ -91,15 +110,17 @@ export default function Info() {
                   </FormItem>
                 )} />
                 {/* Nguồn vốn */}
-                <FormField control={form.control} name="prj_fund" render={({ field }) => (
+                <FormField control={form.control} name="capital" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nguồn vốn</FormLabel>
-                    <FormControl><Input placeholder="Nhập nguồn vốn của bạn" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormControl>
+                      <Input placeholder="Nhập nguồn vốn của bạn" {...field} />
+                    </FormControl>
+                    <FormMessage/>
                   </FormItem>
                 )} />
                 {/* Vai trò (Select) */}
-                <FormField control={form.control} name="prj_role" render={({ field }) => (
+                <FormField control={form.control} name="role" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Vai trò</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -121,8 +142,8 @@ export default function Info() {
                   <Button type="button" variant="outline" onClick={handleCancel}>
                     Quay lại
                   </Button>
-                  <Button type="submit" variant="primary">
-                    Tiếp theo
+                  <Button type="submit" variant="primary" disabled={isPending}>
+                    {isPending? "Đang tạo" : "Tiếp theo"}
                   </Button>
                 </div>
               </form>

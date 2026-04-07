@@ -29,19 +29,21 @@ import {
 import { useAuth } from "@/hooks/useAuth"
 // import { useLogout } from "@/hooks/useAuth"
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar()
 
-  const { logout } = useAuth();
+  const { logout, profile } = useAuth();
   const { isPending } = logout;
+
+  if (profile.isLoading) {
+    return <div className="p-4 text-sm text-gray-500">Đang tải thông tin...</div>;
+  }
+
+  if (profile.isError || !profile.data) {
+    return <div className="p-4 text-sm text-red-500">Vui lòng đăng nhập lại</div>;
+  }
+
+  const user = profile.data.data
 
   return (
     <SidebarMenu>

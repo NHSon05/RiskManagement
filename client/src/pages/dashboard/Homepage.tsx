@@ -10,6 +10,7 @@ import { faChartSimple, faCircleCheck, faCircleExclamation } from '@fortawesome/
 import { type IconProp } from '@fortawesome/fontawesome-svg-core';
 import FadedDiv from '../../components/ui/FadedDiv';
 import { PageTransition } from '@/components/animated';
+import { useAuth } from '@/hooks/useAuth';
 
 interface StatData {
   title: string;
@@ -73,11 +74,16 @@ const recentProjects : recentProjects[] = [
 ];
 
 const HomePage: React.FC = () => {
+
+  const { profile } = useAuth()
+
+  const user = profile.data?.data
+
   return (
     <PageTransition>
       <div className='space-y-8'>
           <div className='bg-(--bg-search) text-start rounded-lg p-6 space-y-4'>
-              <Title size='large' variant='dark'>Xin chào, Nguyễn Văn A</Title>
+              <Title size='large' variant='dark'>Xin chào, {user.name}</Title>
               <p className='text-gray-800 text-[16px]'>
                   Chào mừng bạn đến với <span className='font-bold text-(--primary-btn)'>Risk Management</span>. 
                   Bắt đầu quản lý rủi ro của bạn một cách hiệu quả
