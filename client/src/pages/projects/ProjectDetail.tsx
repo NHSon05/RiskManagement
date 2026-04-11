@@ -27,8 +27,19 @@ import { PDFPreviewDialog, type PDFPreviewRef } from "@/components/ui/molecules/
 import type { PestelSwot, PestelSwotItem, ResponsePlan, Risk, Target } from "@/types/projectType";
 
 import { useRef, useState } from "react";
-import { CircleDollarSign, Clock, Contact, Download, Edit, MapPin, MoreHorizontalIcon, Trash2, UserCircle } from "lucide-react";
-import { FaTwitter, FaFacebookF, FaInstagram } from 'react-icons/fa';
+import {
+  CircleDollarSign,
+  Clock,
+  Contact,
+  Download,
+  EarthIcon,
+  Edit,
+  Flag,
+  MapPin,
+  MoreHorizontalIcon,
+  Trash2,
+  UserCircle
+} from "lucide-react";
 
 import { getRiskLevelBadge } from "@/utils";
 import ImageUpload from "@/components/ui/molecules/ImageUpload";
@@ -73,113 +84,147 @@ export default function ProjectDetail() {
     <PageTransition>
       <div className="mx-auto max-w-6xl space-y-8" ref={contentRef}>
         <Card className="bg-(--white) shadow-sm border-none">
-          <CardContent className="space-y-8">
-            {/* Img */}
-            <ImageUpload />
-            {/* Information */}
-            <div className="text-start space-y-2">
-              <div className="flex justify-between">
-                <Title variant="dark" size="medium">
-                  {data.prj_name}
-                </Title>
-                <Badge className="bg-green-100 text-(--solution) text-sm">Đang tiến hành</Badge>
-              </div>
-              <h2 className="text-md text-(--political) italic font-medium flex items-center">
+          <CardContent className="text-start space-y-1">
+            <Badge className="bg-green-100 text-(--solution) text-sm">Đang tiến hành</Badge>
+            <Title variant="dark" size="large">{data.prj_name}</Title>
+            <div className="flex space-x-8 text-md font-medium">
+              <h2 className="text-(--primary-btn) flex items-center">
                 <UserCircle size={20} className="mr-1" />
-                Nguyễn Văn A
+                <span className="text-(--black) ml-1">
+                  Nguyễn Văn A
+                </span>
               </h2>
-              <h2 className="text-md text-(--political) italic font-medium flex items-center">
+              <h2 className=" text-(--primary-btn) flex items-center">
                 <Contact size={20} className="mr-1" />
-                Vai trò:
                 <span className="text-(--black) ml-1">
                   {data.prj_role}
                 </span>
               </h2>
-              <h2 className="text-md text-(--political) italic font-medium flex items-center">
+              <h2 className=" text-(--primary-btn) flex items-center">
                 <Clock size={20} className="mr-1" />
-                Thời gian báo cáo:
                 <span className="text-(--black) ml-1">
                   01/01/2026
                 </span>
               </h2>
-              <h2 className="text-md text-(--political) italic font-medium flex items-center">
-                <MapPin size={20} className="mr-1" />
-                Địa điểm:
-                <span className="text-(--black) ml-1">
-                  {data.prj_location}
-                </span>
-              </h2>
-              <h2 className="text-md text-(--political) italic font-medium flex items-center">
-                <CircleDollarSign size={20} className="mr-1" />
-                Nguồn vốn:
-                <span className="text-(--black) ml-1">
-                  {data.prj_fund}
-                </span>
-              </h2>
-              <div className="flex space-x-2 items-center my-2">
-                <span>Chia sẻ</span>
-                <div className="flex space-x-1 items-center">
-                  <a href="#" className="bg-(--main-color) w-8 h-8 flex items-center justify-center rounded-full"><FaTwitter size={16} className="text-white" /></a>
-                  <a href="#" className="bg-(--main-color) w-8 h-8 flex items-center justify-center rounded-full"><FaFacebookF size={16} className="text-white" /></a>
-                  <a href="#" className="bg-pink-500 w-8 h-8 flex items-center justify-center rounded-full"><FaInstagram size={16} className="text-white" /></a>
-                </div>
-              </div>
             </div>
+            <h2 className="text-md text-(--primary-btn) flex items-center font-medium">
+              <MapPin size={20} className="mr-1" />
+              <span className="text-(--black) ml-1">
+                {data.prj_location}
+              </span>
+            </h2>
+            <h2 className="text-md text-(--primary-btn) font-medium flex items-center">
+              <CircleDollarSign size={20} className="mr-1" />
+              <span className="text-(--black) ml-1">
+                {data.prj_fund}
+              </span>
+            </h2>
+          </CardContent>
+        </Card>
+        <Card className="bg-(--white) shadow-sm border-none">
+          <CardContent className="space-y-8">
+            {/* Img */}
+            <ImageUpload />
             {/* PESTEL and SWOT */}
 
             {/* Desktop View - 2 cột song song */}
-            <div className="hidden md:grid md:grid-cols-2 gap-6">
+            <div className="hidden md:grid md:grid-cols-3 gap-6 text-start">
               {/* Bối cảnh bên ngoài */}
-              <div className="space-y-4">
-                <h3 className="text-[24px] font-semibold text-(--logo) border-b-2 border-navy-600 pb-2">
-                  Bối cảnh bên ngoài (PESTEL)
-                </h3>
-                <PageTransition>
-                  <div className="space-y-4">
-                    {data.pestel.map((pestel: PestelSwot) => (
-                      <div key={pestel.code} className="text-start">
-                        <Title size="small" className="text-(--political)">{pestel.label}</Title>
-                        <ul className="space-y-2 list-disc pl-5 mt-2">
-                          {pestel.items.map((item: PestelSwotItem, index: number) => (
-                            <li key={index} className="text-md text-gray-700">
-                              {item.content}
-                            </li>
-                          ))}
-                        </ul>
+              <Card className="bg-(--white) shadow-sm border-none col-span-2">
+                <CardContent className="space-y-4">
+                  <h3 className="text-[24px] font-semibold text-(--logo) border-b-2 pb-2 flex items-center">
+                    <EarthIcon size={24} className="mr-2"/>
+                    Bối cảnh bên ngoài (PESTEL)
+                  </h3>
+                  <PageTransition>
+                    <div className="space-y-4">
+                      {data.pestel.map((pestel: PestelSwot) => (
+                        <div key={pestel.code} className="text-start">
+                          <Title size="small" className="text-(--primary-btn)">{pestel.label}</Title>
+                          <ul className="space-y-2 list-disc pl-5 mt-2">
+                            {pestel.items.map((item: PestelSwotItem, index: number) => (
+                              <li key={index} className="text-md text-gray-700">
+                                {item.content}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </PageTransition>
+                </CardContent>
+                {/* Bối cảnh bên trong */}
+                <CardContent className="space-y-4">
+                  <h3 className="text-[24px] font-semibold text-(--logo) border-b-2 pb-2 flex items-center">
+                    <MapPin size={24} className="mr-2"/>
+                    Bối cảnh bên trong (SWOT)
+                  </h3>
+                  <PageTransition>
+                    <div className="space-y-4">
+                      {data.swot.map((swot: PestelSwot) => (
+                        <div key={swot.code} className="text-start">
+                          <Title size="small" className="text-(--primary-btn)">{swot.label}</Title>
+                          <ul className="space-y-2 list-disc pl-5 mt-2">
+                            {swot.items.map((item: PestelSwotItem, index: number) => (
+                              <li key={index} className="text-md text-(--description)">
+                                {item.content}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </PageTransition>
+                </CardContent>
+              </Card>
+              {/* Target */}
+              <div className="col-span-1 space-y-4">
+                <Card className="bg-(--white) shadow-sm border-none col-span-1 self-start">
+                  <CardContent className="text-start space-y-2">
+                    <h3 className="text-[24px] font-semibold text-(--logo) pb-2 flex items-center">
+                      <Flag size={24} className="mr-2"/>
+                      Mục tiêu dự án
+                    </h3>
+                    <div className="relative">
+                      {/* Đường line dọc chạy suốt timeline */}
+                      {/* <div className="absolute left-4.75 top-2 bottom-2 w-[1.5px] bg-green-200" /> */}
+                      <div className="space-y-4">
+                        {data.prj_targets.map((target: Target) => (
+                          <div key={target.id} className="relative pl-8">
+                            {/* Icon tròn nằm trên đường line */}
+                            <div className="absolute left-0 top-1 z-10 h-6 w-6 rounded-full bg-green-100 ring-2 ring-white flex items-center justify-center">
+                              {/* Chấm tròn nhỏ đậm bên trong nếu muốn giống 100% hình mẫu */}
+                              <div className="h-2 w-2 rounded-full bg-green-500" />
+                            </div>
+                            <h3 className="text-md leading-relaxed">
+                              {target.name}
+                            </h3>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </PageTransition>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-(--blue-border)">
+                  <CardContent className="text-start">
+                    <h4 className="text-sm font-bold text-(--main-color) uppercase tracking-wide mb-2">
+                      Lời nhắc Risk Manager
+                    </h4>
+                    <p className="text-sm leading-relaxed text-(--description)">
+                      Đừng quên cập nhật báo cáo rủi ro hàng tuần vào mỗi chiều thứ 6.
+                    </p>
+                  </CardContent>
+                </Card>
               </div>
 
-              {/* Bối cảnh bên trong */}
-              <div className="space-y-4">
-                <h3 className="text-[24px] font-semibold text-(--logo) border-b-2 border-navy-600 pb-2">
-                  Bối cảnh bên trong (SWOT)
-                </h3>
-                <PageTransition>
-                  <div className="space-y-4">
-                    {data.swot.map((swot: PestelSwot) => (
-                      <div key={swot.code} className="text-start">
-                        <Title size="small" className="text-(--political)">{swot.label}</Title>
-                        <ul className="space-y-2 list-disc pl-5 mt-2">
-                          {swot.items.map((item: PestelSwotItem, index: number) => (
-                            <li key={index} className="text-md text-gray-700">
-                              {item.content}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </PageTransition>
-              </div>
             </div>
             {/* Mobile-View */}
             <Tabs defaultValue="pestel" className="md:hidden">
               <div>
                 <TabsList variant="line" className="text-xl font-medium text-(--logo)">
-                  <TabsTrigger value="pestel">Bối cảnh bên ngoài</TabsTrigger>
+                  <TabsTrigger value="pestel">
+                    Bối cảnh bên ngoài
+                  </TabsTrigger>
                   <TabsTrigger value="swot">Bối cảnh bên trong</TabsTrigger>
                 </TabsList>
               </div>
@@ -227,28 +272,6 @@ export default function ProjectDetail() {
                 </PageTransition>
               </TabsContent>
             </Tabs>
-            {/* Target */}
-            <div className="text-start">
-              <Title size="medium" className="text-(--logo)">Mục tiêu</Title>
-              <div className="relative p-2">
-                {/* Đường line dọc chạy suốt timeline */}
-                <div className="absolute left-4.75 top-2 bottom-2 w-[1.5px] bg-green-200" />
-                <div className="space-y-12">
-                  {data.prj_targets.map((target: Target) => (
-                    <div key={target.id} className="relative pl-10">
-                      {/* Icon tròn nằm trên đường line */}
-                      <div className="absolute left-0 top-1 z-10 h-6 w-6 rounded-full bg-green-100 ring-2 ring-white flex items-center justify-center">
-                        {/* Chấm tròn nhỏ đậm bên trong nếu muốn giống 100% hình mẫu */}
-                        <div className="h-2 w-2 rounded-full bg-green-500" />
-                      </div>
-                      <h3 className="text-md font-medium leading-relaxed">
-                        {target.name}
-                      </h3>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
           </CardContent>
         </Card>
         {/* Table */}
@@ -314,8 +337,8 @@ export default function ProjectDetail() {
                     <TableCell className="p-0 text-left">
                       <div className="flex flex-col divide-y divide-slate-200">
                         {risk.response_plans.map((plan: ResponsePlan, index: number) => (
-                          <div key={index} className="px-4 py-2 min-h-10 flex items-center text-(--political) italic font-medium">
-                            <UserCircle size={16} className="mr-2" />
+                          <div key={index} className="px-4 py-2 min-h-10 flex items-center text-(--political) italic font-medium wrap-break-word whitespace-normal">
+                            {/* <UserCircle size={16} className="mr-2" /> */}
                             {plan.owner}
                           </div>
                         ))}
