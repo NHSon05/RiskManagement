@@ -10,14 +10,12 @@ import {
   IconFileWord,
   IconFolder,
   IconHelp,
-  // IconInnerShadowTop,
   IconReport,
   IconSearch,
   IconSettings,
   IconUsers,
 } from "@tabler/icons-react"
 
-// import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "../ui/nav-main"
 import { NavSecondary } from "../ui/nav-secondary"
 import { NavUser } from "../ui/nav-user"
@@ -25,19 +23,11 @@ import { NavDocuments } from "../ui/nav-documents"
 import {
   Sidebar,
   SidebarContent,
-  // SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  // SidebarMenuButton,
-  // SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
 const data = {
-  // user: {
-  //   name: "Nguyễn Văn A",
-  //   email: "sonmcr@gmail.com",
-  //   avatar: "/avatars/shadcn.jpg",
-  // },
   navMain: [
     {
       title: "Trang chủ",
