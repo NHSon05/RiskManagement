@@ -31,7 +31,7 @@ public class SecurityConfig {
                 // Authorization setup for endpoint
                 .authorizeHttpRequests(auth -> auth
                         // Accept everyone access to API login và register without token
-                        .requestMatchers("/auth/login", "/auth/register").permitAll()
+                        .requestMatchers("/auth/login", "/auth/register", "/error").permitAll()
                         // all another request (như /auth/me, /auth/logout...) have to have validated
                         // token
                         .anyRequest().authenticated())
@@ -39,17 +39,18 @@ public class SecurityConfig {
                 // Đặt Session Management by STATELESS (Spring Security won't save session on
                 // server)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
     @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
 
         // Thay localhost:5174 bằng port React/Vite thực tế của bạn nếu có thay đổi
-        configuration.setAllowedOrigins(java.util.List.of("http://localhost:5173", "http://localhost:3000"));
+        configuration.setAllowedOrigins(
+                java.util.List.of("http://localhost:5173", "http://localhost:3000", "http://localhost:5174"));
 
         configuration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(java.util.Arrays.asList("Authorization", "Content-Type"));

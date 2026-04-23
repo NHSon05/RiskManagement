@@ -18,7 +18,7 @@ public class ProjectService {
     private final UserRepository userRepository;
 
     public ProjectService(ProjectRepository projectRepository,
-                          UserRepository userRepository) {
+            UserRepository userRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
     }
@@ -34,8 +34,8 @@ public class ProjectService {
         p.setName(req.getName());
         p.setPrjLevel(req.getPrjLevel()); // Cấp công trình
         p.setLocation(req.getLocation()); // Địa điểm
-        p.setCapital(req.getCapital());   // Nguồn vốn
-        p.setRole(req.getRole());         // Vai trò
+        p.setCapital(req.getCapital()); // Nguồn vốn
+        p.setRole(req.getRole()); // Vai trò
 
         // 3. Thiết lập các thông tin mặc định
         p.setUser(user);
@@ -62,6 +62,24 @@ public class ProjectService {
         if ("COMPLETED".equalsIgnoreCase(status)) {
             p.setFinishAt(LocalDateTime.now());
         }
+
+        return projectRepository.save(p);
+    }
+
+    public Project updateProject(Long id, ProjectRequest req) {
+        Project p = getById(id);
+
+        // Update fields if provided
+        if (req.getName() != null)
+            p.setName(req.getName());
+        if (req.getPrjLevel() != null)
+            p.setPrjLevel(req.getPrjLevel());
+        if (req.getLocation() != null)
+            p.setLocation(req.getLocation());
+        if (req.getCapital() != null)
+            p.setCapital(req.getCapital());
+        if (req.getRole() != null)
+            p.setRole(req.getRole());
 
         return projectRepository.save(p);
     }

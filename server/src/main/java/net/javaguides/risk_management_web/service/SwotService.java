@@ -13,13 +13,23 @@ public class SwotService {
     private final ProjectRepository projectRepo;
 
     public SwotService(SwotRepository swotRepo,
-                       ProjectRepository projectRepo) {
+            ProjectRepository projectRepo) {
         this.swotRepo = swotRepo;
         this.projectRepo = projectRepo;
     }
 
     public Swot save(Long projectId, Swot swot) {
         Project project = projectRepo.findById(projectId).orElseThrow();
+
+        Swot existingSwot = swotRepo.findByProjectId(projectId).orElse(null);
+        if (existingSwot != null) {
+            existingSwot.setStrengths(swot.getStrengths());
+            existingSwot.setWeaknesses(swot.getWeaknesses());
+            existingSwot.setOpportunities(swot.getOpportunities());
+            existingSwot.setThreats(swot.getThreats());
+            return swotRepo.save(existingSwot);
+        }
+
         swot.setProject(project);
         return swotRepo.save(swot);
     }

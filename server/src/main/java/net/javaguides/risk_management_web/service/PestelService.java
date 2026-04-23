@@ -13,13 +13,25 @@ public class PestelService {
     private final ProjectRepository projectRepo;
 
     public PestelService(PestelRepository pestelRepo,
-                         ProjectRepository projectRepo) {
+            ProjectRepository projectRepo) {
         this.pestelRepo = pestelRepo;
         this.projectRepo = projectRepo;
     }
 
     public Pestel save(Long projectId, Pestel pestel) {
         Project project = projectRepo.findById(projectId).orElseThrow();
+
+        Pestel existingPestel = pestelRepo.findByProjectId(projectId).orElse(null);
+        if (existingPestel != null) {
+            existingPestel.setPolitical(pestel.getPolitical());
+            existingPestel.setEconomic(pestel.getEconomic());
+            existingPestel.setSocial(pestel.getSocial());
+            existingPestel.setTechnological(pestel.getTechnological());
+            existingPestel.setEnvironmental(pestel.getEnvironmental());
+            existingPestel.setLegal(pestel.getLegal());
+            return pestelRepo.save(existingPestel);
+        }
+
         pestel.setProject(project);
         return pestelRepo.save(pestel);
     }

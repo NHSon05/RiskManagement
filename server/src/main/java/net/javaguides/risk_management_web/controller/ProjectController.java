@@ -20,7 +20,7 @@ public class ProjectController {
 
     @PostMapping
     public Project create(@RequestParam Long userId,
-                          @RequestBody ProjectRequest req) {
+            @RequestBody ProjectRequest req) {
         return service.createProject(userId, req);
     }
 
@@ -34,11 +34,17 @@ public class ProjectController {
         return service.getById(id);
     }
 
+    @PutMapping("/{id}")
+    public Project update(@PathVariable Long id, @RequestBody ProjectRequest req) {
+        return service.updateProject(id, req);
+    }
+
     @PatchMapping("/{id}/status")
     public Project updateStatus(@PathVariable Long id,
-                                @RequestParam String status) {
+            @RequestParam String status) {
         return service.updateStatus(id, status);
     }
+
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
         service.deleteProject(id);
