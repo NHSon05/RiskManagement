@@ -12,4 +12,9 @@ export interface ProjectResponse {
   name: string;
   status: string;
   createAt: string;
+  finishAt: string;
+  role: string;
+  location: string;
+  capital: string;
+  prjLevel: string;
 }

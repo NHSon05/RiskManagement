@@ -1,5 +1,5 @@
 import { swotApi } from "@/apis/swot.api"
-import type { SwotData } from "@/types/swot.type"
+import type { SwotFormState } from "@/types/swot.type"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export const useSwot = (projectId: number) => {
@@ -13,9 +13,9 @@ export const useSwot = (projectId: number) => {
   })
 
   const saveSwotMutation = useMutation({
-    mutationFn: async (data: SwotData) => await swotApi.saveSwot(projectId, data),
+    mutationFn: async (data: SwotFormState) => await swotApi.saveSwot(projectId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['pestel', projectId]})
+      queryClient.invalidateQueries({queryKey: ['swot', projectId]})
     },
     onError: (error) => {
       console.error("Lỗi khi lưu SWOT", error)

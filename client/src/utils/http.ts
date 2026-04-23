@@ -13,17 +13,17 @@
         },
       })
       
-      // Gắn accessToken to Header
+      // Set accessToken to Header
       this.instance.interceptors.request.use(
         (config) => {
           const token = getAccessToken()
           
           // Dùng !== để so sánh chặt chẽ
           if (token && token !== 'undefined' && token !== 'null') {
-            config.headers.Authorization = `Bearer ${token}`
+            config.headers['Authorization'] = `Bearer ${token}`
           } else {
             // Gọi hàm đã import cho đồng bộ
-            removeAccessToken() 
+            removeAccessToken()
           }
           return config
         },
