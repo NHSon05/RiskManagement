@@ -1,38 +1,46 @@
-import { useFieldArray, type Control } from "react-hook-form";
-import { FormControl, FormField, FormItem } from "../form";
+import { useFieldArray, type Control, type Path } from "react-hook-form";
+import { FormControl, FormField, FormItem, FormMessage } from "../form";
 import Input from "../input";
 import { Plus, Trash2 } from "lucide-react";
 import Button from "../button";
-// import Button from "../button";
+import { useState } from "react";
+import type { FormValues } from "@/pages/projects/steps/Pestel";
 
 interface PesTelInputProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>;
-  name: string;
-  // placeholder: string;
+  control: Control<FormValues>;
+  name: Path<FormValues>;
 }
+
 export default function PestelInput({control, name}:PesTelInputProps) {
+  const [tempItemValue, setTempItemValue] = useState("");
   const {fields , append, remove} = useFieldArray({
     control,
-    name: name
+    name: name as never
   });
 
   return (
     <div className="space-y-2">
-      {fields.map((field, index) => (
-        <div key={field.id} className="flex gap-2 items-start py-1">
+      {fields.map((item, index) => (
+        <div key={item.id} className="flex gap-2 items-start py-1">
           <FormField
             control={control}
-            name={`${name}.${index}.content`}
+            name={`${name}.${index}` as Path<FormValues>}
             render={({field}) => (
               <FormItem className="flex-1">
                 <FormControl>
                   <Input 
                     {...field} 
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        append("");
+                      }
+                    }}
                     placeholder="Nhập nội dung"
-                    value={field.value ?? ""}
+                    value={(field.value as string) ?? ""}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -42,15 +50,36 @@ export default function PestelInput({control, name}:PesTelInputProps) {
           />
         </div>
       ))}
-      <Button
-        variant="none"
-        size="none"
-        onClick={() => append({ value: "" })}
-        className="flex items-center"
-      >
-        <Plus size={20} className="mr-1 h-4 w-4" />
-        <span>Thêm nội dung</span>
-      </Button>
+      <div className="flex gap-2 py-2">
+        <Input 
+          placeholder="Nhập nội dung rồi ấn Enter..." 
+          className="bg-(--secondary-btn) border-(--blue-border) focus:bg-(--white) transition-colors"
+          value={tempItemValue}
+          onChange={(e) => setTempItemValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              if (tempItemValue.trim()) {
+                append(tempItemValue as never);
+                setTempItemValue("");
+              }
+            }
+          }}
+        />
+        <Button
+          type="button"
+          onClick={() => {
+            if (tempItemValue.trim()) {
+              append(tempItemValue as never);
+              setTempItemValue("");
+            }
+          }}
+          variant="none"
+          size="none"
+        >
+          <Plus className="h-6 w-6"/>
+        </Button>
+      </div>
     </div>
   )
 }

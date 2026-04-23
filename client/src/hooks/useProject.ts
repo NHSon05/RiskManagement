@@ -20,6 +20,23 @@ export const useCreateProject = () => {
   })
 }
 
+export const useUpdateProject = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({projectId, body} : {projectId:number; body: CreateProjectBody}) => 
+      projectApi.updateProject(projectId,body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      alert("Cập nhật dự án thành công");
+    },
+    onError: (error) => {
+      console.error("Lỗi khi cập nhật dự án:", error);
+      alert("Có lỗi xảy ra, vui lòng thử lại!");
+    }
+  })
+}
+
 // useMutation response
 /*
 {

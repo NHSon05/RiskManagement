@@ -8,3 +8,7 @@ export interface PestelData {
 }
 
 export type PestelFormState = Record<keyof PestelData, string[]>;
+
+export interface PestelDataResponse extends PestelData {
+  id: string;
+}

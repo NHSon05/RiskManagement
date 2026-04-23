@@ -21,23 +21,21 @@ import {
   CardHeader
 } from "@/components/ui";
 import { PageTransition } from "@/components/animated";
-import { useCreateProject } from "@/hooks/useProject";
-
-const infoSchema = z.object({
-  name: z.string().min(1, "Vui lòng nhập tên dự án"),
-  prjLevel: z.string().min(1, "Vui lòng nhập cấp công trình"),
-  location: z.string().min(1, "Vui lòng nhập địa điểm"),
-  capital: z.string().min(1, "Vui lòng nhập nguồn vốn"),
-  // capital: z.coerce.number().min(1, "Vui lòng nhập nguồn vốn"),
-  role: z.string().min(1, "Vui lòng chọn vai trò"),
-});
+import { useCreateProject, useUpdateProject } from "@/hooks/useProject";
+import { useAuth } from "@/hooks/useAuth";
+import { infoSchema } from "@/projectSchema/projectSchema";
 
 export default function Info() {
   const navigate = useNavigate();
   const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}");
 
   // hook api
-  const { mutate: createProject , isPending } =  useCreateProject();
+  const { mutate: createProject, isPending: isCreating } = useCreateProject();
+  const { isPending: isUpdating } = useUpdateProject();
+  const isPending = isCreating || isUpdating;
+
+  // global auth
+  const { profile } = useAuth();
 
   const form = useForm<z.infer<typeof infoSchema>>({
     resolver: zodResolver(infoSchema),
@@ -50,7 +48,8 @@ export default function Info() {
     },
   });
   function onSubmit(values: z.infer<typeof infoSchema>) {
-    const userId = Number(localStorage.getItem("userId"))
+    // get user object from global profile state instead of unverified localStorage
+    const userId = profile.data?.data?.id;
 
     if (!userId) {
       alert("Không tìm thấy thông tin đăng nhập. Vui lòng đăng nhập lại");
@@ -58,7 +57,6 @@ export default function Info() {
     }
 
     // Push API to backend
-
     createProject(
       {userId, body: values},
       {
@@ -90,7 +88,7 @@ export default function Info() {
                   <FormItem>
                     <FormLabel>Tên dự án</FormLabel>
                     <FormControl><Input placeholder="Hệ thống quản lý kho ERP" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-start"/>
                   </FormItem>
                 )} />
                 {/* Cấp công trình */}
@@ -98,7 +96,7 @@ export default function Info() {
                   <FormItem>
                     <FormLabel>Cấp công trình</FormLabel>
                     <FormControl><Input placeholder="Nhập cấp công trình" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-start" />
                   </FormItem>
                 )} />
                 {/* Địa điểm */}
@@ -106,7 +104,7 @@ export default function Info() {
                   <FormItem>
                     <FormLabel>Địa điểm</FormLabel>
                     <FormControl><Input placeholder="Ví dụ: TP. Đà Nẵng" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-start" />
                   </FormItem>
                 )} />
                 {/* Nguồn vốn */}
@@ -116,7 +114,7 @@ export default function Info() {
                     <FormControl>
                       <Input placeholder="Nhập nguồn vốn của bạn" {...field} />
                     </FormControl>
-                    <FormMessage/>
+                    <FormMessage className="text-start"/>
                   </FormItem>
                 )} />
                 {/* Vai trò (Select) */}
@@ -134,7 +132,7 @@ export default function Info() {
                         <SelectItem value="Nhà thầu" className="bg-white hover:bg-(--border)">Nhà thầu</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormMessage />
+                    <FormMessage className="text-start"/>
                   </FormItem>
                 )} />
                 {/* Button */}
