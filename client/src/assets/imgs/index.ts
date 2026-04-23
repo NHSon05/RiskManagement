@@ -1,0 +1,5 @@
+export { default as fishBoneChart } from './fish-bone-chart.png'
+export { default as swotModel} from './swot-model.png'
+export { default as building } from './building.jpg'
+export { default as CauTuLien } from './cautulien.jpg'
+export { default as ISO } from './ISO.png'
