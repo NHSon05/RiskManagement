@@ -7,8 +7,9 @@ export const riskApi = {
     return http.post<RiskResponse>(`/objectives/${objectiveId}/risks`, body);
   },
   // GET: /objectives/{objectiveId}/risks
-  getRisks: (objectiveId: string | number) => {
-    return http.get<RiskResponse[]>(`/objectives/${objectiveId}/risks`);
+  getRisks: async(objectiveId: string | number) => {
+    const res = await http.get<RiskResponse[]>(`/objectives/${objectiveId}/risks`)
+    return res.data;
   },
   // DELETE: /risks/{riskId}
   deleteRisk: (riskId: string | number) => {

@@ -9,106 +9,109 @@ import {
   Card,
   CardContent,
 } from "@/components/ui";
-import { type Target } from "@/types/projectType";
+// import { type Target } from "@/types/projectType";
 import { getRiskLevelBadge } from "@/utils";
 import { probabilities, impacts } from "@/components/constants";
 import { PageTransition } from "@/components/animated";
 import { PDFViewer } from "@/components/ui/molecules";
 import matrixPDF from '../../../assets/pdf/Matrix.pdf'
+import { useGetObjectives } from "@/hooks/useObjective";
+import { useGetRisk } from "@/hooks/useRisk";
+import type { RiskWithObjective, UpdateAssessmentRequest } from "@/types/risk.type";
+import { assessmentApi } from "@/apis/assessment.api";
 
 // ----------------✅ Ok --------------------------
 export default function Evaluation() {
   const navigate = useNavigate()
-  const [targets, setTargets] = useState<Target[]>(() => {
-    try {
-      const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
-      if (savedData.prj_targets && Array.isArray(savedData.prj_targets)) {
-        console.log(savedData.prj_targets)
-        return savedData.prj_targets
-      }
-    } catch(error) {
-      console.error("Lỗi khi đọc dữ liệu target:", error)
-    }
-    return []
-  })
+
+  // Get ProjectId
+  const projectId = Number(localStorage.getItem("currentProjectId"))
+  // Get ObjectiveId
+  const data = useGetObjectives(projectId)
+  const objectiveIds = data.data?.data?.map(item => item.id) || []
+  // Get Risk
+  const riskData = useGetRisk(objectiveIds)
+  // Flatten allRisks
+  const allRisks = riskData.flatMap(query => query.data || []) as RiskWithObjective[]
+  console.log(allRisks)
+
+  // const [targets, setTargets] = useState<Target[]>(() => {
+  //   try {
+  //     const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
+  //     if (savedData.prj_targets && Array.isArray(savedData.prj_targets)) {
+  //       return savedData.prj_targets
+  //     }
+  //   } catch(error) {
+  //     console.error("Lỗi khi đọc dữ liệu target:", error)
+  //   }
+  //   return []
+  // })
+
   // ✅ Flatten risks from all targets
-  const allRisks = targets.flatMap((target) => 
-    target.risks.map((risk) => ({
-      ...risk,
-      targetId: target.id,
-      targetName: target.name
-    }))
-  )
-  // Probability Handler
-  const getProbability = (level: number) => {
-    return probabilities.find(p => p.level === level)?.label || "";
-  }
-  const handleProbability = (targetId: string, riskId: string, value:string) => {
-    const selectedProb = probabilities.find(p => p.label === value)
-    if (!selectedProb) return;
+  // const allRisk = targets.flatMap((target) => 
+  //   target.risks.map((risk) => ({
+  //     ...risk,
+  //     targetId: target.id,
+  //     targetName: target.name
+  //   }))
+  // )
 
-    setTargets(prevTargets =>
-      prevTargets.map(target => {
-        if (target.id === targetId) {
-          return {
-            ...target,
-            risks: target.risks.map(risk => {
-              if (risk.id === riskId) {
-                const newRiskLevel = selectedProb.level * risk.impact_level
-                return {
-                  ...risk,
-                  probability_level: selectedProb.level,
-                  risk_level: newRiskLevel
-                }
-              }
-              return risk
-            })
-          }
-        }
-        return target;
-      })
-    )
-  }
-  // Impact Handler
-  const getImpact = (level: number) => {
-    return impacts.find(i => i.level === level)?.label || ""
-  }
-  const handleImpact = (targetId: string, riskId: string, value: string) => {
-    const selectedImpact = impacts.find(i => i.label === value);
-    if (!selectedImpact) return;
+  const [assessment, setAssessment] = useState<Record<number, UpdateAssessmentRequest>>({})
+  console.log(assessment)
 
-    setTargets(prevTargets => 
-      prevTargets.map(target => {
-        if (target.id === targetId) {
-          return {
-            ...target,
-            risks: target.risks.map(risk => {
-              if (risk.id === riskId) {
-                const newRiskLevel = risk.probability_level * selectedImpact.level;
-                return {
-                  ...risk,
-                  impact_level: selectedImpact.level,
-                  risk_level: newRiskLevel
-                };
-              }
-              return risk;
-            })
-          };
-        }
-        return target;
-      })
-    );
-  };
-  const handleNext = () => {
-    const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
-    const updatedData = {
-      ...savedData,
-      prj_targets: targets
+  const handleSaveAssessment = async () => {
+    // Get RiskId
+    const riskIds = Object.keys(assessment)
+
+    if (riskIds.length === 0) {
+      return;
     }
-  localStorage.setItem("projectFormData", JSON.stringify(updatedData));
-  console.log("✅ Saved before navigate");
-  navigate('/projects/solution');
+    try {
+      // 1. Create an Array contains promise to call api
+      const apiCalls = riskIds.map((id) => {
+        const riskId = Number(id)
+
+        // Get data to update
+        const payload = {
+          probability: assessment[riskId].probability,
+          impact: assessment[riskId].impact
+        }
+
+        if (payload.probability && payload.impact) {
+          // call api assessment
+          return assessmentApi.updateAssessment(riskId, payload)
+        }
+        return Promise.resolve()
+      })
+      // 2. Active all api 
+      await Promise.all(apiCalls)
+      // 3. Handle after success
+      alert("Đánh giá rủi ro thành công!")
+      // Delete after push to server
+      setAssessment({})
+      // call refetch to reload new data
+      navigate('/projects/solution');
+      
+    } catch (error) {
+      console.error("Lỗi khi lưu đánh giá:", error);
+      alert("Có lỗi xảy ra khi lưu đánh giá, vui lòng thử lại!");
+    }
+
+  // Update Risk
+  
   }
+
+  // Function update state
+  const handleSelectChange = (riskId: number, field : "probability" | "impact", value: string) => {
+    setAssessment((prev) => ({
+      ...prev,
+      [riskId]: {
+        ...prev[riskId],
+        [field]: Number(value)
+      }
+    }))
+  }
+
   return (
     <PageTransition>
       <div className="mx-auto md:px-2 space-y-4">
@@ -143,19 +146,27 @@ export default function Evaluation() {
                 </TableRow>
               </TableHeader>
               <TableBody className="bg-(--white)">
-                {allRisks.map((risk,index) => (
+                {allRisks.map((risk,index) => {
+
+                  const currentProbability = assessment[risk.id]?.probability || risk.assessment?.probability;
+                  const currentImpact = assessment[risk.id]?.impact || risk.assessment?.impact;
+                  console.log(currentProbability)
+                  console.log(currentImpact)
+
+                  return (
                     <TableRow key={risk.id}>
                       <TableCell className="text-left font-medium">{index+1}</TableCell>
                       <TableCell className="text-left text-sm font-medium md:wrap-break-word md:whitespace-normal">
                         {risk.name}
                         <Description className="text-xs font-normal">
-                          Mục tiêu: {risk.targetName}
+                          Mục tiêu: {risk.objective.name}
                         </Description>
                       </TableCell>
                       <TableCell className="text-left">
+                        {/* PROBABILITY */}
                         <Select
-                          value={getProbability(risk.probability_level)}
-                          onValueChange={(value) => handleProbability(risk.targetId, risk.id, value)}
+                          value={currentProbability ? String(currentProbability) : ""}
+                          onValueChange={(value) => handleSelectChange( Number(risk.id), "probability", value)}
                         >
                           <SelectTrigger className="bg-(--white)">
                             <SelectValue placeholder="Chọn khả năng xảy ra"/>
@@ -166,7 +177,7 @@ export default function Evaluation() {
                               {probabilities.map((probability) => (
                                 <SelectItem 
                                   key={probability.level}
-                                  value={probability.label}
+                                  value={String(probability.level)}
                                   className="hover:bg-(--border)"
                                 >
                                   {probability.label}
@@ -176,19 +187,24 @@ export default function Evaluation() {
                           </SelectContent>
                         </Select>
                       </TableCell>
+                      {/* IMPACT */}
                       <TableCell className="text-left">
                         <Select
-                          value={getImpact(risk.impact_level)}
-                          onValueChange={(value) => handleImpact(risk.targetId, risk.id, value)}
+                          value={currentImpact ? String(currentImpact) : ""}
+                          onValueChange={(value) => handleSelectChange(Number(risk.id), "impact", value)}
                         >
                           <SelectTrigger className="bg-(--white)">
                             <SelectValue placeholder="Chọn mức độ ảnh hưởng"/>
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup className="bg-(--white)">
-                              <SelectLabel>Probablitity</SelectLabel>
+                              <SelectLabel>Impact</SelectLabel>
                               {impacts.map((impact) => (
-                                <SelectItem key={impact.level} value={impact.label} className="hover:bg-(--border)">
+                                <SelectItem 
+                                  key={impact.level}
+                                  value={String(impact.level)}
+                                  className="hover:bg-(--border)"
+                                >
                                   {impact.label}
                                 </SelectItem>
                               ))}
@@ -200,10 +216,11 @@ export default function Evaluation() {
                         {/* <span className="text-(--error) rounded-xl">
                           {risk.risk_level}
                         </span> */}
-                        {getRiskLevelBadge(risk.risk_level)}
+                        {getRiskLevelBadge(currentProbability || 0, currentImpact || 0)}
                       </TableCell>
                     </TableRow>
-                ))}
+                  )
+                })}
               </TableBody>
             </Table>
           </CardContent>
@@ -219,7 +236,7 @@ export default function Evaluation() {
             <Button 
               variant="primary"
               size='medium'
-              onClick={handleNext}
+              onClick={handleSaveAssessment}
             >
                 Tiếp theo
             </Button>

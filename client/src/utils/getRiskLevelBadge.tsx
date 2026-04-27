@@ -1,6 +1,15 @@
 import { Badge } from "@/components/ui";
 
-const getRiskLevelBadge = (riskLevel: number) => {
+const getRiskLevelBadge = (probability: number, impact: number) => {
+
+  if (probability === 0 || impact === 0) {
+    return <Badge className="text-(--description)">
+      Chưa đánh giá
+    </Badge>
+  }
+
+  const riskLevel = probability * impact;
+
   if (riskLevel >= 16) {
     return <Badge className="bg-red-200 text-(--error)">
       Rất cao
@@ -21,8 +30,7 @@ const getRiskLevelBadge = (riskLevel: number) => {
       Chưa đánh giá
     </Badge>;
   }
-};
-
+}
 
 export { getRiskLevelBadge }
 

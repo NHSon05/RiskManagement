@@ -1,3 +1,4 @@
+import type { ObjectivesResponse } from "./objective.type";
 import type { SolutionResponse } from "./solution.type";
 
 export interface RiskAssessment {
@@ -14,10 +15,14 @@ export interface RiskResponse {
 }
 
 export interface CreateRiskRequest {
-  name: string;
+  name: string | number;
 }
 
 export interface UpdateAssessmentRequest {
   probability: number;
   impact: number;
+}
+
+export interface RiskWithObjective extends RiskResponse {
+  objective: ObjectivesResponse;
 }
