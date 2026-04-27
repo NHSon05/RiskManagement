@@ -1,8 +1,8 @@
 import type { QueryClient } from "@tanstack/react-query";
 import type { RiskResponse } from "./risk.type";
 
-export interface ObjectiveResponse {
-  id: string;
+export interface ObjectivesResponse {
+  id: number;
   name: string;
   risks?:RiskResponse[];
 }
@@ -11,17 +11,17 @@ export interface CreateObjectiveRequest {
   name: string;
 }
 
-export interface ObjectiveFormState extends ObjectiveResponse {
+export interface ObjectiveFormState extends ObjectivesResponse {
   isExpanding?: boolean;
   risks: RiskResponse[];
 }
 
-export interface UpdateObjectiveRequest {
-  name: string;
+export interface UpdateObjectivesRequest {
+  name: number;
 }
 
-export interface UpdateObjectiveParams {
-  objectiveId: string;
-  updateData: UpdateObjectiveRequest;
+export interface UpdateObjectivesParams {
+  objectiveId: number;
+  updateData: UpdateObjectivesRequest;
   queryClient: QueryClient;
 }

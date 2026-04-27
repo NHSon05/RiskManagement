@@ -1,6 +1,17 @@
+import { assessmentApi } from "@/apis/assessment.api";
 import { riskApi } from "@/apis/risk.api";
-import type { CreateRiskRequest } from "@/types/risk.type";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { CreateRiskRequest, UpdateAssessmentRequest } from "@/types/risk.type";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+
+export const useGetRisk = (objectiveIds : (string | number)[]) => {
+  return useQueries({
+    queries: objectiveIds.map((objectiveId) => ({
+      queryKey: ['risks', objectiveId],
+      queryFn: () => riskApi.getRisks(objectiveId),
+      enabled: !!objectiveId,
+    }))
+  })
+} 
 
 export const useCreateRisk = (projectId: string | number) => {
   const queryClient = useQueryClient();
@@ -46,6 +57,22 @@ export const useDeleteRisk = (projectId: string | number) => {
     onError: (error) => {
       console.error("Lỗi khi xóa rủi ro:", error);
       alert("Có lỗi xảy ra khi xóa rủi ro, vui lòng thử lại!");
+    }
+  })
+}
+
+export const useUpdateAssessment = (projectId: string | number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({riskId, body} : {riskId: string | number; body: UpdateAssessmentRequest}) => 
+      assessmentApi.updateAssessment(riskId, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['objectives', projectId] });
+    },
+    onError: (error) => {
+      console.error("Lỗi khi cập nhật đánh giá rủi ro:", error);
+      alert("Có lỗi xảy ra khi cập nhật đánh giá, vui lòng thử lại!");
     }
   })
 }
