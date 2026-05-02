@@ -1,7 +1,7 @@
 import { assessmentApi } from "@/apis/assessment.api";
 import { riskApi } from "@/apis/risk.api";
-import type { CreateRiskRequest, UpdateAssessmentRequest } from "@/types/risk.type";
-import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import type { CreateRiskRequest, UpdateAssessmentRequest, UpdateRiskRequest } from "@/types/risk.type";
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetRisk = (objectiveIds : (string | number)[]) => {
   return useQueries({
@@ -33,7 +33,7 @@ export const useUpdateRisk = (projectId: string | number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({riskId, body} : {riskId: string | number; body: CreateRiskRequest}) => 
+    mutationFn: ({riskId, body} : {riskId: string | number; body: UpdateRiskRequest}) => 
       riskApi.updateRisk(riskId, body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['objectives', projectId] });
@@ -74,5 +74,13 @@ export const useUpdateAssessment = (projectId: string | number) => {
       console.error("Lỗi khi cập nhật đánh giá rủi ro:", error);
       alert("Có lỗi xảy ra khi cập nhật đánh giá, vui lòng thử lại!");
     }
+  })
+}
+
+export const useGetRiskRanking = (projectId: string | number) => {
+  return useQuery({
+    queryKey: ['risks', projectId, 'ranking'],
+    queryFn: () => riskApi.getRiskRanking(projectId),
+    enabled: !!projectId,
   })
 }

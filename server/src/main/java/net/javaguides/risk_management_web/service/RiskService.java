@@ -75,11 +75,12 @@ public class RiskService {
         return savedSol;
     }
 
-    // Cập nhật tên rủi ro
+    // Cập nhật thông tin rủi ro
     public Risk update(Long id, RiskRequest req) {
         Risk r = riskRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Risk not found"));
-        r.setName(req.getName());
+        if (req.getName() != null) r.setName(req.getName());
+        if (req.getStrategy() != null) r.setStrategy(req.getStrategy());
         return riskRepo.save(r);
     }
 

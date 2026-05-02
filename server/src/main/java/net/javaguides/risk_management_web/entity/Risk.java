@@ -12,10 +12,11 @@ public class Risk {
     private Long id;
 
     private String name;
+    private String strategy;
     // Đã xóa category và personInCharge theo yêu cầu
 
     @ManyToOne
-    @JsonIgnoreProperties({"project", "risks"})
+    @JsonIgnoreProperties({ "project", "risks" })
     private Objective objective;
 
     @ManyToOne
@@ -30,16 +31,59 @@ public class Risk {
     private List<RiskSolution> solutions;
 
     // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public Objective getObjective() { return objective; }
-    public void setObjective(Objective objective) { this.objective = objective; }
-    public Project getProject() { return project; }
-    public void setProject(Project project) { this.project = project; }
-    public RiskAssessment getAssessment() { return assessment; }
-    public void setAssessment(RiskAssessment assessment) { this.assessment = assessment; }
-    public List<RiskSolution> getSolutions() { return solutions; }
-    public void setSolutions(List<RiskSolution> solutions) { this.solutions = solutions; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(String strategy) {
+        this.strategy = strategy;
+    }
+
+    public Objective getObjective() {
+        return objective;
+    }
+
+    public void setObjective(Objective objective) {
+        this.objective = objective;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public RiskAssessment getAssessment() {
+        return assessment;
+    }
+
+    public void setAssessment(RiskAssessment assessment) {
+        this.assessment = assessment;
+    }
+
+    public List<RiskSolution> getSolutions() {
+        return solutions;
+    }
+
+    public void setSolutions(List<RiskSolution> solutions) {
+        this.solutions = solutions;
+    }
 }

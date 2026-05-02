@@ -10,12 +10,18 @@ export interface RiskAssessment {
 export interface RiskResponse {
   id: number;
   name: string;
+  strategy?: string;
   assessment: RiskAssessment | null;
   solutions: SolutionResponse[];
 }
 
 export interface CreateRiskRequest {
   name: string | number;
+}
+
+export interface UpdateRiskRequest {
+  name?: string;
+  strategy?: string;
 }
 
 export interface UpdateAssessmentRequest {
