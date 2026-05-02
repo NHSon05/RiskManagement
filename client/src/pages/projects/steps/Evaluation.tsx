@@ -33,31 +33,8 @@ export default function Evaluation() {
   const riskData = useGetRisk(objectiveIds)
   // Flatten allRisks
   const allRisks = riskData.flatMap(query => query.data || []) as RiskWithObjective[]
-  console.log(allRisks)
-
-  // const [targets, setTargets] = useState<Target[]>(() => {
-  //   try {
-  //     const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
-  //     if (savedData.prj_targets && Array.isArray(savedData.prj_targets)) {
-  //       return savedData.prj_targets
-  //     }
-  //   } catch(error) {
-  //     console.error("Lỗi khi đọc dữ liệu target:", error)
-  //   }
-  //   return []
-  // })
-
-  // ✅ Flatten risks from all targets
-  // const allRisk = targets.flatMap((target) => 
-  //   target.risks.map((risk) => ({
-  //     ...risk,
-  //     targetId: target.id,
-  //     targetName: target.name
-  //   }))
-  // )
 
   const [assessment, setAssessment] = useState<Record<number, UpdateAssessmentRequest>>({})
-  console.log(assessment)
 
   const handleSaveAssessment = async () => {
     // Get RiskId
@@ -91,16 +68,11 @@ export default function Evaluation() {
       setAssessment({})
       // call refetch to reload new data
       navigate('/projects/solution');
-      
     } catch (error) {
       console.error("Lỗi khi lưu đánh giá:", error);
       alert("Có lỗi xảy ra khi lưu đánh giá, vui lòng thử lại!");
     }
-
-  // Update Risk
-  
   }
-
   // Function update state
   const handleSelectChange = (riskId: number, field : "probability" | "impact", value: string) => {
     setAssessment((prev) => ({
@@ -147,11 +119,8 @@ export default function Evaluation() {
               </TableHeader>
               <TableBody className="bg-(--white)">
                 {allRisks.map((risk,index) => {
-
                   const currentProbability = assessment[risk.id]?.probability || risk.assessment?.probability;
                   const currentImpact = assessment[risk.id]?.impact || risk.assessment?.impact;
-                  console.log(currentProbability)
-                  console.log(currentImpact)
 
                   return (
                     <TableRow key={risk.id}>

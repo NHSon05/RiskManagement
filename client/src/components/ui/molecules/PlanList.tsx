@@ -1,47 +1,43 @@
 import { useState } from "react";
 import { type Control, type UseFormRegister, useFieldArray } from "react-hook-form";
 import { nanoid } from "nanoid";
-
-import { type ResponsePlan } from "@/types/projectType";
-
 import { Label } from "../label";
 import Input from "../input";
 import Button from "../button";
 import { Plus, Trash2 } from "lucide-react";
 import { uppercaseName } from "@/utils";
+import type { SolutionResponse } from "@/types/solution.type";
+import type { RiskWithObjective } from "@/types/risk.type";
 
-// -------- SUB COMPONENT: PLAN LIST ---------
 export default function PlanList({
   nestIndex,
   control,
   register
 } : {
   nestIndex: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  register: UseFormRegister<any>;
+  control: Control<{risks: RiskWithObjective[]}>;
+  register: UseFormRegister<{risks: RiskWithObjective[]}>;
 }) {
-  const [planAction, setPlanAction] = useState("")
-  const [owner, setOwner] = useState("")
+  const [contentAction, setContentAction] = useState("")
+  const [personInCharge, setPersonInCharge] = useState("")
   // Nested useFieldArray for response_plans
   const {fields, append, remove} = useFieldArray({
     control,
-    name: `risks.${nestIndex}.response_plans`,
+    name: `risks.${nestIndex}.solutions`,
   })
   
   const titleCase = (str:string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
   
   const handleQuickAdd = () => {
-    if (!planAction.trim()) return
+    if (!contentAction.trim()) return
     const newPlan = {
       id: nanoid(),
-      owner: uppercaseName(owner),
-      name: titleCase(planAction)
+      content: titleCase(contentAction),
+      personInCharge: uppercaseName(personInCharge)
     }
     append(newPlan)
-    setPlanAction("")
-    setOwner("")
+    setContentAction("")
+    setPersonInCharge("")
   }
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -58,9 +54,9 @@ export default function PlanList({
           <Label>Hành động</Label>
           <Input
             placeholder="Nhập kế hoạch..."
-            value={planAction}
+            value={contentAction}
             className="bg-(--white)"
-            onChange={(e) => setPlanAction(e.target.value)}
+            onChange={(e) => setContentAction(e.target.value)}
             onKeyDown={handleKeyDown}
           />
         </div>
@@ -69,9 +65,9 @@ export default function PlanList({
           <Label>Người chịu trách nhiệm</Label>
           <Input
             placeholder="Nhập tên người chịu trách nhiệm..."
-            value={owner}
+            value={personInCharge}
             className="bg-(--white)"
-            onChange={(e) => setOwner(e.target.value)}
+            onChange={(e) => setPersonInCharge(e.target.value)}
             onKeyDown={handleKeyDown}
           />
         </div>
@@ -90,7 +86,7 @@ export default function PlanList({
       {/* List rendering */}
       <div>  
         {fields.map((field,index) => {
-          const plan = field as ResponsePlan
+          const plan = field as SolutionResponse
           return (
             <div
               key={field.id}
@@ -98,13 +94,13 @@ export default function PlanList({
             >
               <div className="md:col-span-7">
                 <div 
-                  className=" bg-(--white) font-medium text-sm text-gray-700 placeholder:text-gray-400 border min-h-10 w-full min-w-0 rounded-md px-2 py-2 text-start shadow-xs"
+                  className=" bg-(--white) font-medium text-sm text-(--description) placeholder:text-(--description/80) border min-h-10 w-full min-w-0 rounded-md px-2 py-2 text-start shadow-xs"
                 >
-                  {plan.name}
+                  {plan.content}
                 </div>
                 <input 
                   type="hidden" 
-                  {...register(`risks.${nestIndex}.response_plans.${index}.name`)} 
+                  {...register(`risks.${nestIndex}.solutions.${index}.content`)} 
                 />
               </div>
 
@@ -113,11 +109,11 @@ export default function PlanList({
                 <div 
                   className=" bg-(--white) font-medium text-(--black) text-sm placeholder:text-gray-400 border min-h-10 w-full min-w-0 rounded-md px-2 py-2 text-start shadow-xs"
                 >
-                  {plan.owner}
+                  {plan.personInCharge}
                 </div>
                 <input 
                   type="hidden" 
-                  {...register(`risks.${nestIndex}.response_plans.${index}.owner`)} 
+                  {...register(`risks.${nestIndex}.solutions.${index}.personInCharge`)} 
                 />
               </div>
               {/* Nút Xóa */}

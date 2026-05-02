@@ -1,5 +1,5 @@
 export interface SolutionResponse {
-  id: number;
+  id: number | string;
   content: string;
   personInCharge: string;
 }

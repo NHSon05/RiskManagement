@@ -8,7 +8,6 @@ import {
 } from "@/components/ui";
 import PlanList from "@/components/ui/molecules/PlanList";
 import { motion } from "motion/react"
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useFieldArray,
@@ -16,11 +15,16 @@ import {
   useWatch,
 } from "react-hook-form";
 
-import { type Risk, type Target } from "@/types/projectType";
 import { cardVariants } from "@/types/CardVariants";
-import { getRiskLevelBadge } from "@/utils";
 import { PageTransition } from "@/components/animated";
 import { toast } from "react-toastify";
+import renderRiskLevelBadge from "@/utils/renderRiskLevelBadge";
+import { useParams } from "@/hooks/useParams";
+import { useGetRiskRanking, useUpdateRisk } from "@/hooks/useRisk";
+import { Loader2 } from "lucide-react";
+import { useCreateSolution } from "@/hooks/useSolution";
+import type { RiskWithObjective } from "@/types/risk.type";
+import { useEffect } from "react";
 
 // ----------------- Strategy config -------------------
 const STRATEGIES = [
@@ -31,12 +35,24 @@ const STRATEGIES = [
 ];
 
 type FormValues = {
-  risks: (Risk & { targetId: string; targetName: string })[];
+  risks: RiskWithObjective[];
 };
+
 // ------------------------------------------
 export default function Solution() {
   const navigate = useNavigate();
   
+  // get ProjectId
+  const { projectId } = useParams();
+
+  // get data ranking
+  const {data: riskRankings, isLoading} = useGetRiskRanking(Number(projectId))
+  console.log(riskRankings)
+
+  const { mutateAsync: UpdateRiskStrategy } = useUpdateRisk(Number(projectId))
+  const { mutateAsync: CreateSolution } = useCreateSolution(Number(projectId))
+
+
   const form  = useForm<FormValues>({
     defaultValues: {risks: []}
   })
@@ -48,60 +64,110 @@ export default function Solution() {
     control: form.control,
     name: "risks"
   })
+  // useEffect(() => {
+  //   try {
+  //     const saveData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
+  //     if (saveData.prj_targets && Array.isArray(saveData.prj_targets)) {
+  //       const flatRisks = saveData.prj_targets.flatMap((target: Target) => 
+  //         target.risks.map((risk: Risk) => ({
+  //           ...risk,
+  //           targetId: target.id
+  //           targetName: target.name,
+  //           strategy: risk.strategy || "", 
+  //           solutions: risk.response_plans || []
+  //            Ġ
+  //         }))
+  //       )
+  //       flatRisks.sort((a:Risk , b: Risk) => b.risk_level - a.risk_level)
+  //       form.reset({risks: flatRisks})
+  //     }
+  //   } catch (error) {
+  //     console.error("Lỗi khi đọc dữ liệu target:", error)
+  //   }
+  // },[form])
+
   useEffect(() => {
-    try {
-      const saveData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
-      if (saveData.prj_targets && Array.isArray(saveData.prj_targets)) {
-        const flatRisks = saveData.prj_targets.flatMap((target: Target) => 
-          target.risks.map((risk: Risk) => ({
-            ...risk,
-            targetId: target.id,
-            targetName: target.name,
-            strategy: risk.strategy || "", 
-            response_plans: risk.response_plans || []
-          }))
-        )
-        flatRisks.sort((a:Risk , b: Risk) => b.risk_level - a.risk_level)
-        form.reset({risks: flatRisks})
-      }
-    } catch (error) {
-      console.error("Lỗi khi đọc dữ liệu target:", error)
+    if (riskRankings && riskRankings.length > 0) {
+      form.reset({
+        risks: riskRankings.map((risk) => ({
+          ...risk,
+          solutions: risk.solutions.map(solution => ({
+            id: solution.id,
+            content: solution.content,
+            personInCharge: solution.personInCharge
+          })) || []
+        }))
+      })
     }
-  },[form])
-  const onSubmit = (data: FormValues) => {
+  }, [riskRankings, form])
+
+  const onSubmit = async(data: FormValues) => {
     try {
-      const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
-      const currentTargets = savedData.prj_targets || []
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const updateData = currentTargets.map((target: any) => ({
-        ...target,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        risks: target.risks.map((risk: any) => {
-          const modifiedRisk = data.risks.find(r => r.id === risk.id)
-
-          if (modifiedRisk) {
-            return {
-              ...risk,
-              strategy: modifiedRisk.strategy,
-              response_plans: modifiedRisk.response_plans
+      const savePromises = data.risks.map(async (riskItem) => {
+        // Action 1: Update strategy
+        if (riskItem.strategy) {
+          await UpdateRiskStrategy({
+            riskId: riskItem.id,
+            body: {
+              strategy: riskItem.strategy,
+              name: riskItem.name
             }
-          }
-          return risk
-        })
-      }))
-      const newData = {
-        ...savedData,
-        prj_targets: updateData
-      }
-      localStorage.setItem("projectFormData", JSON.stringify(newData));
-      console.log("Saved Successfully:", newData);
+          })
+        }
+        // Action 2: Save list of solutions
+        if (riskItem.solutions && riskItem.solutions.length > 0) {
+          const solutionPromises = riskItem.solutions.map((plan) => {
+            // Split 2 api field, ignore plan.id
+            const {content, personInCharge} = plan;
+
+            return CreateSolution({
+              riskId: riskItem.id,
+              body: {
+                content,
+                personInCharge
+              }
+            })
+          })
+          // wait all solution plan
+          await Promise.all(solutionPromises)
+        }
+      })
+      await Promise.all(savePromises)
+
+      // const savedData = JSON.parse(localStorage.getItem("projectFormData") || "{}")
+      // const currentTargets = savedData.prj_targets || []
+
+      // // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // const updateData = currentTargets.map((target: any) => ({
+      //   ...target,
+      //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      //   risks: target.risks.map((risk: any) => {
+      //     const modifiedRisk = data.risks.find(r => r.id === risk.id)
+
+      //     if (modifiedRisk) {
+      //       return {
+      //         ...risk,
+      //         strategy: modifiedRisk.strategy,
+      //         response_plans: modifiedRisk.response_plans
+      //       }
+      //     }
+      //     return risk
+      //   })
+      // }))
+      // const newData = {
+      //   ...savedData,
+      //   prj_targets: updateData
+      // }
+      // localStorage.setItem("projectFormData", JSON.stringify(newData));
+      console.log("Saved Successfully:", data);
       toast("Lưu thành công")
       navigate('/projects/detail')
     } catch (error) {
       console.error("Lỗi khi lưu dữ liệu", error)
     }
   }
+
   return (
     <PageTransition>
       <div>
@@ -116,11 +182,13 @@ export default function Solution() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto max-w-5xl">
             {/* List of risk */}
             <div className="space-y-8 mt-4">
-              {fields.map((field,index) => {
-                const currentStrategy = strategies[index]?.strategy
-                return (
-                  // Risk Card
-                  <motion.div
+              {isLoading ? <div className="flex items-center justify-center py-8"><Loader2 className="animate-spin" /> Đang tải bảng xếp hạng...</div> :
+                fields.length === 0 ? <p className="text-center py-8">Không có rủi ro nào!</p> :
+                riskRankings?.map((field,index) => {
+                  const currentStrategy = strategies[index]?.strategy
+                  return (
+                    // Risk Card
+                    <motion.div
                     whileHover={{ scale: 1.05 }}
                     variants={cardVariants}
                     key={field.id}
@@ -130,7 +198,7 @@ export default function Solution() {
                         {/* Risk Name and Level */}
                         <div className="flex justify-between">
                           <Title variant="dark" size="small">{field.name}</Title>
-                          {getRiskLevelBadge(field.risk_level)}
+                          {renderRiskLevelBadge(field.assessment?.riskLevel || 0)}
                         </div>
                         {/* ------------------------------------------- */}
                         {/* Strategy */}

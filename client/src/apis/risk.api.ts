@@ -1,4 +1,4 @@
-import type { CreateRiskRequest, RiskResponse } from "@/types/risk.type";
+import type { CreateRiskRequest, RiskResponse, UpdateRiskRequest } from "@/types/risk.type";
 import http from "@/utils/http";
 
 export const riskApi = {
@@ -16,7 +16,13 @@ export const riskApi = {
     return http.delete<void>(`/risks/${riskId}`);
   },
   // PUT: /risks/{riskId}
-  updateRisk: (riskId: string | number, body: CreateRiskRequest) => {
+  updateRisk: (riskId: string | number, body: UpdateRiskRequest) => {
     return http.put<RiskResponse>(`/risks/${riskId}`, body);
+  },
+
+  // GET: Risk Ranking (with query: /projects/{projectId}/risks/ranking)
+  getRiskRanking: async (projectId: string | number) => {
+    const res = await http.get<RiskResponse[]>(`/projects/${projectId}/risks/ranking`)
+    return res.data;
   }
 }
