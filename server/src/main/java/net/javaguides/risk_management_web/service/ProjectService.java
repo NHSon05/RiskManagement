@@ -5,8 +5,18 @@ import net.javaguides.risk_management_web.entity.Project;
 import net.javaguides.risk_management_web.entity.User;
 import net.javaguides.risk_management_web.repository.ProjectRepository;
 import net.javaguides.risk_management_web.repository.UserRepository;
+import net.javaguides.risk_management_web.repository.RiskRepository;
+import net.javaguides.risk_management_web.repository.ObjectiveRepository;
+import net.javaguides.risk_management_web.repository.SwotRepository;
+import net.javaguides.risk_management_web.repository.PestelRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.util.Map;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,11 +26,23 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final Cloudinary cloudinary;
+    private final RiskRepository riskRepository;
+    private final ObjectiveRepository objectiveRepository;
+    private final SwotRepository swotRepository;
+    private final PestelRepository pestelRepository;
 
     public ProjectService(ProjectRepository projectRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository, Cloudinary cloudinary,
+            RiskRepository riskRepository, ObjectiveRepository objectiveRepository,
+            SwotRepository swotRepository, PestelRepository pestelRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
+        this.cloudinary = cloudinary;
+        this.riskRepository = riskRepository;
+        this.objectiveRepository = objectiveRepository;
+        this.swotRepository = swotRepository;
+        this.pestelRepository = pestelRepository;
     }
 
     @Transactional
@@ -84,10 +106,48 @@ public class ProjectService {
         return projectRepository.save(p);
     }
 
+    @Transactional
     public void deleteProject(Long id) {
         if (!projectRepository.existsById(id)) {
             throw new RuntimeException("Project not found with id: " + id);
         }
+        
+        // Delete related entities first to avoid foreign key constraints
+        riskRepository.deleteByProjectId(id);
+        objectiveRepository.deleteByProjectId(id);
+        swotRepository.deleteByProjectId(id);
+        pestelRepository.deleteByProjectId(id);
+        
         projectRepository.deleteById(id);
+    }
+
+    public Project updateBackgroundImage(Long projectId, MultipartFile file) throws IOException {
+        Project p = getById(projectId);
+
+        if (p.getBackgroundImageId() != null) {
+            cloudinary.uploader().destroy(p.getBackgroundImageId(), ObjectUtils.emptyMap());
+        }
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+
+        String newImageUrl = uploadResult.get("secure_url").toString();
+        String newId = uploadResult.get("public_id").toString();
+
+        p.setBackgroundImageUrl(newImageUrl);
+        p.setBackgroundImageId(newId);
+
+        return projectRepository.save(p);
+    }
+
+    public Project deleteBackgroundImage(Long projectId) throws IOException {
+        Project p = getById(projectId);
+        if (p.getBackgroundImageId() != null) {
+            cloudinary.uploader().destroy(p.getBackgroundImageId(), ObjectUtils.emptyMap());
+            p.setBackgroundImageUrl(null);
+            p.setBackgroundImageId(null);
+        }
+
+        return projectRepository.save(p);
     }
 }

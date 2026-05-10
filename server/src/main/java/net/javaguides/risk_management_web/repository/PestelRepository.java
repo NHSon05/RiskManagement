@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface PestelRepository extends JpaRepository<Pestel, Long> {
 
     Optional<Pestel> findByProjectId(Long projectId);
+    void deleteByProjectId(Long projectId);
 }

@@ -10,4 +10,5 @@ public interface RiskRepository extends JpaRepository<Risk, Long> {
     List<Risk> findByObjectiveId(Long objectiveId);
 
     List<Risk> findByProjectIdOrderByAssessment_RiskLevelDesc(Long projectId);
+    void deleteByProjectId(Long projectId);
 }
