@@ -11,7 +11,7 @@ export interface RiskResponse {
   id: number;
   name: string;
   strategy?: string;
-  assessment: RiskAssessment | null;
+  assessment: RiskAssessment;
   solutions: SolutionResponse[];
 }
 

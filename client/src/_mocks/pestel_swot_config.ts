@@ -13,3 +13,19 @@ export const SWOT_MAP = [
   { key: 'opportunities', label: 'O - Oppotunities (Cơ hội)' },
   { key: 'threats', label: 'T - Threats (Thách thức)' },
 ];
+
+export const PESTEL_LABELS: Record<string, string> = {
+  political: "Chính trị",
+  economic: "Kinh tế",
+  social: "Xã hội",
+  technological: "Công nghệ",
+  environmental: "Môi trường",
+  legal: "Pháp lý"
+}
+
+export const SWOT_LABELS: Record<string, string> = {
+  strengths: "Điểm mạnh",
+  weaknesses: "Điểm yếu",
+  opportunities: "Cơ hội",
+  threats: "Thách thức"
+}

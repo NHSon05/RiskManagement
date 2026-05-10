@@ -1,3 +1,5 @@
+import type { UserResponse } from "./user.type";
+
 export interface CreateProjectBody {
   name: string;
   prjLevel: string;
@@ -17,4 +19,12 @@ export interface ProjectResponse {
   location: string;
   capital: string;
   prjLevel: string;
+  user: Pick<UserResponse, 'email' | 'id' | 'name'>;
+  backgroundImageUrl?: string;
+  backgroundImageId?: string;
+}
+
+export interface ImageProjectProps {
+  projectId: number;
+  currentImageUrl?: string | null;
 }
