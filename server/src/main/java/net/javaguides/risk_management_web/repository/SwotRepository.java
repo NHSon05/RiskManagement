@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface SwotRepository extends JpaRepository<Swot, Long> {
 
     Optional<Swot> findByProjectId(Long projectId);
+    void deleteByProjectId(Long projectId);
 }

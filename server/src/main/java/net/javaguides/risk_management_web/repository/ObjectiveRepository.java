@@ -8,4 +8,5 @@ import java.util.List;
 public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
 
     List<Objective> findByProjectId(Long projectId);
+    void deleteByProjectId(Long projectId);
 }

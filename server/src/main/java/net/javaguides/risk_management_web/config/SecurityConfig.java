@@ -1,8 +1,10 @@
 package net.javaguides.risk_management_web.config;
 
 import net.javaguides.risk_management_web.security.JwtAuthenticationFilter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -29,6 +31,7 @@ public class SecurityConfig {
 
                 // Authorization setup for endpoint
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // Accept everyone access to API login và register without token
                         .requestMatchers("/auth/login", "/auth/register", "/error").permitAll()
                         // all another request (như /auth/me, /auth/logout...) have to have validated
@@ -51,7 +54,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(
                 java.util.List.of("http://localhost:5173", "http://localhost:3000", "http://localhost:5174"));
 
-        configuration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(java.util.Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true); // Quan trọng nếu có gửi kèm token/cookie
 
