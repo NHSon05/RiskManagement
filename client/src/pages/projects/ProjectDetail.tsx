@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Table,
   TableBody,
@@ -24,9 +23,8 @@ import {
 } from "@/components/ui";
 import { PageTransition } from "@/components/animated";
 import { PDFPreviewDialog, type PDFPreviewRef } from "@/components/ui/molecules/PDFPreview";
-import type { PestelSwot, PestelSwotItem, ResponsePlan, Risk, Target } from "@/types/projectType";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import {
   CircleDollarSign,
   Clock,
@@ -41,11 +39,24 @@ import {
   UserCircle
 } from "lucide-react";
 
-import { getRiskLevelBadge } from "@/utils";
 import ImageUpload from "@/components/ui/molecules/ImageUpload";
+import renderRiskLevelBadge from "@/utils/renderRiskLevelBadge";
+import { useParams } from "@/hooks/useParams";
+import { useGetProjectById } from "@/hooks/useProject";
+import { usePestel } from "@/hooks/usePestel";
+import { formatData } from "@/utils/format-data";
+import { useSwot } from "@/hooks/useSwot";
+import type { PestelItem, PestelRawData } from "@/types/pestel.type";
+import { PESTEL_LABELS, SWOT_LABELS } from "@/_mocks/pestel_swot_config";
+import { useGetObjectives } from "@/hooks/useObjective";
+import type { ObjectivesResponse } from "@/types/objective.type";
+import { useGetRiskRanking } from "@/hooks/useRisk";
+import type { RiskResponse } from "@/types/risk.type";
+import type { SolutionResponse } from "@/types/solution.type";
 
 export default function ProjectDetail() {
 
+  // Document Handler
   const contentRef = useRef<HTMLDivElement>(null);
   const pdfPreviewRef = useRef<PDFPreviewRef>(null);
 
@@ -54,50 +65,49 @@ export default function ProjectDetail() {
       await pdfPreviewRef.current.generatePreview(contentRef.current);
     }
   };
-  const [data] = useState(() => {
-    try {
-      const saved = localStorage.getItem("projectFormData")
-      return saved ? JSON.parse(saved) : { prj_targets: [] }
-    } catch (error) {
-      console.error('Lỗi khi lấy dữ liệu', error)
-      return { prj_targets: [] }
-    }
-  })
 
-  if (!data) {
-    return (
-      <h2 className="p-6 text-center text-(--description)">
-        Đang tải dữ liệu...
-      </h2>
-    )
+  // API Data
+  const { projectId } = useParams();
+  const { data: projectData, isPending: isProjectPending, isError: isProjectError } = useGetProjectById(Number(projectId));
+  const { pestelQuery} = usePestel(Number(projectId))
+  const { swotQuery } = useSwot(Number(projectId))
+  const { data: objectivesQuery, isPending: isObjectivePending, isError: isObjectiveError } = useGetObjectives(Number(projectId))
+  const { data: riskRankings, isPending: isRiskPending, isError: isRiskError } = useGetRiskRanking(Number(projectId))
+
+  const rawPestelData = pestelQuery.data?.data
+  const rawSwotData = swotQuery.data?.data
+  const objectivesData = objectivesQuery?.data
+  
+
+  if (isProjectPending || pestelQuery.isPending || swotQuery.isPending || isObjectivePending || isRiskPending) {
+    return <h2 className="p-6 text-center text-(--description)">Đang tải dữ liệu...</h2>
   }
-  // Flatten all risks from all targets
-  const allRisks = data.prj_targets?.flatMap((target: Target, targetIndex: any) =>
-    target.risks?.map((risk: Risk, riskIndex: any) => ({
-      ...risk,
-      targetName: target.name,
-      targetIndex,
-      riskIndex
-    })) || []
-  ) || []
+  
+  if (isProjectError || pestelQuery.isError || isObjectiveError || isRiskError) {
+    return <h2 className="p-6 text-center text-(--error)">Có lỗi xảy ra vui lòng thử lại!</h2>
+  }
+
+  const pestelData = formatData(rawPestelData, PESTEL_LABELS)
+  const swotData = formatData(rawSwotData, SWOT_LABELS)
+  
   return (
     <PageTransition>
       <div className="mx-auto max-w-6xl space-y-8" ref={contentRef}>
         <Card className="bg-(--white) shadow-sm border-none">
           <CardContent className="text-start space-y-1">
             <Badge className="bg-green-100 text-(--solution) text-sm">Đang tiến hành</Badge>
-            <Title variant="dark" size="large">{data.prj_name}</Title>
+            <Title variant="dark" size="large">{projectData.name}</Title>
             <div className="flex space-x-8 text-md font-medium">
               <h2 className="text-(--primary-btn) flex items-center">
                 <UserCircle size={20} className="mr-1" />
                 <span className="text-(--black) ml-1">
-                  Nguyễn Văn A
+                  {projectData.user.name}
                 </span>
               </h2>
               <h2 className=" text-(--primary-btn) flex items-center">
                 <Contact size={20} className="mr-1" />
                 <span className="text-(--black) ml-1">
-                  {data.prj_role}
+                  {projectData.role}
                 </span>
               </h2>
               <h2 className=" text-(--primary-btn) flex items-center">
@@ -110,13 +120,13 @@ export default function ProjectDetail() {
             <h2 className="text-md text-(--primary-btn) flex items-center font-medium">
               <MapPin size={20} className="mr-1" />
               <span className="text-(--black) ml-1">
-                {data.prj_location}
+                {projectData.location}
               </span>
             </h2>
             <h2 className="text-md text-(--primary-btn) font-medium flex items-center">
               <CircleDollarSign size={20} className="mr-1" />
               <span className="text-(--black) ml-1">
-                {data.prj_fund}
+                {projectData.capital}
               </span>
             </h2>
           </CardContent>
@@ -124,7 +134,7 @@ export default function ProjectDetail() {
         <Card className="bg-(--white) shadow-sm border-none">
           <CardContent className="space-y-8">
             {/* Img */}
-            <ImageUpload />
+            <ImageUpload projectId={Number(projectId)} currentImageUrl={projectData?.backgroundImageUrl || undefined} />
             {/* PESTEL and SWOT */}
 
             {/* Desktop View - 2 cột song song */}
@@ -138,12 +148,12 @@ export default function ProjectDetail() {
                   </h3>
                   <PageTransition>
                     <div className="space-y-4">
-                      {data.pestel.map((pestel: PestelSwot) => (
+                      {pestelData.map((pestel: PestelRawData) => (
                         <div key={pestel.code} className="text-start">
                           <Title size="small" className="text-(--primary-btn)">{pestel.label}</Title>
-                          <ul className="space-y-2 list-disc pl-5 mt-2">
-                            {pestel.items.map((item: PestelSwotItem, index: number) => (
-                              <li key={index} className="text-md text-gray-700">
+                          <ul className="space-y-2 list-disc pl-6 mt-2">
+                            {pestel.items.map((item: PestelItem, index: number) => (
+                              <li key={index} className="text-md text-(--description)">
                                 {item.content}
                               </li>
                             ))}
@@ -161,11 +171,11 @@ export default function ProjectDetail() {
                   </h3>
                   <PageTransition>
                     <div className="space-y-4">
-                      {data.swot.map((swot: PestelSwot) => (
+                      {swotData.map((swot: PestelRawData) => (
                         <div key={swot.code} className="text-start">
                           <Title size="small" className="text-(--primary-btn)">{swot.label}</Title>
-                          <ul className="space-y-2 list-disc pl-5 mt-2">
-                            {swot.items.map((item: PestelSwotItem, index: number) => (
+                          <ul className="space-y-2 list-disc pl-6 mt-2">
+                            {swot.items.map((item: PestelItem, index: number) => (
                               <li key={index} className="text-md text-(--description)">
                                 {item.content}
                               </li>
@@ -186,18 +196,14 @@ export default function ProjectDetail() {
                       Mục tiêu dự án
                     </h3>
                     <div className="relative">
-                      {/* Đường line dọc chạy suốt timeline */}
-                      {/* <div className="absolute left-4.75 top-2 bottom-2 w-[1.5px] bg-green-200" /> */}
                       <div className="space-y-4">
-                        {data.prj_targets.map((target: Target) => (
-                          <div key={target.id} className="relative pl-8">
-                            {/* Icon tròn nằm trên đường line */}
+                        {objectivesData?.map((objective: ObjectivesResponse) => (
+                          <div key={objective.id} className="relative pl-8">
                             <div className="absolute left-0 top-1 z-10 h-6 w-6 rounded-full bg-green-100 ring-2 ring-white flex items-center justify-center">
-                              {/* Chấm tròn nhỏ đậm bên trong nếu muốn giống 100% hình mẫu */}
                               <div className="h-2 w-2 rounded-full bg-green-500" />
                             </div>
                             <h3 className="text-md leading-relaxed">
-                              {target.name}
+                              {objective.name}
                             </h3>
                           </div>
                         ))}
@@ -216,7 +222,6 @@ export default function ProjectDetail() {
                   </CardContent>
                 </Card>
               </div>
-
             </div>
             {/* Mobile-View */}
             <Tabs defaultValue="pestel" className="md:hidden">
@@ -231,11 +236,11 @@ export default function ProjectDetail() {
               <TabsContent value="pestel">
                 <PageTransition>
                   <div className="space-y-4">
-                    {data.pestel.map((pestel: PestelSwot) => (
+                    {pestelData.map((pestel: PestelRawData) => (
                       <div key={pestel.code} className="text-start px-4">
                         <Title size="small" className="text-(--political)">{pestel.label}</Title>
                         <ul className="space-y-1 list-disc px-8">
-                          {pestel.items.map((item: PestelSwotItem, index: any) => (
+                          {pestel.items.map((item: PestelItem, index: number) => (
                             <li className="flex text-md display-list-item"
                               key={index}
                               style={{ display: 'list-item' }}
@@ -252,16 +257,15 @@ export default function ProjectDetail() {
               <TabsContent value="swot" className="space-y-2">
                 <PageTransition>
                   <div className="space-y-4">
-                    {data.swot.map((swot: PestelSwot) => (
+                    {swotData.map((swot: PestelRawData) => (
                       <div key={swot.code} className="text-start px-4">
                         <Title size="small" className="text-(--political)">{swot.label}</Title>
                         <ul className="space-y-1 list-disc px-8">
-                          {swot.items.map((item: PestelSwotItem, index: any) => (
-                            <li className="flex text-sm display-list-item"
+                          {swot.items.map((item: PestelItem, index: number) => (
+                            <li className="flex text-md display-list-item"
                               key={index}
                               style={{ display: 'list-item' }}
                             >
-                              {/* <Dot className="w-8 h-8 mr-2"/> */}
                               {item.content}
                             </li>
                           ))}
@@ -304,7 +308,6 @@ export default function ProjectDetail() {
           </ButtonGroup>
         </div>
 
-        {/* Risk Table */}
         <Card className="bg-(--white) shadow-sm border-none">
           <CardContent className="px-6 py-2 space-y-4">
             <Table className="max-w-6xl lg:w-full table-fixed">
@@ -319,27 +322,26 @@ export default function ProjectDetail() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {allRisks.map((risk: Risk, index: number) => (
+                {riskRankings?.map((risk: RiskResponse, index: number) => (
                   <TableRow key={risk.id} className="hover:bg-(--bg-search) transition-colors">
                     <TableCell className="text-center font-semibold">{index + 1}</TableCell>
                     <TableCell className="text-left font-medium text-sm wrap-break-word whitespace-normal">{risk.name}</TableCell>
-                    <TableCell className="text-left">{getRiskLevelBadge(risk.risk_level)}</TableCell>
-                    <TableCell className="text-left font-medium text-sm wrap-break-word whitespace-normal">{risk.strategy}</TableCell>
+                    <TableCell className="text-left">{renderRiskLevelBadge(risk.assessment?.riskLevel)}</TableCell>
+                    <TableCell className="text-left font-medium text-sm break-all whitespace-normal">{risk.strategy}</TableCell>
                     <TableCell className="p-0">
                       <ul className="flex flex-col divide-y divide-slate-200">
-                        {risk.response_plans.map((plan: ResponsePlan, index: number) => (
-                          <li key={index} className="p-2 min-h-10 flex text-left items-center text-sm wrap-break-word whitespace-normal">
-                            {plan.name}
+                        {risk.solutions.map((solution: SolutionResponse, index: number) => (
+                          <li key={index} className="p-2 min-h-10 flex text-left items-center text-sm break-all whitespace-normal">
+                            {solution.content}
                           </li>
                         ))}
                       </ul>
                     </TableCell>
                     <TableCell className="p-0 text-left">
                       <div className="flex flex-col divide-y divide-slate-200">
-                        {risk.response_plans.map((plan: ResponsePlan, index: number) => (
-                          <div key={index} className="px-4 py-2 min-h-10 flex items-center text-(--political) italic font-medium wrap-break-word whitespace-normal">
-                            {/* <UserCircle size={16} className="mr-2" /> */}
-                            {plan.owner}
+                        {risk.solutions.map((solution: SolutionResponse, index: number) => (
+                          <div key={index} className="px-4 py-2 min-h-10 flex items-center text-(--political) italic font-medium break-all whitespace-normal">
+                            {solution.personInCharge}
                           </div>
                         ))}
                       </div>

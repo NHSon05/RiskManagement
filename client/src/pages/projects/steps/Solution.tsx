@@ -47,8 +47,6 @@ export default function Solution() {
 
   // get data ranking
   const {data: riskRankings, isLoading} = useGetRiskRanking(Number(projectId))
-  console.log(riskRankings)
-
   const { mutateAsync: UpdateRiskStrategy } = useUpdateRisk(Number(projectId))
   const { mutateAsync: CreateSolution } = useCreateSolution(Number(projectId))
 
