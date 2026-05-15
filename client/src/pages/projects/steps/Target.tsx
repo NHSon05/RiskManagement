@@ -133,11 +133,11 @@ export default function Target() {
                         <p className="text-sm text-(--description) italic">Chưa có mục tiêu nào. Hãy nhấn "Thêm mục tiêu" bên dưới.</p>
                       </div>
                     ) : (
-                      <Accordion type="single" collapsible className="w-full space-y-4 my-4">
+                      <Accordion type="multiple" className="w-full space-y-4 my-4" value={objectives.map(obj => String(obj.id))} onValueChange={() => {}}>
                       {objectives.map((objective) => (
                         <AccordionItem
                           key={objective.id}
-                          value={objective.id}
+                          value={String(objective.id)}
                           className="border-2 border-(--blue-border) text-start bg-(--white) rounded-lg px-4 my-4 data-[state=open]:border-b data-[state=open]:mb-4"
                         >
                           <AccordionTrigger className="hover:no-underline py-4">
@@ -145,6 +145,7 @@ export default function Target() {
                               <div
                                 className="flex-1 mr-4"
                                 onClick={(e) => e.stopPropagation()}
+                                onPointerDown={(e) => e.stopPropagation()}
                               >
                                 <Input
                                   defaultValue={objective.name}
@@ -167,7 +168,7 @@ export default function Target() {
                           <AccordionContent>
                             {/* Risk List */}
                             <RiskList 
-                              projectId={projectId} 
+                              // projectId={projectId}
                               objectiveId={objective.id} 
                               risks={objective.risks || []} 
                             />

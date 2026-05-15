@@ -12,7 +12,7 @@ interface StatCardProps {
   value?: string | number;
   description?: string;
   icon: IconProp;
-  color?: 'green' | 'blue' | 'orange';
+  color?: 'green' | 'blue' | 'orange' | 'navy';
   className?: string;
 };
 
@@ -32,9 +32,11 @@ function StatCard({
             'text-[var(--progress)]': color == 'blue',
             'text-[var(--solution)]': color == 'green',
             'text-[var(--warning)]': color == 'orange',
+            'text-[var(--logo)]': color == 'navy',
         },
         className
     )
+    
     // const bgClasses = classNames(
     //     {
     //         'bg-[var(--bg-search)]': color == 'blue',

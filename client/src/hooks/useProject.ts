@@ -21,6 +21,17 @@ export const useCreateProject = () => {
   })
 }
 
+export const useGetProjectsByUserId = (userId: number) => {
+  return useQuery({
+    queryKey: ['projects', userId],
+    queryFn: () => projectApi.getProjects(userId),
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    staleTime: 0,
+    enabled: !!userId
+  })
+}
+
 export const useGetProjectById = (id: number) => {
   return useQuery({
     queryKey: ['projects', id],

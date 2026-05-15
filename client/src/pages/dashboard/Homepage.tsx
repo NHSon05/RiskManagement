@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Title,  } from '@/components/ui';
@@ -6,72 +6,20 @@ import StatCard from './components/statCard';
 import ProjectCard from './components/projectCard';
 
 // import images from '../../assets';
-import { faChartSimple, faCircleCheck, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faChartSimple, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { type IconProp } from '@fortawesome/fontawesome-svg-core';
 import FadedDiv from '../../components/ui/FadedDiv';
 import { PageTransition } from '@/components/animated';
 import { useAuth } from '@/hooks/useAuth';
+import { useGetProjectsByUserId } from '@/hooks/useProject';
 
 interface StatData {
   title: string;
   value: number;
   description: string;
   icon: IconProp;
-  color: 'blue' | 'green' | 'orange'; // 2. Định nghĩa kiểu chính xác
+  color: 'blue' | 'green' | 'navy';
 }
-
-const overviewStats: StatData[] = [
-  { 
-    title: 'Tổng số dự án', 
-    value: 12, 
-    description: 'Số lượng dự án bạn đang đăng ký',
-    icon: faChartSimple, 
-    color: 'blue'
-  },
-  { 
-    title: 'Dự án đang hoạt động', 
-    value: 7,
-    description: 'Số dự án hiện đang được tiến hành',
-    icon: faCircleCheck, 
-    color: 'green' 
-  },
-  { 
-    title: 'Dự án rủi ro cao', 
-    value: 3, 
-    description: 'Dự án cần sự chú ý và khẩn cấp',
-    icon: faCircleExclamation, 
-    color: 'orange'
-  },
-];
-
-interface recentProjects{
-    title: string;
-    status: 'onWorking' | 'onFinishing' | 'onDelaying';
-    lastUpdate: string;
-    img: string;
-}
-
-const recentProjects : recentProjects[] = [
-    { 
-      title: 'Xây dựng Cầu Tứ Liên Giai đoạn I', 
-      status: 'onWorking', 
-      lastUpdate: 'Cập nhật 2 ngày trước',
-      img: 'https://cafefcdn.com/203337114487263232/2024/11/27/cau-tu-lien-1732714717281-17327147177261781619844.jpg'
-      // src: 
-    },
-    { 
-        title: 'Đánh giá rủi ro Tuyến Metro X', 
-        status: 'onFinishing', 
-        lastUpdate: 'Cập nhật 5 ngày trước',
-        img: 'https://cdn2.tuoitre.vn/thumb_w/480/471584752817336320/2025/9/23/tautto-17586115371441542534457.png'
-    },
-    { 
-        title: 'Dự án phát triển siêu thị Mega', 
-        status: 'onDelaying', 
-        lastUpdate: 'Cập nhật 1 tuần trước',
-        img: 'https://images2.thanhnien.vn/zoom/686_429/Uploaded/quochungqc/2022_12_12/mat-tien-hiep-phu-9734.jpg'
-    }
-];
 
 const HomePage: React.FC = () => {
 
@@ -79,6 +27,53 @@ const HomePage: React.FC = () => {
 
   const user = profile.data?.data
 
+  const { data:projects, isPending, isError } = useGetProjectsByUserId(Number(user.id || 0))
+  const [currentPage, setCurrentPage] = useState<number>(1)
+
+  if (isPending) return <h2 className="p-6 text-center text-(--description)">Đang tải dữ liệu...</h2>
+  if (isError) return <h2 className="p-6 text-center text-(--error)">Có lỗi xảy ra vui lòng thử lại!</h2>
+
+
+  const totalProjects = projects.length;
+  const activeProjects = projects.filter(p => !p.finishAt).length;
+  const finishedProjects = projects.filter(p => p.finishAt).length; 
+
+  const overviewStats: StatData[] = [
+    { 
+      title: 'Tổng số dự án', 
+      value: totalProjects, 
+      description: 'Số lượng dự án bạn đang đăng ký',
+      icon: faChartSimple, 
+      color: 'navy'
+    },
+    { 
+      title: 'Dự án đang hoạt động', 
+      value: activeProjects,
+      description: 'Số dự án hiện đang được tiến hành',
+      icon: faCircleCheck, 
+      color: 'blue' 
+    },
+    { 
+      title: 'Dự án hoàn thành', 
+      value: finishedProjects, 
+      description: 'Dự án đã hoàn thành',
+      icon: faCircleCheck, 
+      color: 'green'
+    },
+  ];
+
+  const ITEMS_PER_PAGE = 3
+  // slice data
+  const totalPages = Math.ceil((projects?.length || 0) / ITEMS_PER_PAGE);
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE
+  const indexofFirstItem = indexOfLastItem - ITEMS_PER_PAGE
+
+  const currentProjects = projects?.slice(indexofFirstItem, indexOfLastItem) || [];
+  console.log(currentProjects)
+
+  const handlePageChange = (pageNumber: number ) => {
+    setCurrentPage(pageNumber)
+  }
   return (
     <PageTransition>
       <div className='space-y-8'>
@@ -107,11 +102,50 @@ const HomePage: React.FC = () => {
           {/* 3. Khối "Dự án gần đây" */}
           <div>
               <Title variant='dark' size='medium' className='text-start'>Dự án gần đây</Title>
-              <FadedDiv className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2'>
-                {recentProjects.map(({title, lastUpdate,status,img},index) => (
-                  <ProjectCard key={index} title={title} status={status} lastUpdate={lastUpdate} img={img}/>
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2'>
+                {currentProjects?.map((project) => (
+                  <FadedDiv key={project.id}>
+                    <ProjectCard id={project.id} title={project.name} status={project.finishAt ? 'onFinishing' : 'onWorking'} img={project.backgroundImageUrl || 'default_image.png'}/>
+                  </FadedDiv>
                 ))}
-              </FadedDiv>
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-2 mt-4">
+                  {/* Nút Prev */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 border rounded-md disabled:opacity-50 hover:bg-(--bg-search) transition-colors"
+                  >
+                    Trước
+                  </button>
+
+                  {/* Các nút số trang */}
+                  {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`w-8 h-8 flex items-center justify-center rounded-md transition-colors ${
+                        currentPage === page
+                          ? "bg-(--primary-btn) text-white font-medium" 
+                          : "hover:bg-(--primary-btn)"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  {/* Nút Next */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 border rounded-md disabled:opacity-50 hover:bg-(--bg-search) transition-colors"
+                  >
+                    Sau
+                  </button>
+                </div>
+              )}
           </div>
       </div>
     </PageTransition>

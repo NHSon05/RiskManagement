@@ -99,7 +99,7 @@ export const router = createBrowserRouter(
             <Route path='solution' element={
               <Suspense fallback={<Loading />}><Solution /></Suspense>
             } />
-            <Route path='detail' element={
+            <Route path=':projectId' element={
               <Suspense fallback={<Loading/>}><ProjectDetail /></Suspense>
             } />
           </Route>

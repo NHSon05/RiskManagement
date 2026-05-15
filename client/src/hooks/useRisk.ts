@@ -11,16 +11,28 @@ export const useGetRisk = (objectiveIds : (string | number)[]) => {
       enabled: !!objectiveId,
     }))
   })
-} 
+}
 
-export const useCreateRisk = (projectId: string | number) => {
+export const useGetRiskById = (objectiveId: string | number) => {
+  return useQuery({
+    queryKey: ['risks', objectiveId],
+    queryFn: () => riskApi.getRisks(objectiveId),
+    enabled: !!objectiveId,
+    staleTime: 5 * 60 * 1000,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+  })
+}
+
+export const useCreateRisk = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({objectiveId, body} : {objectiveId: string | number; body: CreateRiskRequest}) => 
       riskApi.createRisk(objectiveId, body),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['objectives', projectId] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['risks', variables.objectiveId] });
+      queryClient.invalidateQueries({ queryKey: ['objectives'] });
     },
     onError: (error) => {
       console.error("Lỗi khi tạo rủi ro:", error);
@@ -29,14 +41,14 @@ export const useCreateRisk = (projectId: string | number) => {
   })
 }
 
-export const useUpdateRisk = (projectId: string | number) => {
+export const useUpdateRisk = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({riskId, body} : {riskId: string | number; body: UpdateRiskRequest}) => 
       riskApi.updateRisk(riskId, body),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['objectives', projectId] });
+      queryClient.invalidateQueries({ queryKey: ['objectives'] });
     },
     onError: (error) => {
       console.error("Lỗi khi cập nhật rủi ro:", error);
@@ -45,14 +57,14 @@ export const useUpdateRisk = (projectId: string | number) => {
   })
 }
 
-export const useDeleteRisk = (projectId: string | number) => {
+export const useDeleteRisk = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (riskId: string | number) => 
       riskApi.deleteRisk(riskId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['objectives', projectId] });
+      queryClient.invalidateQueries({ queryKey: ['risks'] });
     },
     onError: (error) => {
       console.error("Lỗi khi xóa rủi ro:", error);

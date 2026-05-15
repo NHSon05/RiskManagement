@@ -8,13 +8,12 @@ import { cardVariants } from '../../../types/CardVariants';
 import { Link } from 'react-router-dom';
 
 
-
-
 interface ProjectCardProps {
+    id: number;
     title: string;
     status: 'onWorking' | 'onFinishing' | 'onDelaying';
     img: string;
-    lastUpdate: string;
+    lastUpdate?: string;
     className?: string
 };
 
@@ -49,6 +48,7 @@ const statusConfig : statusConfig = {
 }
 
 export default function ProjectCard({
+    id,
     title,
     status,
     lastUpdate,
@@ -62,10 +62,10 @@ export default function ProjectCard({
         "bg-white p-4 rounded-lg shadow-md space-y-4 min-h-[120px] flex flex-col justify-between",
         className
     )
-    const currentStatus = statusConfig[status];
+    const currentStatus = statusConfig[status || 'onWorking'];
 
     return (
-        <Link to='/projects/#'>
+        <Link to={`/projects/${id}`} >
             <motion.div className={classes} {...props}
                         variants={cardVariants}
                         whileHover={{ scale: 1.05 }} whileTap={{ scale: 1 }}
@@ -82,10 +82,10 @@ export default function ProjectCard({
                     </p>
                 </div>
                 <div className='space-y-2'>
-                    <div className="flex items-center text-sm text-gray-500">
+                    {lastUpdate && <div className="flex items-center text-sm text-gray-500">
                         <FontAwesomeIcon className="mr-1" icon={faClock} />
                         <span>{lastUpdate}</span>
-                    </div>
+                    </div>}
                     <Button size='small' className='w-full'>Xem thêm</Button>
                 </div>
             </motion.div>

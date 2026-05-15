@@ -325,13 +325,13 @@ export default function ProjectDetail() {
                 {riskRankings?.map((risk: RiskResponse, index: number) => (
                   <TableRow key={risk.id} className="hover:bg-(--bg-search) transition-colors">
                     <TableCell className="text-center font-semibold">{index + 1}</TableCell>
-                    <TableCell className="text-left font-medium text-sm wrap-break-word whitespace-normal">{risk.name}</TableCell>
+                    <TableCell className="text-left font-medium text-sm break-all whitespace-normal">{risk.name}</TableCell>
                     <TableCell className="text-left">{renderRiskLevelBadge(risk.assessment?.riskLevel)}</TableCell>
                     <TableCell className="text-left font-medium text-sm break-all whitespace-normal">{risk.strategy}</TableCell>
                     <TableCell className="p-0">
                       <ul className="flex flex-col divide-y divide-slate-200">
                         {risk.solutions.map((solution: SolutionResponse, index: number) => (
-                          <li key={index} className="p-2 min-h-10 flex text-left items-center text-sm break-all whitespace-normal">
+                          <li key={index} className="p-2 min-h-10 flex text-left items-center text-sm wrap-break-word whitespace-normal">
                             {solution.content}
                           </li>
                         ))}
