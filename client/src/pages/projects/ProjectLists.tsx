@@ -3,14 +3,15 @@ import { PageTransition } from "@/components/animated";
 import { 
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue, 
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow, 
-  Title, Badge
+  Title, Badge,
+  Button
 } from "@/components/ui";
 import { useAuth } from "@/hooks/useAuth";
-import { useGetProjectsByUserId } from "@/hooks/useProject";
-import { Link } from "react-router-dom";
+import { useDeleteProject, useGetProjectsByUserId } from "@/hooks/useProject";
+import { Trash2 } from "lucide-react";
 
 export default function ProjectLists() {
-
+  const deleteProject = useDeleteProject();
   const { profile }  = useAuth();
   const user = profile?.data?.data;
 
@@ -31,6 +32,11 @@ export default function ProjectLists() {
     if (filter === "ACTIVE") return p.status !== "COMPLETED";
     return true;
   }) || [];
+
+  const handleDelete = (id: number) => {
+    if (deleteProject.isPending) return;
+    deleteProject.mutate(id)
+  }
 
   return (
     <PageTransition>
@@ -74,9 +80,12 @@ export default function ProjectLists() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-end">
-                    <Link to={String(project.id)} className="text-primary hover:underline font-medium">
-                      Xem chi tiết
-                    </Link>
+                    <Button
+                      className="rounded-full bg-(--error) text-(--background) hover:bg-(--error)/80"
+                      onClick={() => handleDelete(project.id)}
+                    >
+                      <Trash2/>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))

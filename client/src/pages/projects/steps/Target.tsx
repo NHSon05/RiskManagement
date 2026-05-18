@@ -13,10 +13,9 @@ import {
   CardTitle,
 } from "@/components/ui"
 import { Plus, Trash2 } from "lucide-react"
-import { useState } from "react"
 import { titleCase } from "@/utils"
 import { PageTransition } from "@/components/animated"
-import { PDFViewer, RiskList } from "@/components/ui/molecules"
+import { PDFViewer, RiskList, AIChatBox } from "@/components/ui/molecules"
 import pdf from '../../../assets/pdf/RISK-CHECKLIST.pdf'
 import { fishBoneChart, swotModel } from "@/assets/imgs"
 import { RISK_CHECKLIST } from "@/components/constants"
@@ -26,10 +25,12 @@ import {
   useUpdateObjective, 
   useDeleteObjective 
 } from "@/hooks/useObjective"
+import { useGetProjectById } from "@/hooks/useProject"
 
 export default function Target() {
   const navigate = useNavigate()
   const projectId = Number(localStorage.getItem("currentProjectId"));
+  const {data: projectResponse, isLoading: projectIsLoading} = useGetProjectById(projectId);
 
   const { data: objectivesResponse, isLoading } = useGetObjectives(projectId);
   const createObjective = useCreateObjective();
@@ -39,14 +40,6 @@ export default function Target() {
   const objectives = objectivesResponse?.data || [];
 
   // get general data from localStorage for role display
-  const [localData] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("projectFormData") || "{}")
-    } catch {
-      return {}
-    }
-  })
-
   const handleAddObjective = () => {
     if (!projectId) {
       alert("Không tìm thấy ID dự án, vui lòng tạo dự án trước.");
@@ -116,14 +109,14 @@ export default function Target() {
             </div>
             {/* Role */}
             <p className="font-semibold mt-4 mb-1 text-start text-(--description)">
-              Vai trò của đơn vị thực hiện: <span className="text-(--black)">{localData.info?.role || ''}</span>
+              Vai trò của đơn vị thực hiện: <span className="text-(--black)">{projectIsLoading ? 'Đang tải...' : projectResponse?.role || ''}</span>
             </p>
             {/* Target List */}
             <Card className="shadow-sm border-none bg-(--white)">
               <CardContent className="p-8">
-                <Title variant="navy" size="medium" className="text-start">
-                  Danh sách mục tiêu và rủi ro liên quan tới mục tiêu
-                </Title>
+                  <Title variant="navy" size="medium" className="text-start col-span-2">
+                    Danh sách mục tiêu và rủi ro liên quan tới mục tiêu
+                  </Title>
                 {isLoading ? (
                   <p className="py-4 text-gray-500">Đang tải danh sách mục tiêu...</p>
                 ) : (
@@ -195,7 +188,7 @@ export default function Target() {
                       className="flex w-full"
                       onClick={handleAddObjective}
                       disabled={createObjective.isPending}
-                    >
+                      >
                       <Plus/>
                       {createObjective.isPending ? "Đang thêm..." : "Thêm mục tiêu"}
                     </Button>
@@ -248,6 +241,7 @@ export default function Target() {
           </Card>
         </div>
       </div>
+      <AIChatBox />
     </PageTransition>
   )
 }

@@ -58,7 +58,7 @@ export default function RiskList({ objectiveId, risks = [] }: ListRiskProps) {
 
       <Title variant="dark" size="small" className="text-start mt-2">Danh sách rủi ro</Title>
       
-      {currentRisks?.map((risk) => (
+      {currentRisks.map((risk) => (
         <div key={risk.id} className="flex gap-2 items-center py-2">
           <Input 
             defaultValue={risk.name} 
@@ -80,7 +80,7 @@ export default function RiskList({ objectiveId, risks = [] }: ListRiskProps) {
         </div>
       ))}
 
-      {currentRisks?.length === 0 && (
+      {currentRisks.length === 0 && (
         <div className="text-center py-4 bg-(--white) rounded border border-dashed border-(--blue-border) mt-2">
           <p className="text-xs text-(--description) italic">Chưa có rủi ro nào. Hãy nhập vào ô bên trên.</p>
         </div>
