@@ -23,11 +23,11 @@ public class Risk {
     @JsonIgnore
     private Project project;
 
-    @OneToOne(mappedBy = "risk", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "risk", cascade = CascadeType.ALL, orphanRemoval = true)
     private RiskAssessment assessment;
 
     // Mối quan hệ 1 Rủi ro - Nhiều Giải pháp
-    @OneToMany(mappedBy = "risk", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "risk", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RiskSolution> solutions;
 
     // Getters & Setters
