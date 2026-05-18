@@ -41,13 +41,14 @@ type FormValues = {
 // ------------------------------------------
 export default function Solution() {
   const navigate = useNavigate();
+
   
   // get ProjectId
   const { projectId } = useParams();
 
   // get data ranking
   const {data: riskRankings, isLoading} = useGetRiskRanking(Number(projectId))
-  const { mutateAsync: UpdateRiskStrategy } = useUpdateRisk(Number(projectId))
+  const { mutateAsync: UpdateRiskStrategy } = useUpdateRisk()
   const { mutateAsync: CreateSolution } = useCreateSolution(Number(projectId))
 
 
@@ -160,7 +161,7 @@ export default function Solution() {
       // localStorage.setItem("projectFormData", JSON.stringify(newData));
       console.log("Saved Successfully:", data);
       toast("Lưu thành công")
-      navigate('/projects/detail')
+      navigate(`/projects/${projectId}`)
     } catch (error) {
       console.error("Lỗi khi lưu dữ liệu", error)
     }

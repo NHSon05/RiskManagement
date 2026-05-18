@@ -18,9 +18,9 @@ public class RiskService {
     private final RiskSolutionRepository solutionRepo;
 
     public RiskService(RiskRepository riskRepo,
-                       ObjectiveRepository objectiveRepo,
-                       RiskLibraryRepository libraryRepo,
-                       RiskSolutionRepository solutionRepo) {
+            ObjectiveRepository objectiveRepo,
+            RiskLibraryRepository libraryRepo,
+            RiskSolutionRepository solutionRepo) {
         this.riskRepo = riskRepo;
         this.objectiveRepo = objectiveRepo;
         this.libraryRepo = libraryRepo;
@@ -79,13 +79,16 @@ public class RiskService {
     public Risk update(Long id, RiskRequest req) {
         Risk r = riskRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Risk not found"));
-        if (req.getName() != null) r.setName(req.getName());
-        if (req.getStrategy() != null) r.setStrategy(req.getStrategy());
+        if (req.getName() != null)
+            r.setName(req.getName());
+        if (req.getStrategy() != null)
+            r.setStrategy(req.getStrategy());
         return riskRepo.save(r);
     }
 
     public void delete(Long id) {
-        if (!riskRepo.existsById(id)) throw new RuntimeException("Risk not found");
+        if (!riskRepo.existsById(id))
+            throw new RuntimeException("Risk not found");
         riskRepo.deleteById(id);
     }
 
