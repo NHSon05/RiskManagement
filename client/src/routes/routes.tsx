@@ -36,6 +36,7 @@ const NotFound = lazy(() => import('@/pages/notFound/NotFound'))
 
 // UI
 import { Loading } from '@/components/ui'
+import Analysis from '@/pages/analysis/Analysis'
 
 export const router = createBrowserRouter(
   createRoutesFromElements(  
@@ -70,6 +71,9 @@ export const router = createBrowserRouter(
           } />
           <Route path='reports' element={
             <Suspense fallback={<Loading />}><Report /></Suspense>
+          } />
+          <Route path='analysis' element={
+            <Suspense fallback={<Loading />}><Analysis /></Suspense>
           } />
           <Route path='support' element={
             <Suspense fallback={<Loading />}><Support /></Suspense>

@@ -36,7 +36,7 @@ const data = {
     },
     {
       title: "Phân tích",
-      to: "/analys",
+      to: "/analysis",
       icon: IconChartBar,
     },
     {

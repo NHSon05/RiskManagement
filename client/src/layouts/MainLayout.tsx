@@ -1,7 +1,6 @@
 // <-- Layout chính (Sidebar + Header)
 import { Outlet } from "react-router-dom";
 import NavBar from "@/components/layout/navbar";
-import Footer from "@/components/layout/footer";
 import ScrollToTop from "../hooks/ScrollToTop";
 import { SidebarInset, SidebarProvider } from "@/components/ui";
 import { AppSidebar } from "@/components/layout/sidebar";
@@ -27,7 +26,6 @@ function MainLayout() {
               </div>
             </SidebarInset>
           </SidebarProvider>
-          <Footer/>
         </div>
     );
 }

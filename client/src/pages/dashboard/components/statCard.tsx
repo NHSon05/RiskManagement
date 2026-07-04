@@ -1,65 +1,65 @@
-import classNames from "classnames";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { motion } from "motion/react"
 import { cardVariants } from "../../../types/CardVariants";
 import { Link } from "react-router-dom";
-// import React from "react";
-// import { icon } from "@fortawesome/fontawesome-svg-core";
+import type { LucideIcon } from 'lucide-react';
 
 interface StatCardProps {
   title?: string;
   value?: string | number;
   description?: string;
-  icon: IconProp;
+  icon: LucideIcon;
   color?: 'green' | 'blue' | 'orange' | 'navy';
   className?: string;
-};
+}
 
 function StatCard({
     title,
     value,
     description,
-    icon,
+    icon: Icon,
     color,
-    className,
+    // className,
     ...passProps
 } : StatCardProps) {
 
     const props = {...passProps}
-    const colorClass = classNames(
-        {
-            'text-[var(--progress)]': color == 'blue',
-            'text-[var(--solution)]': color == 'green',
-            'text-[var(--warning)]': color == 'orange',
-            'text-[var(--logo)]': color == 'navy',
-        },
-        className
-    )
     
-    // const bgClasses = classNames(
-    //     {
-    //         'bg-[var(--bg-search)]': color == 'blue',
-    //         'bg-[var(--bg-solution)]': color == 'green',
-    //         'bg-[var(--bg-report)]': color == 'orange',
-    //     },
-    //     className
-    // )
-
+    const colorTheme = {
+      blue: {
+        text: 'text-blue-500 dark:text-blue-400',
+        bg: 'bg-blue-50 dark:bg-blue-950/30',
+      },
+      green: {
+        text: 'text-emerald-500 dark:text-emerald-400',
+        bg: 'bg-emerald-50 dark:bg-emerald-950/30',
+      },
+      orange: {
+        text: 'text-amber-500 dark:text-amber-400',
+        bg: 'bg-amber-50 dark:bg-amber-950/30',
+      },
+      navy: {
+        text: 'text-indigo-500 dark:text-indigo-400',
+        bg: 'bg-indigo-50 dark:bg-indigo-950/30',
+      }
+    }[color || 'blue'];
 
     return (
-      <Link to='/projects/'>      
-        <motion.div className={`p-6 rounded-lg shadow-md flex justify-between items-start bg-(--white)`} {...props} 
-                    whileHover={{ scale: 1.05 }} whileTap={{ scale: 1 }}
-                    variants={cardVariants}
+      <Link to='/projects' className="block">      
+        <motion.div 
+          className="bg-white shadow-lg rounded-xl hover:scale-[1.02] transition-premium cursor-pointer group" 
+          {...props} 
+          variants={cardVariants}
         >
-            <div className="text-start">
-                <p className={`text-lg font-semibold ${colorClass}`}>{title}</p>
-                <p className={`text-4xl font-semibold my-1 ${colorClass}`}>{value}</p>
-                <p className="text-sm text-(--black)">{description}</p>
+          <div className="p-6 flex justify-between items-start">
+            <div className="text-start space-y-2">
+              <p className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">{title}</p>
+              <p className="text-4xl font-extrabold text-neutral-950 dark:text-white tracking-tight">{value}</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">{description}</p>
             </div>
-            <FontAwesomeIcon className={`text-[24px] p-2 ${colorClass}`} icon={icon} />
-
+            <div className={`p-3 rounded-2xl ${colorTheme.text} transition-all duration-300 group-hover:scale-110`}>
+              <Icon className="h-6 w-6" strokeWidth={1.5} />
+            </div>
+          </div>
         </motion.div>
       </Link>
     )
